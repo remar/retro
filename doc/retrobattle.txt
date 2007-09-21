@@ -1,0 +1,385 @@
+-------------------------------------------------------------------------------
+RETROBATTLE
+-------------------------------------------------------------------------------
+
+1. Overview
+2. Blocks
+3. Captain Good
+4. Enemies
+5. Skill levels
+6. Bonus pick-ups
+7. Score tally screen
+8. Level specification
+9. Bonus levels
+A. Score counting
+B. Hi-Score table
+C. Title screen
+
+
+-------------------------------------------------------------------------------
+1. OVERVIEW
+
+Retrobattle is a simple NES-style platform jumper where your objective
+is to collect the 8 golden coins found in each level. There are
+increasingly more difficult enemies to encounter, and they move faster
+in later levels.
+
+
+-------------------------------------------------------------------------------
+2. BLOCKS
+
+There are a couple of different kinds of blocks.
+
+o Background blocks
+o Solid blocks
+o Breakable blocks
+
+The background blocks are either blue or orange, on normal and bonus
+levels respectively. These blocks can be found around the edges of the
+playing field.
+
+The solid blocks are blocks in the level that can't be destroyed in
+any way. There are eight different colors of the solid blocks, one
+color per four levels. There are 16 representations of a solid block,
+depending on if there are block above, under, to the left, and to the
+right of the block.
+
+Breakable blocks are similar in many ways to solid blocks. The main
+difference is of course that they can be destroyed by being hit by
+shots from Captain Good and the Bounty Hunter, and by Drones that
+randomly hit them. On higher difficulty levels (4 or above) the
+breakable blocks takes two hits before being destroyed, which is
+represented with cracked blocks.
+
+If a block wants to respawn but is obstructed by anything at all,
+it will wait one second before trying again.
+
+
+-------------------------------------------------------------------------------
+3. CAPTAIN GOOD
+
+Captain Good is the name of the player character, and is represented
+by a small sprite, 16x24 pixles. Captain Good can walk left and right,
+shoot his trusty blaster, and jump with his jetpack. When in the air,
+Captain Good moves either up or down with constant speed, using his
+jetpack to assure that he doesn't just fall down! The blaster holds 8
+rounds of ammunition which refills automatically, but with a
+delay of 8 seconds. The blaster shots can damage breakable blocks and all
+kinds of enemies. Captain Good can also pick up Power-Ups which appear
+randomly in the levels.
+
+If you walk left and suddenly hold right, Captain Good will walk
+right, but continue left as soon as the right arrow is released (and
+vice versa). This makes it easier to "twitch-turn around" to fire
+behind you very quickly. Basically, if both the left and right arrow
+keys are pressed at once, the one pressed last determines Captain
+Good's direction.
+
+At the start of a level, Good is nonsolid (blinking). As soon as the
+key for left, right, jump or shoot is pressed, Good solidifies and can
+be damaged. Pausing the game does not solidify him.
+
+
+-------------------------------------------------------------------------------
+4. ENEMIES
+
+There are 8 kinds of enemies in Retrobattle.
+
+1. Fuzz
+2. Drone
+3. Space Viper
+4. Bounty Hunter
+5. Red Fuzz
+6. Gold Drone
+7. Dire Space Viper
+8. Dark Bounty Hunter
+
+
+Fuzz
+----
+A Fuzz is a blue saw blade shaped cute little enemy that rolls around
+on the terrain found in the levels. Fuzz spawn out of Nests that are
+found in the levels every 8 seconds, as long as the number of Fuzz is
+smaller than the maximum allowed. At the start of a level, the delay
+between spawning Fuzz is only one second. A Fuzz starts to either move
+left or right, and then moves in that direction until one of several
+things happen: Fuzz shot, Fuzz in air, Fuzz colliding with bottom
+(spikes).
+
+If a Fuzz is shot, it becomes paralyzed and turns into a paler shade
+of blue. When a Fuzz is paralyzed, it can be pushed down, and if it
+drops far enough it will be destroyed and points will be awarded. If
+the Fuzz recovers from paralyzation (happens after a set number of
+seconds) it will start rolling again in the direction it had before
+being shot.
+
+If a Fuzz happens to be in the air (if the block that it's climbing
+disappears) it will start falling down, just as if it were spawned out
+of a Nest. When it lands, it will continue rolling in the direction
+which it was rolling in before it fell down.
+
+If a Fuzz collides with the spikes found at the bottom of the stage,
+it reverses direction and climbs back up again the way it came.
+
+Fuzz move at 120 pixels per second.
+
+
+Drone
+-----
+A Drone is a gray, pointy enemy that moves around randomly
+horizontally and vertically. The probability that a Drone moves in a
+specific direction depends on the surrounding blocks/empty spaces. If
+all surrounding tiles are empty, the drone moves with equal
+probability in all directions. The probability that a Drone moves
+through a breakable block is smaller than that it moves through empty
+space, however it will always dig its way out if surrounded on all sides.
+Drones have 2 hit points.
+
+Drones do not dig unless Captain Good has solidified. Drones move at
+60 pixels per second.
+
+
+Space Viper
+-----------
+
+Space Vipers are long, green snakes that randomly prowl the field,
+hiding behind all other objects and taking 6 hits directly to the head
+to destroy. The only time they will break a block is when they get
+surrounded by blocks in all directions, at which point they choose a
+random way out. There is only ever one Viper per level, and the length
+of their bodies depends on the Skill.
+
+Vipers cannot pass through their own body - if a Viper heads into a
+dead-end or is surrounded by its own body, it stops and waits until an
+exit opens up. This means the Viper can coil itself up, and once it
+starts moving again, its tail will stop where it coiled up until the
+viper is at full length again.
+
+Touching any part of the Viper means death. However, Captain Good can
+fit vertically between two parts of a Viper.
+
+Vipers move at 60 pixels per second.
+
+
+Bounty Hunter
+-------------
+
+Bounty Hunters appear at random, flash for one second, then solidify
+and wait another second, then fire their weapon and take another
+second to fade away. They always face Captain Good, but can only fire
+directly left or right.
+
+Bounty Hunters have 4 hit points. When destroyed, they cause a 3*3
+explosion that is harmless to Captain Good, but deals 2 damage to
+other enemies. Bounty Hunters spend ceil(random(3)) seconds invisible
+(after fading out and before fading in).
+
+Bounty Hunters do not appear unless Captain Good has solidified.
+
+
+Red Fuzz
+--------
+
+Just as fast as the blue ones, but randomize their direction every
+random(3)+3 seconds.
+
+
+Gold Drone
+----------
+
+The Gold version of the Drone has a 50% chance of moving towards
+Captain Good, instead of simply moving at random; in this case it will
+treat breakable blocks like empty space and smash right through.
+
+Moving towards Captain Good means that the Drone will randomly either
+head towards Good's X position, or his Y position.
+
+Gold Drones do not dig unless Captain Good has solidified.
+
+
+Dire Space Viper
+----------------
+
+These purple Vipers have a 50% chance to move towards Captain Good,
+but not until he has solidified.
+
+Moving towards Captain Good means that the Viper will randomly either
+head towards Good's X position, or his Y position.
+
+
+Dark Bounty Hunter
+------------------
+
+These Hunters sport blasters that cause Dark explosions exactly inside
+of the block the bullet hits, and all four directions around the
+block. Dark explosions only damage blocks and Captain Good. Dark
+Bounty Hunters only spend 1/3 of a second invisible (after fading out
+and before fading in). They do not appear unless Captain Good has
+solidified.
+
+
+
+-------------------------------------------------------------------------------
+5. SKILL LEVELS
+
+There are 8 skill levels in the game, which affect the color of the
+blocks on the playing field and the enemies encountered. Choosing a
+higher Skill than 1 also affects what bonus level is encountered
+first.
+
+At all Skills 4 and above, breakable blocks take 2 hits, but this does
+not affect how enemies dig through them.
+
+Skill 1
+3 Blue Fuzz that walk at half their normal speed
+2 Drones
+
+Skill 2
+4 Blue Fuzz
+3 Drones
+1 Space Viper with a length of 4
+
+Skill 3
+5 Blue Fuzz
+4 Drones
+1 Space Viper with a length of 5
+1 Bounty Hunter
+
+Skill 4
+6 Blue Fuzz
+4 Drones
+1 Space Viper with a length of 6
+1 Bounty Hunter
+
+Skill 5
+6 RED Fuzz
+4 Drones
+1 Space Viper with a length of 6
+1 Bounty Hunter
+
+Skill 6
+6 REd Fuzz
+4 GOLD Drones
+1 Space Viper with a length of 6
+1 Bounty Hunter
+
+Skill 7
+6 RED Fuzz
+4 GOLD Drones
+1 DIRE Space Viper with a length of 6
+1 Bounty Hunter
+
+Skill 8
+6 RED Fuzz
+4 GOLD Drones
+1 DIRE Space Viper with a length of 6
+1 DARK Bounty Hunter
+
+
+-------------------------------------------------------------------------------
+6. BONUS PICK-UPS
+
+Bonuses appear randomly on the screen every random(33)+7 seconds,
+though this timer does not count while Captain Good has not
+solidified. Bonuses can only appear where there is a solid or
+breakable block underneath, and cannot appear inside of anything at
+all. All bonuses have a certain weight written in paranthesis that
+determines how likely it is that they will appear.
+
+1. SMALL COINS (3)
+Gives 200 bonus points.
+
+2. DIAMOND (3)
+Gives 250 bonus points.
+
+3. GOLD BAR (3)
+Gives 300 bonus points.
+
+4. BLUE PEARL (3)
+Gives 400 bonus points.
+
+5. WHITE BALL (2)
+Refills all the ammunition for your standard gun.
+
+6. LOCK (2)
+Locks all the Fuzz Nests for 50 seconds, so that no new Fuzz can
+appear. The only drawback is that you won't get as much score as you
+normally would, as there will be less Fuzz to defeat.
+
+7. POWER GUN (2)
+This weapon temporarily replaces your standard gun, and the word POWER
+appears in the upper right corner of the screen. It only has one shot,
+so you lose the Power gun when you fire it. When the shot hits
+something, it causes a huge 5*5 diamond explosion that destroys blocks
+and deals 2 points of damage to all enemies caught in it. Note that
+the explosion aligns itself to the grid of blocks on the playing field.
+
+8. LASER GUN (2)
+Like the Power gun, this weapon only has one shot, and disappears when
+you use it. When you possess it, the word LASER appears in the upper
+right corner of the screen. It fires a searing laser blast that cuts
+straight through blocks and deals 2 points of damage to all enemies
+caught in the line of fire. Note that the laser blast aligns itself to
+the grid of blocks on the playing field; this means that it will only
+cut through one horizontal line of blocks, never two.
+
+9. CLOCK (1)
+Adds 50 additional seconds to the timer.
+
+10. BOMB (1)
+Instantly stuns all Fuzz, destroys all Drones and deals 2 points of
+damage to the Space Viper and Bounty Hunter (unless it's busy
+teleporting). If a Fuzz is just about to jump out of a nest when the
+bomb detonates, the Fuzz will not appear.
+
+11. QUAKE (1)
+Damages all undamaged blocks on the screen. It doesn't destroy the
+blocks that are already damaged. Only appears on Skill 4 and higher.
+
+
+
+-------------------------------------------------------------------------------
+7. SCORE TALLY SCREEN
+
+When the last coin has been collected, all objects disappear, a tune
+is played and the screen then wipes down to the score tally screen. If
+all lives are lost, you also enter this screen, but with no tune being
+played. The scoreboard counts up all the bonuses in order, with a
+short delay between each. Time units (seconds) remaining count down
+instead of up.
+
+Time: 20 for each second
+Coins: 100*Skill level (Bonus levels are different)
+Fuzz/Red Fuzz: 120
+Drones/Gold Drones: 200
+Space Viper/Dire Space Viper: 1200
+Bounty Hunter/Dark Bounty Hunter: 1000
+
+The time bonus is not awarded if the timer ever ran out during the
+level or if all lives were lost. In this case the text "NO BONUS" is
+displayed instead of the usual text for counting the time points.
+
+
+-------------------------------------------------------------------------------
+9. BONUS LEVELS
+
+Bonus levels appear for every 4 levels beaten. There is one bonus
+level for every Skill level; after the 8th bonus level is beaten, they
+start over from the first one.
+
+You have 60 seconds to get all 10 coins in a bonus level. There are no
+enemies and no ammo limit.
+
+Coins are worth 200+(100*Bonus level, NOT Skill level). If all coins
+are collected before time runs out, the stage ends and you get a 2000
+point bonus.
+
+
+-------------------------------------------------------------------------------
+A. SCORE COUNTING
+
+Score is usually only added to your total at the score tally screen,
+however collecting certain bonuses immediately increases your
+score. Any time the score passes a multiple of 30000 in the game (and
+all lives are not lost), you get an extra life. This stops working
+after a score of 240000, at which point you've earned 8 extra lives.
