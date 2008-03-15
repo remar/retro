@@ -10,7 +10,7 @@ PROGS =		retro
 all:		$(PROGS)
 
 RETRO =		retro.o Input.o GameLogic.o Hero.o Fuzz.o Object.o Level.o \
-		Coin.o Nest.o ScoreKeeper.o Spawner.o \
+		Coin.o Nest.o ScoreKeeper.o Spawner.o Bullet.o \
 		../../remar2d/src/remar2d.o ../../remar2d/src/tinyxml.o \
 		../../remar2d/src/tinystr.o ../../remar2d/src/tinyxmlerror.o \
 		../../remar2d/src/tinyxmlparser.o ../../remar2d/src/Sprite.o \
