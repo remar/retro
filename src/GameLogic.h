@@ -6,6 +6,7 @@
 #include "Hero.h"
 #include "Fuzz.h"
 #include "Level.h"
+#include "ScoreKeeper.h"
 
 class GameLogic
 {
@@ -19,8 +20,10 @@ class GameLogic
   Input *input;
   remar2d *graphics;
 
-  Hero *hero;
-  Fuzz *fuzz, *fuzz2;
+  ScoreKeeper *scoreKeeper;
+
+  // Hero *hero;
+  // Fuzz *fuzz, *fuzz2;
 
   Level *level;
 
@@ -34,6 +37,15 @@ class GameLogic
   GameMode mode;
 
   int oldTime;
+
+  /* Fixed interval time-based animation */
+  static const int maximumFrameRate = 60;
+  static const int minimumFrameRate = 15;
+  static const float updateInterval = 1.0 / maximumFrameRate;
+  static const float maxCyclesPerFrame = maximumFrameRate / minimumFrameRate;
+
+  float lastFrameTime;
+  float cyclesLeftOver;
 
   /* TODO: Classes to handle levels, monsters, player and STUFF! */
 };
