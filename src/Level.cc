@@ -7,7 +7,8 @@ Level::Level(remar2d *gfx, Input *input)
 }
 
 Level::Level(remar2d *gfx, Input *input, ScoreKeeper *scoreKeeper)
-  : blocksTakeTwoHits(false), fuzzes(0), nests(0), coins(0), paused(false)
+  : blocksTakeTwoHits(false), fuzzes(0), nests(0), coins(0), bullets(0),
+    paused(false)
 {
   this->gfx = gfx;
   this->input = input;
@@ -23,8 +24,8 @@ Level::Level(remar2d *gfx, Input *input, ScoreKeeper *scoreKeeper)
       coin[i] = 0;
       fuzz[i] = 0;
       nest[i] = 0;
+      bullet[i] = 0;
     }
-
 
   char buf[1024];
   sprintf(buf, "../levels/%d.lev", scoreKeeper->getLevel());
@@ -205,6 +206,7 @@ Level::update(int delta)
   if(input->held(SDLK_RIGHT)) move_x++;
   if(input->pressed(SDLK_UP)) hero->jump(true);
   if(input->released(SDLK_UP)) hero->jump(false);
+  if(input->pressed(SDLK_z)) hero->shoot(&bullets, &bullet[0]);
   if(input->pressed(SDLK_d)) hero->die();
   if(input->pressed(SDLK_p)) pause();
 
@@ -251,8 +253,13 @@ Level::update(int delta)
     }
 
   for(int i = 0;i < 8;i++)
-    if(fuzz[i])
-      moveFuzz(fuzz[i]);
+    {
+      if(bullet[i])
+	bullet[i]->update();
+
+      if(fuzz[i])
+	moveFuzz(fuzz[i]);
+    }
 }
 
 void

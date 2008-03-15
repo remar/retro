@@ -78,6 +78,10 @@ class Level
   int fuzzes;
   Fuzz *fuzz[8];
 
+  /* Bullets flying through the air! (KERPOWW!!) */
+  int bullets;
+  Bullet *bullet[8];
+
   /* Objects in the level (hero, enemies, nests, bonuses, shots). */
   map<string, Object *> objects;
 };
