@@ -1,4 +1,4 @@
-<?xml version="1.0">
+<?xml version="1.0"?>
 <sprite version="1" name="fuzz">
   <animation name="roll right" loop="true">
     <image path="fuzz.bmp" size_x="24" size_y="24" key="000000"

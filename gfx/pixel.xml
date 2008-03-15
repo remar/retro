@@ -1,4 +1,4 @@
-<?xml version="1.0">
+<?xml version="1.0"?>
 <sprite version="1" name="pixel">
   <animation name="pixel" loop="false">
    <image path="pixel.bmp" size_x="1" size_y="1" key="000000"
