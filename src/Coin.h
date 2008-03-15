@@ -8,6 +8,10 @@ class Coin : public Object
 {
  public:
   Coin(remar2d *gfx);
+  bool collect();
+
+ private:
+  bool collected;
 };
 
 #endif
