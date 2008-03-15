@@ -18,6 +18,7 @@ GameLogic::GameLogic(Input *i, remar2d *gfx)
 		     "../gfx/coin.xml",
 		     "../gfx/flame.xml",
 		     "../gfx/nest.xml",
+		     "../gfx/shot.xml",
 		     0};
 
   /* Read in graphics */

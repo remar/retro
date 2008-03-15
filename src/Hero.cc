@@ -167,6 +167,33 @@ Hero::updateAnimation(float xDir, float yDir)
 }
 
 void
+Hero::shoot(int *bullets, Bullet **bullet)
+{
+  if(*bullets < 8)
+    {
+      Bullet *b = new Bullet(gfx);
+      if(direction == LEFT)
+	{
+	  b->moveAbs(getX()-4, getY()+4);
+	  b->moveLeft();
+	}
+      else if(direction == RIGHT)
+	{
+	  b->moveAbs(getX()+16, getY()+4);
+	  b->moveRight();
+	}
+      b->setVisible(true);
+
+      for(int i = 0;i < 8;i++)
+	if(bullet[i] == 0)
+	  {
+	    bullet[i] = b;
+	    break;
+	  }
+    }
+}
+
+void
 Hero::die()
 {
   dead = true;

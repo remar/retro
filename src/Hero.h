@@ -3,6 +3,7 @@
 
 #include <remar2d.h>
 #include "Object.h"
+#include "Bullet.h"
 
 class Hero : public Object
 {
@@ -12,6 +13,7 @@ class Hero : public Object
   void stop();
   void jump(bool on);
   bool jumps(int decrease);
+  void shoot(int *bullets, Bullet **bullet);
   void die();
 
  private:
