@@ -8,15 +8,38 @@ class Hero : public Object
 {
  public:
   Hero(remar2d *gfx);
-  void moveRel(float xDir, float yDir, bool onGround);
+  void moveRel(float xDir, float yDir); //, bool onGround);
   void stop();
   void jump(bool on);
   bool jumps(int decrease);
+  void die();
 
  private:
-  int direction;
+  void updateAnimation(float xDir, float yDir);
+  void setDirection(float dir);
+
+  enum Direction
+    {
+      LEFT,
+      RIGHT
+    };
+
+  Direction direction;
   int jumpCounter;
   bool jumping;
+  bool allowJumping;
+  bool falling;
+
+  bool blinking;
+  bool dead;
+
+  /* The flame sprite (displayed when jumping) */
+  int flame;
+  bool flameShown;
+  Direction flameDirection;
+
+  float oldXDir;
+  float oldYDir;
 
   enum Animation
     {
