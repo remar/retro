@@ -79,6 +79,9 @@ At the start of a level, Good is nonsolid (blinking). As soon as the
 key for left, right, jump or shoot is pressed, Good solidifies and can
 be damaged. Pausing the game does not solidify him.
 
+The shots fired by Captain Good move at 180 pixels per second (3 pixels
+per frame).
+
 
 -------------------------------------------------------------------------------
 4. ENEMIES
@@ -407,6 +410,8 @@ enemies and no ammo limit.
 Coins are worth 200+(100*Bonus level, NOT Skill level). If all coins
 are collected before time runs out, the stage ends and you get a 2000
 point bonus.
+
+After the bonus level, the skill level is increased by 1.
 
 
 -------------------------------------------------------------------------------
