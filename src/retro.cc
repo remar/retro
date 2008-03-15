@@ -11,11 +11,12 @@ int main()
 {
   SDL_Init(SDL_INIT_VIDEO);
 
-  remar2d *gfx = new remar2d(WIDTH, HEIGHT, BPP, FS);
+  remar2d *gfx = new remar2d(WIDTH, HEIGHT, BPP, FS, "Retrobattle");
 
   Input *input = new Input();
 
   GameLogic *gameLogic = new GameLogic(input, gfx);
+
 
   while(gameLogic->quit() == false)
     {
@@ -27,6 +28,7 @@ int main()
 
       SDL_Delay(5);
     }
+
 
   delete gfx;
   delete input;
