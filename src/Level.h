@@ -7,6 +7,9 @@
 #include "Hero.h"
 #include "Fuzz.h"
 #include "Coin.h"
+#include "Nest.h"
+#include "ScoreKeeper.h"
+#include "Spawner.h"
 #include <map>
 #include <string>
 
@@ -14,7 +17,7 @@ class Level
 {
  public:
   Level(remar2d *gfx, Input *input);
-  Level(remar2d *gfx, Input *input, char *lev);
+  Level(remar2d *gfx, Input *input, ScoreKeeper *scoreKeeper);
   ~Level();
   bool loadLevel(char *lev);
   void update(int delta);
@@ -26,8 +29,12 @@ class Level
  private:
   void clearLevel();
   void moveObjectRel(Object *object, int *x, int *y);
-  bool isOnGround(Object *object, int x, int y);
+  // bool isOnGround(Object *object, int x, int y);
   void moveFuzz(Fuzz *fuzz);
+  bool collides(Object *obj1, Object *obj2);
+  void pause();
+
+  Spawner *spawner;
 
   enum BlockType
     {
@@ -47,6 +54,10 @@ class Level
 
   Input *input;
 
+  ScoreKeeper *scoreKeeper;
+
+  bool paused;
+
   /* Names of tilesets */
   char *backgroundBlocks;
   char *blocks;
@@ -55,15 +66,17 @@ class Level
   /* Da player. */
   Hero *hero;
 
-  /* Two (2) fuzzes. */
-  Fuzz *fuzz, *fuzz2;
-
-  /* Keep track of number of coins */
+  /* Coins */
   int coins;
   Coin *coin[8];
 
-  /* Four pixel sprites to display bounding box */
-  int pixel[4];
+  /* Nests */
+  int nests;
+  Nest *nest[8];
+
+  /* Fuzzies!! */
+  int fuzzes;
+  Fuzz *fuzz[8];
 
   /* Objects in the level (hero, enemies, nests, bonuses, shots). */
   map<string, Object *> objects;
