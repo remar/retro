@@ -1,0 +1,31 @@
+LIST OF FEATURES TO IMPLEMENT
+-------------------------------------------------------------------------------
+
+Breaking of blocks
+Cracking of blocks (when blocks take 2 hits)
+Respawning of broken blocks
+Shooting and bullet handling
+Keep track of blaster ammunition supply
+Power-ups
+If walking right, then pressing left, walk left until left is released...
+Enemies: Drone,
+	 Space Viper,
+	 Bounty Hunter,
+	 Red Fuzz,
+	 Gold Drone,
+	 Dire Space Viper,
+	 Dark Bounty Hunter
+Spawning of various enemies
+Level completion (moving to the next level)
+Start screen
+Between-level screen
+Key binding redefinition
+Bonus levels
+HUD at top of screen
+Fullscreen option
+Sounds
+Music
+Extra lives
+Font system
+Push Fuzzes
+Stunn Fuzzes
