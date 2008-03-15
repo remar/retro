@@ -38,6 +38,12 @@ Object::setAnimation(char *animation)
 }
 
 void
+Object::pauseAnimation(bool on)
+{
+  gfx->pauseAnimation(sprite_instance, on);
+}
+
+void
 Object::setBoundingBox(int width, int height, int offset_x, int offset_y)
 {
   bounding_box.w = width - 1;

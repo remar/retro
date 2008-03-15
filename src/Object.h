@@ -13,6 +13,7 @@ class Object
   void moveRel(float x, float y);
   void setVisible(bool visible);
   void setAnimation(char *animation);
+  void pauseAnimation(bool on);
   void setBoundingBox(int width, int height, int offset_x, int offset_y);
   int getX();
   int getY();
@@ -26,6 +27,7 @@ class Object
   int sprite_instance;
   float pos_x, pos_y;
   SDL_Rect bounding_box;
+  bool animationPaused;
 };
 
 #endif
