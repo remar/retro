@@ -227,6 +227,8 @@ blocks on the playing field and the enemies encountered. Choosing a
 higher Skill than 1 also affects what bonus level is encountered
 first.
 
+The skill is increased after each bonus level.
+
 At all Skills 4 and above, breakable blocks take 2 hits, but this does
 not affect how enemies dig through them.
 
@@ -258,7 +260,7 @@ Skill 5
 1 Bounty Hunter
 
 Skill 6
-6 REd Fuzz
+6 RED Fuzz
 4 GOLD Drones
 1 Space Viper with a length of 6
 1 Bounty Hunter
@@ -358,6 +360,38 @@ Bounty Hunter/Dark Bounty Hunter: 1000
 The time bonus is not awarded if the timer ever ran out during the
 level or if all lives were lost. In this case the text "NO BONUS" is
 displayed instead of the usual text for counting the time points.
+
+
+-------------------------------------------------------------------------------
+8. LEVEL SPECIFICATION
+
+A level file consists of an array of 25 * 15 numbers. The following is
+the specification of what the numbers mean:
+
+  0: Empty
+  1: Breakable
+  2: Solid
+  3: Captain Good
+  4: Fuzz Nest
+  5: Golden Coin
+
+Here's an example level (#1):
+
+2 2 0 0 4 0 0 0 0 0 0 0 0 0 0 0 0 0 4 0 0 0 0 2 2
+2 2 0 0 0 5 0 0 0 0 0 0 5 0 0 0 0 0 0 5 0 0 0 2 2
+2 2 0 0 2 1 2 0 0 4 0 1 1 1 0 4 0 0 2 1 2 0 0 2 2
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 1 1 1 0 1 1 1 0 0 0 0 0 0 0 0 0
+2 2 1 1 2 1 1 0 0 0 0 0 0 0 0 0 0 0 1 1 2 1 1 2 2
+2 2 0 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 2 2
+0 0 0 0 0 0 0 4 0 2 1 1 2 1 1 2 0 4 0 0 0 0 0 0 0
+0 0 0 0 0 0 5 0 0 0 0 0 1 0 0 0 0 0 5 0 0 0 0 0 0
+2 2 0 0 0 1 1 1 1 0 0 0 1 4 0 0 1 1 1 1 0 0 0 2 2
+2 2 0 0 0 0 0 0 0 0 5 0 1 0 5 0 0 0 0 0 0 0 0 2 2
+2 2 1 1 0 0 0 0 0 0 1 2 1 2 1 0 0 0 0 0 0 1 1 2 2
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 1 1 0 1 1 0 0 5 0 0 1 1 0 1 1 0 0 0 0 0
+2 2 2 2 2 2 0 0 0 2 2 2 2 2 2 2 0 0 0 2 2 2 2 2 2
 
 
 -------------------------------------------------------------------------------
