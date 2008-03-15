@@ -31,6 +31,15 @@ Fuzz::rollRight()
 }
 
 void
+Fuzz::rollRandom()
+{
+  if(rand()%2)
+    rollRight();
+  else
+    rollLeft();
+}
+
+void
 Fuzz::stun()
 {
   if(rollDirection != NONE)
@@ -57,3 +66,10 @@ Fuzz::blink()
       rollDirection = NONE;
     }
 }
+
+// void
+// Fuzz::pause(bool on)
+// {
+//   if(on)
+    
+// }

@@ -12,6 +12,7 @@ class Fuzz : public Object
   Fuzz(remar2d *gfx);
   void rollLeft();
   void rollRight();
+  void rollRandom();
   void stun();
   void blink();
   MoveDir getRollDir() { return rollDirection; }
@@ -22,7 +23,7 @@ class Fuzz : public Object
   MoveDir moveDirection;
   MoveDir rollDirection;
   bool stunned;
-  int blinkTime;
+  unsigned int blinkTime;
 };
 
 #endif
