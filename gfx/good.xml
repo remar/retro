@@ -1,4 +1,4 @@
-<?xml version="1.0">
+<?xml version="1.0"?>
 <sprite version="1" name="good">
   <animation name="run right" loop="true">
    <image path="goodright.bmp" size_x="16" size_y="24" key="000000"
@@ -54,6 +54,7 @@
     <frame y="0" x="13" dur="80" />
     <frame y="0" x="14" dur="80" />
   </animation>
+
   <animation name="stand right" loop="false">
     <image path="goodright.bmp" size_x="16" size_y="24" key="000000"
            orig_x="0" orig_y="0" />
@@ -64,4 +65,18 @@
            orig_x="0" orig_y="0" />
     <frame x="0" y="0" dur="1" />
   </animation>
+
+  <animation name="blink right" loop="true">
+    <image path="goodright.bmp" size_x="16" size_y="24" key="000000"
+           orig_x="0" orig_y="0" />
+    <frame x="0" y="0" dur="150" />
+    <frame x="4" y="0" dur="150" />
+  </animation>
+  <animation name="blink left" loop="true">
+    <image path="goodleft.bmp" size_x="16" size_y="24" key="000000"
+           orig_x="0" orig_y="0" />
+    <frame x="0" y="0" dur="150" />
+    <frame x="4" y="0" dur="150" />
+  </animation>
+
 </sprite>
