@@ -16,3 +16,12 @@ Nest::blink(bool on)
   else
     setAnimation("normal");
 }
+
+void
+Nest::spawn(Fuzz **fuzz)
+{
+  *fuzz = new Fuzz(gfx);
+  (*fuzz)->setVisible(true);
+  (*fuzz)->moveAbs(getX(), getY());
+  (*fuzz)->rollRandom();  
+}
