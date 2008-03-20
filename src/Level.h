@@ -21,18 +21,26 @@ class Level
   ~Level();
   bool loadLevel(char *lev);
   void update(int delta);
+  void breakBlock(int x, int y);
   void blockHit(int x, int y);
-  void twoHitBlocks(bool on);
+  void drawBlock(int x, int y);
   void redrawAll();
   void randomBlocks();
 
  private:
   void clearLevel();
   void moveObjectRel(Object *object, int *x, int *y);
+
+  /* Returns true if the Object collides with the background. x and y
+     is set to the background tile that the object collides with (can
+     only collide with one tile...) */
+  bool objectCollidesWithBackground(Object *object, int *x, int *y);
+
   // bool isOnGround(Object *object, int x, int y);
   void moveFuzz(Fuzz *fuzz);
   bool collides(Object *obj1, Object *obj2);
   void pause();
+  void removeBullet(int i);
 
   Spawner *spawner;
 
@@ -45,9 +53,9 @@ class Level
       BROKEN = 4
     };
 
-  BlockType level[25][19];
+  bool emptyBlock(BlockType block);
 
-  bool blocksTakeTwoHits;
+  BlockType level[25][19];
 
   /* Graphics engine pointer */
   remar2d *gfx;
@@ -62,6 +70,7 @@ class Level
   char *backgroundBlocks;
   char *blocks;
   char *solids;
+  char *dots;
 
   /* Da player. */
   Hero *hero;

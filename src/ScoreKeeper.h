@@ -27,6 +27,7 @@ class ScoreKeeper
   void setSkillLevel(int level);
   int  getSkillLevel();
   int getLevel();
+  bool blocksTakeTwoHits();
 
  private:
   int skillLevel;

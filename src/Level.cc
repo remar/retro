@@ -7,8 +7,7 @@ Level::Level(remar2d *gfx, Input *input)
 }
 
 Level::Level(remar2d *gfx, Input *input, ScoreKeeper *scoreKeeper)
-  : blocksTakeTwoHits(false), fuzzes(0), nests(0), coins(0), bullets(0),
-    paused(false)
+  : fuzzes(0), nests(0), coins(0), bullets(0), paused(false)
 {
   this->gfx = gfx;
   this->input = input;
@@ -18,6 +17,7 @@ Level::Level(remar2d *gfx, Input *input, ScoreKeeper *scoreKeeper)
   backgroundBlocks = gfx->loadTileSet("../gfx/background.xml");
   blocks = gfx->loadTileSet("../gfx/block1.xml");
   solids = gfx->loadTileSet("../gfx/solid1.xml");
+  dots = gfx->loadTileSet("../gfx/dot.xml");
 
   for(int i = 0;i < 8;i++)
     {
@@ -110,9 +110,7 @@ Level::loadLevel(char *lev)
 		  nest[nests] = new Nest(gfx);
 		  nest[nests]->setVisible(true);
 		  nest[nests]->moveAbs(x*32+3, y*32+3*32+3);
-		  // nest[nests]->spawn(&fuzz[fuzzes]);
 		  nests++;
-		  // fuzzes++;
 		}
 	      break;
 
@@ -141,8 +139,6 @@ Level::loadLevel(char *lev)
 
   hero = new Hero(gfx);
   hero->setVisible(true);
-//   hero->moveAbs(400, 8*32+8);
-//   hero->moveAbs(x*32+8, y*32+3*32+8);
   hero->moveAbs(heroStartX, heroStartY);
 
   redrawAll();
@@ -255,7 +251,20 @@ Level::update(int delta)
   for(int i = 0;i < 8;i++)
     {
       if(bullet[i])
-	bullet[i]->update();
+	{
+	  /* check collision between bullet and various stuff... */
+	  int x = bullet[i]->getX(), y;
+	  if(x < -5 || x > 799)
+	    removeBullet(i);
+	  else if(objectCollidesWithBackground(bullet[i], &x, &y))
+	    {
+	      removeBullet(i);
+	      blockHit(x, y);
+	    }
+
+	  if(bullet[i])
+	    bullet[i]->update();
+	}
 
       if(fuzz[i])
 	moveFuzz(fuzz[i]);
@@ -263,21 +272,86 @@ Level::update(int delta)
 }
 
 void
-Level::blockHit(int x, int y)
+Level::breakBlock(int x, int y)
 {
-  if(level[x][y] == BREAKABLE)
-    {
-      level[x][y] = BROKEN;
-      // gfx->setBackgroundTile(x, y, "broken tile", 0, 0);
-      // Add x, y to list of breakable tiles that should be respawned
-      // in the future
-    }
+  level[x][y] = BROKEN;
+
+  // Add x, y to list of breakable tiles that should be respawned
+  // in the future
 }
 
 void
-Level::twoHitBlocks(bool on)
+Level::blockHit(int x, int y)
 {
-  blocksTakeTwoHits = on;
+  bool redraw = false;
+
+  if(level[x][y] == BREAKABLE)
+    {
+      if(scoreKeeper->blocksTakeTwoHits())
+	{
+	  level[x][y] = DAMAGED;
+	}
+      else
+	{
+	  breakBlock(x, y);
+	}
+
+      redraw = true;
+    }
+  else if(level[x][y] == DAMAGED)
+    {
+      breakBlock(x, y);
+      redraw = true;
+    }
+
+  if(redraw)
+    {
+      drawBlock(x, y);
+      
+      /* Redraw blocks that surround this block */
+      if(x > 2)
+	drawBlock(x - 1, y);
+      if(x < 22)
+	drawBlock(x + 1, y);
+      if(y > 3)
+	drawBlock(x, y - 1);
+      drawBlock(x, y + 1);
+    }
+}
+
+inline bool
+Level::emptyBlock(BlockType block)
+{
+  return block == EMPTY || block == BROKEN;
+}
+
+/* Redraw a single block, taking neighbour blocks into consideration */
+void
+Level::drawBlock(int x, int y)
+{
+  int the_map[16] = { 0, 7, 8, 5, 9, 1, 6, 12, 10, 3, 2, 11, 4, 14, 13, 15 };
+
+  int i = (x < 22 ? !emptyBlock(level[x+1][y]): 0)
+    + (y > 3  ? (!emptyBlock(level[x][y-1]) << 1) : 0)
+    + (x > 2  ? (!emptyBlock(level[x-1][y]) << 2) : 0)
+    + (y < 17 ? (!emptyBlock(level[x][y+1]) << 3) : 0);
+
+  if(level[x][y] == SOLID)
+    {
+      gfx->setTile(x, y, solids, the_map[i], 0);
+    }
+  else if(level[x][y] == BREAKABLE)
+    {
+      gfx->setTile(x, y, blocks, the_map[i], 0);
+    }
+  else if(level[x][y] == DAMAGED)
+    {
+      gfx->setTile(x, y, blocks, the_map[i] + 16, 0);
+    }
+  else if(level[x][y] == BROKEN)
+    {
+      gfx->setTile(x, y, dots, 0, 0);
+    }
 }
 
 void
@@ -326,29 +400,39 @@ Level::redrawAll()
     }
 
   /* Draw level */
-  int the_map[16] = { 0, 7, 8, 5, 9, 1, 6, 12, 10, 3, 2, 11, 4, 14, 13, 15 };
-
   for(int y = 3;y < 18;y++)
     for(int x = 2;x < 23;x++)
       {
-	int i = (x < 22 ? !!level[x+1][y] : 0)
-	      + (y > 3  ? (!!level[x][y-1] << 1) : 0)
-	      + (x > 2  ? (!!level[x-1][y] << 2) : 0)
-	      + (y < 17 ? (!!level[x][y+1] << 3) : 0);
-
-	if(level[x][y] == SOLID)
-	  {
-	    gfx->setTile(x, y, solids, the_map[i], 0);
-	  }
-	else if(level[x][y] == BREAKABLE)
-	  {
-	    gfx->setTile(x, y, blocks, the_map[i], 0);
-	  }
-	else if(level[x][y] == DAMAGED)
-	  {
-	    gfx->setTile(x, y, blocks, the_map[i] + 16, 0);
-	  }
+	drawBlock(x, y);
       }
+
+//   int the_map[16] = { 0, 7, 8, 5, 9, 1, 6, 12, 10, 3, 2, 11, 4, 14, 13, 15 };
+
+//   for(int y = 3;y < 18;y++)
+//     for(int x = 2;x < 23;x++)
+//       {
+// 	int i = (x < 22 ? !!level[x+1][y] : 0)
+// 	      + (y > 3  ? (!!level[x][y-1] << 1) : 0)
+// 	      + (x > 2  ? (!!level[x-1][y] << 2) : 0)
+// 	      + (y < 17 ? (!!level[x][y+1] << 3) : 0);
+
+// 	if(level[x][y] == SOLID)
+// 	  {
+// 	    gfx->setTile(x, y, solids, the_map[i], 0);
+// 	  }
+// 	else if(level[x][y] == BREAKABLE)
+// 	  {
+// 	    gfx->setTile(x, y, blocks, the_map[i], 0);
+// 	  }
+// 	else if(level[x][y] == DAMAGED)
+// 	  {
+// 	    gfx->setTile(x, y, blocks, the_map[i] + 16, 0);
+// 	  }
+// 	else if(level[x][y] == BROKEN)
+// 	  {
+// 	    gfx->setTile(x, y, dots, 0, 0);
+// 	  }
+//       }
 }
 
 void
@@ -418,8 +502,10 @@ Level::moveObjectRel(Object *object, int *x, int *y)
 	    blockCollX = 0;
 	  else
 	    blockCollX = (posX1-x_to_move-1)/32;
-	  if(level[blockCollX][posY1/32] != EMPTY
-	     || level[blockCollX][posY2/32] != EMPTY)
+// 	  if(level[blockCollX][posY1/32] != EMPTY
+// 	     || level[blockCollX][posY2/32] != EMPTY)
+	  if(!emptyBlock(level[blockCollX][posY1/32])
+	     || !emptyBlock(level[blockCollX][posY2/32]))
 	    {
 	      *x = x_to_move;
 	      break;
@@ -437,8 +523,10 @@ Level::moveObjectRel(Object *object, int *x, int *y)
 	  else
 	    blockCollX = (posX2+x_to_move+1)/32;
 
-	  if(level[blockCollX][posY1/32] != EMPTY
-	     || level[blockCollX][posY2/32] != EMPTY)
+// 	  if(level[blockCollX][posY1/32] != EMPTY
+// 	     || level[blockCollX][posY2/32] != EMPTY)
+	  if(!emptyBlock(level[blockCollX][posY1/32])
+	     || !emptyBlock(level[blockCollX][posY2/32]))
 	    {
 	      *x = x_to_move;
 	      break;
@@ -472,8 +560,10 @@ Level::moveObjectRel(Object *object, int *x, int *y)
       /* Try to move up */
       for(;y_to_move != *y;y_to_move--)
 	{
-	  if(level[blockCollX1][(posY1-y_to_move-1)/32] != EMPTY
-	     || level[blockCollX2][(posY1-y_to_move-1)/32] != EMPTY)
+// 	  if(level[blockCollX1][(posY1-y_to_move-1)/32] != EMPTY
+// 	     || level[blockCollX2][(posY1-y_to_move-1)/32] != EMPTY)
+	  if(!emptyBlock(level[blockCollX1][(posY1-y_to_move-1)/32])
+	     || !emptyBlock(level[blockCollX2][(posY1-y_to_move-1)/32]))
 	    {
 	      *y = y_to_move;
 	      break;
@@ -485,8 +575,10 @@ Level::moveObjectRel(Object *object, int *x, int *y)
       /* Try to move down */
       for(;y_to_move != *y;y_to_move++)
 	{
-	  if(level[blockCollX1][(posY2+y_to_move+1)/32] != EMPTY
-	     || level[blockCollX2][(posY2+y_to_move+1)/32] != EMPTY)
+// 	  if(level[blockCollX1][(posY2+y_to_move+1)/32] != EMPTY
+// 	     || level[blockCollX2][(posY2+y_to_move+1)/32] != EMPTY)
+	  if(!emptyBlock(level[blockCollX1][(posY2+y_to_move+1)/32])
+	     || !emptyBlock(level[blockCollX2][(posY2+y_to_move+1)/32]))
 	    {
 	      *y = y_to_move;
  	      break;
@@ -494,6 +586,43 @@ Level::moveObjectRel(Object *object, int *x, int *y)
 	}
     }
 }
+
+int clip(int value, int limit)
+{
+  if(value < 0)
+    return 0;
+  else if(value > limit)
+    return limit;
+  else
+    return value;
+}
+
+bool
+Level::objectCollidesWithBackground(Object *object, int *x, int *y)
+{
+  int posX = object->getX();
+  int posY = object->getY();
+  SDL_Rect *box = object->getBoundingBox();
+
+  int posX1 = clip((posX + box->x) / 32, 799);
+  int posX2 = clip((posX + box->x + box->w) / 32, 799);
+  int posY1 = clip((posY + box->y) / 32, 599);
+  int posY2 = clip((posY + box->y + box->h) / 32, 599);
+
+  /* Test if one of the four points (upper left, upper right, lower
+     left, lower right) collides with the background) */
+  if(!emptyBlock(level[posX1][posY1]))
+    { *x = posX1; *y = posY1; return true; }
+  else if(!emptyBlock(level[posX2][posY1]))
+    { *x = posX2; *y = posY1; return true; }
+  else if(!emptyBlock(level[posX1][posY2]))
+    { *x = posX1; *y = posY2; return true; }
+  else if(!emptyBlock(level[posX2][posY2]))
+    { *x = posX2; *y = posY2; return true; }
+
+  return false;
+}
+
 
 /*
   Move-A-Fuzz
@@ -506,6 +635,8 @@ Level::moveObjectRel(Object *object, int *x, int *y)
 
   TODO: moveFuzz should be placed in class Fuzz, supply the level[25][19] as
         argument.
+
+  TODO: Reimplement this function... it's quite messy right now
 */
 
 void
@@ -746,4 +877,16 @@ Level::pause()
     paused = true;
 
   gfx->pauseAnimations(paused);
+}
+
+void
+Level::removeBullet(int i)
+{
+  if(bullet[i] && bullets)
+    {
+      bullet[i]->setVisible(false);
+      delete bullet[i];
+      bullet[i] = 0;
+      bullets--;
+    }
 }

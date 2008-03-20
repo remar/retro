@@ -55,3 +55,9 @@ ScoreKeeper::getLevel()
 {
   return level;
 }
+
+bool
+ScoreKeeper::blocksTakeTwoHits()
+{
+  return skillLevel >= 4;
+}
