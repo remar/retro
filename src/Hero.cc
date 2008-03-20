@@ -190,6 +190,8 @@ Hero::shoot(int *bullets, Bullet **bullet)
 	    bullet[i] = b;
 	    break;
 	  }
+
+      (*bullets)++;
     }
 }
 
