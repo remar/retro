@@ -1,8 +1,6 @@
 LIST OF FEATURES TO IMPLEMENT
 -------------------------------------------------------------------------------
 
-Breaking of blocks
-Cracking of blocks (when blocks take 2 hits)
 Respawning of broken blocks
 Shooting and bullet handling
 Keep track of blaster ammunition supply
@@ -29,3 +27,13 @@ Extra lives
 Font system
 Push Fuzzes
 Stunn Fuzzes
+Demo recording & playback
+
+
+
+-------------------------------------------------------------------------------
+DONE
+-------------------------------------------------------------------------------
+
+Breaking of blocks
+Cracking of blocks (when blocks take 2 hits)

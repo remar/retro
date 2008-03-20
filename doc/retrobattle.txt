@@ -51,8 +51,10 @@ randomly hit them. On higher difficulty levels (4 or above) the
 breakable blocks takes two hits before being destroyed, which is
 represented with cracked blocks.
 
+A broken block respawns in 8 seconds (8*60 frames).
+
 If a block wants to respawn but is obstructed by anything at all,
-it will wait one second before trying again.
+it will wait 2 seconds (2*60 frames) before trying again.
 
 
 -------------------------------------------------------------------------------
