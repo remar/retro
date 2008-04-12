@@ -3,12 +3,14 @@
 
 #include "SDL.h"
 #include <remar2d.h>
+#include "SoundManager.h"
 
 /* Animated object in the game */
 class Object
 {
  public:
-  Object(remar2d *gfx, char *sprite);
+  Object(remar2d *gfx, char *sprite, SoundManager *sfx);
+  ~Object();
   void moveAbs(float x, float y);
   void moveRel(float x, float y);
   void setVisible(bool visible);
@@ -18,16 +20,23 @@ class Object
   int getX();
   int getY();
   SDL_Rect *getBoundingBox();
+  bool collides(Object *other);
+  bool destroy();
 
   /* Update position and actions in the level. */
   void update(int delta);
 
  protected:
   remar2d *gfx;
+  SoundManager *sfx;
   int sprite_instance;
   float pos_x, pos_y;
   SDL_Rect bounding_box;
   bool animationPaused;
+  char *name;
+
+  /* Destroy this object */
+  bool destroyMe;
 };
 
 #endif
