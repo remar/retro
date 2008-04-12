@@ -78,4 +78,8 @@ Spawner::findEmptyFuzz()
   for(int i = 0;i < 8;i++)
     if(fuzz[i] == 0)
       return &fuzz[i];
+
+  /* This should never happen!! */
+  printf("BUG: No empty fuzz holder found!\n");
+  return 0;
 }
