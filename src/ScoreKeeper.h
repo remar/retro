@@ -18,7 +18,7 @@ class ScoreKeeper
     };
 
   bool fastFuzzes();
-  int redFuzzes();
+  bool redFuzzes();
 
   int numberOfEnemy(EnemyType type);
 /*   int numberOfBlueFuzzes(); */
@@ -27,13 +27,17 @@ class ScoreKeeper
   void setSkillLevel(int level);
   int  getSkillLevel();
   int getLevel();
+  void nextLevel();
   bool blocksTakeTwoHits();
+  void resetKills();
+  void killed(EnemyType type);
 
  private:
   int skillLevel;
   int level; /* Level we're on */
   int lives;
   int score;
+  int kills[7];
 };
 
 #endif

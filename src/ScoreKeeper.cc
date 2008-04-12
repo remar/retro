@@ -1,4 +1,5 @@
 #include "ScoreKeeper.h"
+#include <stdio.h>
 
 ScoreKeeper::ScoreKeeper()
   : skillLevel(1), level(1), score(0), lives(3)
@@ -12,7 +13,7 @@ ScoreKeeper::fastFuzzes()
   return skillLevel > 1;
 }
 
-int
+bool
 ScoreKeeper::redFuzzes()
 {
   return skillLevel >= 5;
@@ -56,8 +57,37 @@ ScoreKeeper::getLevel()
   return level;
 }
 
+void
+ScoreKeeper::nextLevel()
+{
+  level++;
+}
+
 bool
 ScoreKeeper::blocksTakeTwoHits()
 {
   return skillLevel >= 4;
+}
+
+void
+ScoreKeeper::resetKills()
+{
+  for(int i = 0;i < 7;i++)
+    kills[i] = 0;
+}
+
+void
+ScoreKeeper::killed(EnemyType type)
+{
+  char *enemyChar[] = { "Fuzz",
+			"Drone",
+			"Space Viper",
+			"Bounty Hunter",
+			"Gold Drone",
+			"Dire Space Viper",
+			"Dark Bounty Hunter"};
+
+  printf("Killed a %s\n", enemyChar[type]);
+
+  kills[type]++;
 }
