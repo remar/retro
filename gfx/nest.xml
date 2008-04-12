@@ -19,4 +19,10 @@
     <frame x="3" y="0" dur="150" />
   </animation>
 
+  <animation name="locked" loop="false">
+    <image path="lockednest.bmp" size_x="26" size_y="26" key="000000"
+           orig_x="0" orig_y="0" />
+    <frame x="0" y="0" dur="1" />
+  </animation>
+
 </sprite>
