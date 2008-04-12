@@ -1,6 +1,7 @@
 LIST OF FEATURES TO IMPLEMENT
 -------------------------------------------------------------------------------
 
+Font system (remar2d)
 Respawning of broken blocks
 Shooting and bullet handling
 Keep track of blaster ammunition supply
@@ -25,7 +26,6 @@ Sounds
 Music
 Extra lives
 Font system
-Push Fuzzes
 Stunn Fuzzes
 Demo recording & playback
 
@@ -37,3 +37,4 @@ DONE
 
 Breaking of blocks
 Cracking of blocks (when blocks take 2 hits)
+Push Fuzzes
