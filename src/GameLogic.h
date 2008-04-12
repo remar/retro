@@ -2,16 +2,18 @@
 #define GAMELOGIC_H
 
 #include <remar2d.h>
+#include "SoundManager.h"
 #include "Input.h"
 #include "Hero.h"
 #include "Fuzz.h"
 #include "Level.h"
 #include "ScoreKeeper.h"
+#include "GameMode.h"
 
 class GameLogic
 {
  public:
-  GameLogic(Input *i, remar2d *gfx);
+  GameLogic(Input *i, remar2d *gfx, SoundManager *sfx);
   ~GameLogic();
   void update();
   bool quit();
@@ -19,20 +21,11 @@ class GameLogic
  private:
   Input *input;
   remar2d *graphics;
+  SoundManager *sound;
 
   ScoreKeeper *scoreKeeper;
 
-  // Hero *hero;
-  // Fuzz *fuzz, *fuzz2;
-
   Level *level;
-
-  enum GameMode
-    {
-      MENU,
-      GAME,
-      QUIT
-    };
 
   GameMode mode;
 
@@ -46,6 +39,8 @@ class GameLogic
 
   float lastFrameTime;
   float cyclesLeftOver;
+
+  bool quitGame;
 
   /* TODO: Classes to handle levels, monsters, player and STUFF! */
 };

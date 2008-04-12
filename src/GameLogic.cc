@@ -1,17 +1,13 @@
 #include "GameLogic.h"
 #include <stdlib.h>
 
-GameLogic::GameLogic(Input *i, remar2d *gfx)
-  : input(i), graphics(gfx), mode(GAME), oldTime(SDL_GetTicks()),
-    lastFrameTime(SDL_GetTicks() / 1000.0), cyclesLeftOver(0)
+GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx)
+  : input(i), graphics(gfx), sound(sfx), mode(GAME), oldTime(SDL_GetTicks()),
+    lastFrameTime(SDL_GetTicks() / 1000.0), cyclesLeftOver(0), quitGame(false)
 {
   srand(time(0));
 
-  /* Size of tiles depends on what screen we're on, so this shouldn't
-     be here. */
-  graphics->setupTileBackground(32, 32);
-
-  /* TODO: Loading of sprites should be lazy instead. */
+  /* Read in graphics */
   char *sprites[] = {"../gfx/good.xml",
 		     "../gfx/fuzz.xml",
 		     "../gfx/pixel.xml",
@@ -19,9 +15,8 @@ GameLogic::GameLogic(Input *i, remar2d *gfx)
 		     "../gfx/flame.xml",
 		     "../gfx/nest.xml",
 		     "../gfx/shot.xml",
+		     "../gfx/hud.xml",
 		     0};
-
-  /* Read in graphics */
   for(int i = 0;sprites[i];i++)
     {
       graphics->loadSprite(sprites[i]);
@@ -30,22 +25,18 @@ GameLogic::GameLogic(Input *i, remar2d *gfx)
   scoreKeeper = new ScoreKeeper();
 
   /* Pass on graphics, input, and score keeper objects to the level. */
-  level = new Level(graphics, input, scoreKeeper);
-//   level = new Level(graphics, input, 0);
-//   level->randomBlocks();
+  level = new Level(graphics, sound, input, scoreKeeper);
 }
 
 GameLogic::~GameLogic()
 {
-  delete level;
+  if(level)
+    delete level;
 }
 
 void
 GameLogic::update()
 {
-//   int delta = SDL_GetTicks() - oldTime;
-//   oldTime = SDL_GetTicks();
-
   float currentTime = SDL_GetTicks() / 1000.0;
   float updateIterations = (currentTime - lastFrameTime) + cyclesLeftOver;
 
@@ -60,14 +51,19 @@ GameLogic::update()
 	{
 	case MENU:
 	case GAME:
-	  level->update(0);
+	  mode = level->update(0);
+	  break;
+	case SCORE:
+	  scoreKeeper->nextLevel();
+	  delete level;
+	  level = new Level(graphics, sound, input, scoreKeeper);
+	  mode = GAME;
 	  break;
 	case QUIT:
-	  ;
+	  quitGame = true;
+	  break;
 	}
     }
-
-  //printf("Loops: %d\n", loops);
 
   cyclesLeftOver = updateIterations;
   lastFrameTime = currentTime;
@@ -77,6 +73,8 @@ bool
 GameLogic::quit()
 {
   /* Should the application quit? */
+  // TODO: The application should only quit if the player chooses QUIT
+  // in the menu
 
-  return (input->quit() || input->pressed(SDLK_ESCAPE));
+  return (input->quit() || input->pressed(SDLK_ESCAPE) || quitGame);
 }
