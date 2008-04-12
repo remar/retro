@@ -1,8 +1,9 @@
 #include "Hero.h"
 
-Hero::Hero(remar2d *gfx)
-  : Object(gfx, "good"), currentAnimation(STANDING), jumpCounter(80),
-    direction(RIGHT), blinking(true), dead(false), jumping(false)
+Hero::Hero(remar2d *gfx, SoundManager *sfx)
+  : Object(gfx, "good", sfx),  blinking(true), jumping(false), dead(false),
+    direction(RIGHT), jumpCounter(80), currentAnimation(STANDING),
+    channel(-1)
 {
   setAnimation("blink right");
   setBoundingBox(10, 20, 3, 4);
@@ -10,6 +11,19 @@ Hero::Hero(remar2d *gfx)
   flame = gfx->createSpriteInstance("flame");
   gfx->showSprite(flame, false);
   gfx->setAnimation(flame, "right");
+}
+
+Hero::~Hero()
+{
+  /* Stop walking sound */
+  if(channel != -1)
+    sfx->stopSound(channel);
+
+  gfx->showSprite(flame, false);
+  gfx->removeSpriteInstance(flame);
+
+  // TODO: Do I need to explicitly call base destructor?
+  this->~Object();
 }
 
 int getDir(float dir)
@@ -118,6 +132,9 @@ Hero::jump(bool on)
   if(on == false)
     jumpCounter = -1;
   jumping = on;
+
+  if(on)
+    sfx->playSound(4, false);
 }
 
 bool
@@ -144,6 +161,12 @@ Hero::updateAnimation(float xDir, float yDir)
       else
 	setAnimation("stand right");
 
+      if(channel != -1)
+	{
+	  sfx->stopSound(channel);
+	  channel = -1;
+	}
+
       currentAnimation = STANDING;
     }
   else if(yDir == 0 && (getY()%32)==8)
@@ -152,6 +175,11 @@ Hero::updateAnimation(float xDir, float yDir)
 	setAnimation("run left");
       else
 	setAnimation("run right");
+
+      if(channel == -1)
+	{
+	  channel = sfx->playSound(11, true);
+	}
 
       currentAnimation = WALKING;
     }
@@ -162,6 +190,12 @@ Hero::updateAnimation(float xDir, float yDir)
       else
 	setAnimation("stand right");
 
+      if(channel != -1)
+	{
+	  sfx->stopSound(channel);
+	  channel = -1;
+	}
+
       currentAnimation = FLYING;
     }
 }
@@ -169,17 +203,26 @@ Hero::updateAnimation(float xDir, float yDir)
 void
 Hero::shoot(int *bullets, Bullet **bullet)
 {
+  if(dead)
+    return;
+
+  if(blinking)
+    {
+      blinking = false;
+      updateAnimation(0, 0);
+    }
+
   if(*bullets < 8)
     {
-      Bullet *b = new Bullet(gfx);
+      Bullet *b = new Bullet(gfx, sfx);
       if(direction == LEFT)
 	{
-	  b->moveAbs(getX()-4, getY()+4);
+	  b->moveAbs(getX()-4, getY()+8);
 	  b->moveLeft();
 	}
       else if(direction == RIGHT)
 	{
-	  b->moveAbs(getX()+16, getY()+4);
+	  b->moveAbs(getX()+16, getY()+8);
 	  b->moveRight();
 	}
       b->setVisible(true);
@@ -192,18 +235,43 @@ Hero::shoot(int *bullets, Bullet **bullet)
 	  }
 
       (*bullets)++;
+
+      sfx->playSound(6, false);
     }
 }
 
 void
 Hero::die()
 {
+  if(dead || blinking)
+    return;
+
   dead = true;
 
   gfx->showSprite(flame, false); /* just in case... */
+
+  /* Stop walking sound */
+  if(channel != -1)
+    sfx->stopSound(channel);
+
+  sfx->playSound(2, false);
 
   if(direction == LEFT)
     setAnimation("death left");
   else
     setAnimation("death right");
+
+  deathTimer = 150;
+}
+
+void
+Hero::update()
+{
+  if(dead)
+    {
+      deathTimer--;
+
+      if(deathTimer == 0)
+	destroyMe = true;
+    }
 }

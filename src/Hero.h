@@ -8,13 +8,15 @@
 class Hero : public Object
 {
  public:
-  Hero(remar2d *gfx);
+  Hero(remar2d *gfx, SoundManager *sfx);
+  ~Hero();
   void moveRel(float xDir, float yDir); //, bool onGround);
   void stop();
   void jump(bool on);
   bool jumps(int decrease);
   void shoot(int *bullets, Bullet **bullet);
   void die();
+  void update();
 
  private:
   void updateAnimation(float xDir, float yDir);
@@ -51,6 +53,11 @@ class Hero : public Object
     };
 
   Animation currentAnimation;
+  
+  /* channel that the walk sound is played on */
+  int channel;
+
+  int deathTimer;
 };
 
 #endif
