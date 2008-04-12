@@ -7,7 +7,7 @@
 class Bullet : public Object
 {
  public:
-  Bullet(remar2d *gfx);
+  Bullet(remar2d *gfx, SoundManager *sfx);
   void moveLeft();
   void moveRight();
   void update();

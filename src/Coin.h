@@ -7,7 +7,7 @@
 class Coin : public Object
 {
  public:
-  Coin(remar2d *gfx);
+  Coin(remar2d *gfx, SoundManager *sfx);
   bool collect();
 
  private:

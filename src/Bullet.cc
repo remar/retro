@@ -1,7 +1,7 @@
 #include "Bullet.h"
 
-Bullet::Bullet(remar2d *gfx)
-  : Object(gfx, "shot"), direction(LEFT)
+Bullet::Bullet(remar2d *gfx, SoundManager *sfx)
+  : Object(gfx, "shot", sfx), direction(LEFT)
 {
   setAnimation("normal");
   setBoundingBox(6, 6, 0, 0);
