@@ -469,8 +469,8 @@ Fuzz::rollLeft()
   if(rollDirection != LEFT)
     {
       setAnimation("roll left");
-      // pauseAnimation(false);
       rollDirection = LEFT;
+      moveDirection = LEFT;
       stunned = false;
     }
 }
@@ -481,8 +481,8 @@ Fuzz::rollRight()
   if(rollDirection != RIGHT)
     {
       setAnimation("roll right");
-      // pauseAnimation(false);
       rollDirection = RIGHT;
+      moveDirection = RIGHT;
       stunned = false;
     }
 }
