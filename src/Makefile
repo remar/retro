@@ -11,13 +11,15 @@ all:		$(PROGS)
 
 RETRO =		retro.o Input.o GameLogic.o Hero.o Fuzz.o Object.o Level.o \
 		Coin.o Nest.o ScoreKeeper.o Spawner.o Bullet.o SoundManager.o \
-		BrokenBlock.o \
+		BrokenBlock.o Explosion.o Smoke.o Enemy.o Counter.o Drone.o \
+		Field.o Collectible.o HUD.o Menu.o \
 		../../remar2d/src/remar2d.o ../../remar2d/src/tinyxml.o \
 		../../remar2d/src/tinystr.o ../../remar2d/src/tinyxmlerror.o \
 		../../remar2d/src/tinyxmlparser.o ../../remar2d/src/Sprite.o \
 		../../remar2d/src/Animation.o \
 		../../remar2d/src/SpriteInstance.o \
-		../../remar2d/src/TileSet.o ../../remar2d/src/Tile.o
+		../../remar2d/src/TileSet.o ../../remar2d/src/Tile.o \
+		../../remar2d/src/Font.o ../../remar2d/src/Character.o
 
 retro:		$(RETRO)
 		g++ -o $@ $^ $(LIBS)
