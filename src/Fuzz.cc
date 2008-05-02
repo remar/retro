@@ -1,7 +1,7 @@
 #include "Fuzz.h"
 
 Fuzz::Fuzz(remar2d *gfx, SoundManager *sfx)
-  : Object(gfx, "fuzz", sfx), moveDirection(NONE), rollDirection(NONE),
+  : Enemy(gfx, "fuzz", sfx), moveDirection(NONE), rollDirection(NONE),
     falling(true), stunned(false), fastFuzz(false), FALL_LIMIT(80),
     /*SPIKES_LEVEL(600-32-16),*/ dead(false), onSpikes(false)
 {
@@ -437,8 +437,10 @@ Fuzz::update(Field *field, Hero *hero)
 		 && field->emptyBlock((posX1+move_x)/32, posY2/32)))
 	    {
 	      moveRel(move_x, 0);
-	      attach(posX1+move_x, posX2+move_x, posY1, posY2,
-		     DOWN);
+	      if(!falling)
+		{
+		  attach(posX1+move_x, posX2+move_x, posY1, posY2, DOWN);
+		}
 	    }
 	}
       else
@@ -546,6 +548,18 @@ bool
 Fuzz::isStunned()
 {
   return stunned;
+}
+
+bool
+Fuzz::hit()
+{
+  if(!stunned)
+    {
+      stun();
+      return true;
+    }
+
+  return false;
 }
 
 void

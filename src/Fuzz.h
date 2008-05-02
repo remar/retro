@@ -3,10 +3,11 @@
 
 #include <remar2d.h>
 #include "Object.h"
+#include "Enemy.h"
 #include "Field.h"
 #include "Hero.h"
 
-class Fuzz : public Object
+class Fuzz : public Enemy // Object
 {
  public:
   enum Direction {NONE, LEFT, RIGHT, UP, DOWN};
@@ -23,6 +24,7 @@ class Fuzz : public Object
   Direction getMoveDir() { return moveDirection; }
   void setMoveDir(Direction dir) { moveDirection = dir; }
   bool isStunned();
+  bool hit();
 
  private:
   void attach(int posX1, int posX2, int posY1, int posY2, Direction direction);
