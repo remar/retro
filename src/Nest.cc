@@ -1,11 +1,34 @@
 #include "Nest.h"
 
-Nest::Nest(remar2d *gfx, SoundManager *sfx)
-  : Object(gfx, "nest", sfx)
+Nest::Nest(remar2d *gfx, SoundManager *sfx, list<Enemy *> *enemies)
+  : Object(gfx, "nest", sfx), spawnTimer(0)
 {
+  this->enemies = enemies;
+
   setAnimation("normal");
 
   blink(false);
+}
+
+void
+Nest::update()
+{
+  if(spawnTimer > 0)
+    {
+      --spawnTimer;
+      if(spawnTimer == 0)
+	{
+	  Fuzz *fuzz = new Fuzz(gfx, sfx);
+	  fuzz->setVisible(true);
+	  fuzz->moveAbs(getX(), getY());
+	  fuzz->rollRandom();  
+
+	  enemies->push_back(fuzz);
+
+	  sfx->playSound(7, false);  	  
+	  blink(false);
+	}
+    }
 }
 
 void
@@ -18,12 +41,14 @@ Nest::blink(bool on)
 }
 
 void
-Nest::spawn(Fuzz **fuzz)
+Nest::spawn() //Fuzz **fuzz)
 {
-  *fuzz = new Fuzz(gfx, sfx);
-  (*fuzz)->setVisible(true);
-  (*fuzz)->moveAbs(getX(), getY());
-  (*fuzz)->rollRandom();  
+  spawnTimer = 60;
+  blink(true);
+}
 
-  sfx->playSound(7, false);
+bool
+Nest::isSpawning()
+{
+  return spawnTimer > 0;
 }
