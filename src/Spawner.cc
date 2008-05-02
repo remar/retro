@@ -1,10 +1,13 @@
 #include "Spawner.h"
 
-Spawner::Spawner(Nest **nest, Fuzz **fuzz, int type, int maxNumber)
+// Spawner::Spawner(Nest **nest, Fuzz **fuzz, int type, int maxNumber)
+Spawner::Spawner(list<Object *> *objects, int type, int maxNumber)
   : numberOfNests(0)
 {
-  this->nest = nest;
-  this->fuzz = fuzz;
+  // this->nest = nest;
+  // this->fuzz = fuzz;
+  // this->enemies = enemies;
+  this->objects = objects;
   this->type = type;
   this->maxNumber = maxNumber;
 
@@ -15,25 +18,49 @@ Spawner::Spawner(Nest **nest, Fuzz **fuzz, int type, int maxNumber)
   for(int i = 0;i < 8;i++)
     {
       nestCountDown[i] = 0;
+    }
 
-      if(nest[i])
-	numberOfNests++;
+//       if(nest[i])
+// 	numberOfNests++;
+  list<Object *>::iterator it;
+  for(it = objects->begin();it != objects->end();it++)
+    {
+      if(Nest *nest = dynamic_cast<Nest *>(*it))
+	{
+	  printf("NEST!\n");
+	  nests.push_back(nest);
+	  numberOfNests++;
+	}
     }
 }
 
 void
 Spawner::update()
 {
-  for(int i = 0;i < numberOfNests;i++)
-    {
-      if(nestCountDown[i] == 1)
-	{
-	  nest[i]->blink(false);
-	  nest[i]->spawn(findEmptyFuzz());
-	}
-      if(nestCountDown[i] > 0)
-	nestCountDown[i]--;
-    }
+  list<Nest *>::iterator it;
+  int i;
+
+//   for(it = nests.begin(), i=0;it != nests.end();it++, i++)
+//     {
+//       if(nestCountDown[i] == 1)
+// 	{
+// 	  (*it)->blink(false);
+// 	  (*it)->spawn();
+// 	}
+//       if(nestCountDown[i] > 0)
+// 	nestCountDown[i]--;
+//     }
+
+//   for(int i = 0;i < numberOfNests;i++)
+//     {
+//       if(nestCountDown[i] == 1)
+// 	{
+// 	  nest[i]->blink(false);
+// 	  nest[i]->spawn(findEmptyFuzz());
+// 	}
+//       if(nestCountDown[i] > 0)
+// 	nestCountDown[i]--;
+//     }
 
   if(inQueue == 0)
     return;
@@ -46,10 +73,13 @@ Spawner::update()
       while(nestFound == false)
 	{
 	  int n = rand() % numberOfNests;
-	  if(nest[n] && nestCountDown[n] == 0)
+
+	  for(it = nests.begin(), i = 0;it != nests.end() && i != n;it++, i++);
+	  if((*it)->isSpawning() == false) //nestCountDown[n] == 0)
 	    {
-	      nest[n]->blink(true);
-	      nestCountDown[n] = 60;
+// 	      nest[n]->blink(true);
+// 	      nestCountDown[n] = 60;
+	      (*it)->spawn();
 	      nestFound = true;
 	    }
 	}
@@ -72,14 +102,14 @@ Spawner::addFuzz()
   inQueue++;
 }
 
-Fuzz **
-Spawner::findEmptyFuzz()
-{
-  for(int i = 0;i < 8;i++)
-    if(fuzz[i] == 0)
-      return &fuzz[i];
+// Fuzz **
+// Spawner::findEmptyFuzz()
+// {
+//   for(int i = 0;i < 8;i++)
+//     if(fuzz[i] == 0)
+//       return &fuzz[i];
 
-  /* This should never happen!! */
-  printf("BUG: No empty fuzz holder found!\n");
-  return 0;
-}
+//   /* This should never happen!! */
+//   printf("BUG: No empty fuzz holder found!\n");
+//   return 0;
+// }

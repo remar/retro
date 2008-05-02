@@ -3,21 +3,26 @@
 
 #include "Nest.h"
 #include "Fuzz.h"
+#include "Enemy.h"
+#include <list>
 
 /* Spawn fuzzies when needed and with correct interval */
 
 class Spawner
 {
  public:
-  Spawner(Nest **nest, Fuzz **fuzz, int type, int maxNumber);
+  //Spawner(Nest **nest, Fuzz **fuzz, int type, int maxNumber);
+  Spawner(list<Object *> *objects, int type, int maxNumber);
   void update();
   void addFuzz();
 
  private:
-  Fuzz **findEmptyFuzz();
+  // Fuzz **findEmptyFuzz();
 
-  Nest **nest;
-  Fuzz **fuzz;
+  // Nest **nest;
+  // Fuzz **fuzz;
+  list<Object *> *objects;
+  list<Nest *> nests;
   int type; /* 0 = Blue Fuzz, 1 = Red Fuzz */
   int maxNumber;
   int numberOfNests;
