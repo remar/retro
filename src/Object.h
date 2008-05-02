@@ -10,7 +10,7 @@ class Object
 {
  public:
   Object(remar2d *gfx, char *sprite, SoundManager *sfx);
-  ~Object();
+  virtual ~Object();
   void moveAbs(float x, float y);
   void moveRel(float x, float y);
   void setVisible(bool visible);
@@ -24,7 +24,7 @@ class Object
   bool destroy();
 
   /* Update position and actions in the level. */
-  void update(int delta);
+  virtual void update();
 
  protected:
   remar2d *gfx;
@@ -34,6 +34,9 @@ class Object
   SDL_Rect bounding_box;
   bool animationPaused;
   char *name;
+
+  /* Countdown to destruction (GRRRRRR) */
+  int destroyTimer;
 
   /* Destroy this object */
   bool destroyMe;

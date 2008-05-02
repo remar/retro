@@ -118,7 +118,18 @@ inline int abs(int x)
       aoa
 
   None of the points are inside the other rectangle... but this sure
-  is a collision...
+  is a collision... maybe check with a line intersection:
+
+      a-a
+      a |
+      a |
+   bbbbbbbbb
+   |  a |  |
+   b--a-+--b
+      a |
+      a |
+      a-a
+
 
 */
 bool
@@ -147,6 +158,7 @@ Object::collides(Object *other)
   if(abs(bb1_x1 - bb2_x1) > 32 || abs(bb1_y1 - bb2_y1) > 32)
     return false;
 
+  /* Check if any of Bounding Box 2's points are inside Bounding Box 1 */
   /* x1, y1 */
   if(bb2_x1 >= bb1_x1 && bb2_x1 <= bb1_x2
      && bb2_y1 >= bb1_y1 && bb2_y1 <= bb1_y2)
@@ -172,6 +184,32 @@ Object::collides(Object *other)
       return true;
     }
 
+  /* Check if any of Bounding Box 1's points are inside Bounding Box 2 */
+  /* x1, y1 */
+  if(bb1_x1 >= bb2_x1 && bb1_x1 <= bb2_x2
+     && bb1_y1 >= bb2_y1 && bb1_y1 <= bb2_y2)
+    {
+      return true;
+    }
+  /* x2, y1 */
+  if(bb1_x2 >= bb2_x1 && bb1_x2 <= bb2_x2
+     && bb1_y1 >= bb2_y1 && bb1_y1 <= bb2_y2)
+    {
+      return true;
+    }
+  /* x1, y2 */
+  if(bb1_x1 >= bb2_x1 && bb1_x1 <= bb2_x2
+     && bb1_y2 >= bb2_y1 && bb1_y2 <= bb2_y2)
+    {
+      return true;
+    }
+  /* x2, y2 */
+  if(bb1_x2 >= bb2_x1 && bb1_x2 <= bb2_x2
+     && bb1_y2 >= bb2_y1 && bb1_y2 <= bb2_y2)
+    {
+      return true;
+    }
+
   /* No collision */
   return false;
 }
@@ -180,4 +218,10 @@ bool
 Object::destroy()
 {
   return destroyMe;
+}
+
+void
+Object::update()
+{
+  
 }
