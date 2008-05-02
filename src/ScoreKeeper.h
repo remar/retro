@@ -26,17 +26,34 @@ class ScoreKeeper
 
   void setSkillLevel(int level);
   int  getSkillLevel();
+
   int getLevel();
+  void setLevel(int lev);
   void nextLevel();
+
   bool blocksTakeTwoHits();
   void resetKills();
   void killed(EnemyType type);
+  void heroKilled();
+  int getLives();
+
+  void addScore(int s);
+  void setScore(int s);
+  int getScore();
+
+  void setTopScore(int s);
+  int getTopScore();
+
+  void calculateScore();
 
  private:
   int skillLevel;
   int level; /* Level we're on */
   int lives;
+
   int score;
+  int top;
+
   int kills[7];
 };
 

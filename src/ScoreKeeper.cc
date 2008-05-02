@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 ScoreKeeper::ScoreKeeper()
-  : skillLevel(1), level(1), score(0), lives(3)
+  : skillLevel(1), level(1), score(0), top(0), lives(3)
 {
 
 }
@@ -58,6 +58,12 @@ ScoreKeeper::getLevel()
 }
 
 void
+ScoreKeeper::setLevel(int lev)
+{
+  level = lev;
+}
+
+void
 ScoreKeeper::nextLevel()
 {
   level++;
@@ -90,4 +96,60 @@ ScoreKeeper::killed(EnemyType type)
   printf("Killed a %s\n", enemyChar[type]);
 
   kills[type]++;
+}
+
+void
+ScoreKeeper::heroKilled()
+{
+  if(lives)
+    lives--;
+}
+
+int
+ScoreKeeper::getLives()
+{
+  return lives;
+}
+
+void
+ScoreKeeper::addScore(int s)
+{
+  score += s;
+}
+
+void
+ScoreKeeper::setScore(int s)
+{
+  score = s;
+}
+
+int
+ScoreKeeper::getScore()
+{
+  return score;
+}
+
+void
+ScoreKeeper::setTopScore(int s)
+{
+  top = s;
+}
+
+int
+ScoreKeeper::getTopScore()
+{
+  return top;
+}
+
+void
+ScoreKeeper::calculateScore()
+{
+  int scores[] = {120, 200, 1200, 1000, 200, 1200, 1000};
+
+  for(int i = 0;i < 7;i++)
+    {
+      score += kills[i] * scores[i];
+    }
+
+  score += 100*skillLevel;
 }
