@@ -16,12 +16,16 @@ SoundManager::SoundManager()
       "stun.wav",  /* 9 */
       "wake.wav",  /* 10 */
       "walk.wav",  /* 11 */
+      "dot.wav",   /* 12 */
+      "pause.wav", /* 13 */
+      "start.wav", /* 14 */
       0
     };
   
   char *musicFiles[] =
     {
-      "test.wav",
+      "test.wav", /* 0 */
+      "clear.wav", /* 1 */
       0
     };
 
@@ -51,6 +55,11 @@ SoundManager::SoundManager()
     }
 }
 
+SoundManager::~SoundManager()
+{
+  Mix_HaltMusic();
+}
+
 int
 SoundManager::playSound(int i, bool loop)
 {
@@ -64,7 +73,7 @@ SoundManager::stopSound(int channel)
 }
 
 void
-SoundManager::playMusic(int i)
+SoundManager::playMusic(int i, bool loop)
 {
-  Mix_PlayMusic(songs[i], -1);
+  Mix_PlayMusic(songs[i], loop ? -1 : 0);
 }

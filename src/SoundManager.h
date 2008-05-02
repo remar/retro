@@ -7,9 +7,10 @@ class SoundManager
 {
  public:
   SoundManager();
-  int playSound(int i, bool loop);
+  ~SoundManager();
+  int playSound(int i, bool loop = false);
   void stopSound(int channel);
-  void playMusic(int i);
+  void playMusic(int i, bool loop = true);
 
  private:
   Mix_Chunk **sounds;
