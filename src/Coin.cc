@@ -5,8 +5,7 @@ Coin::Coin(remar2d *gfx, SoundManager *sfx)
 {
   setAnimation("blink");
 
-  /* TODO: Correct bounding box */
-  setBoundingBox(10, 10, 0, 0);
+  setBoundingBox(16, 24, 0, 0);
 }
 
 bool
