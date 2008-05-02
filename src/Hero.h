@@ -17,6 +17,7 @@ class Hero : public Object
   void shoot(int *bullets, Bullet **bullet);
   void die();
   void update();
+  bool isBlinking() { return blinking; }
 
  private:
   void updateAnimation(float xDir, float yDir);

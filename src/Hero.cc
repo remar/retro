@@ -21,9 +21,6 @@ Hero::~Hero()
 
   gfx->showSprite(flame, false);
   gfx->removeSpriteInstance(flame);
-
-  // TODO: Do I need to explicitly call base destructor?
-  this->~Object();
 }
 
 int getDir(float dir)
@@ -133,7 +130,7 @@ Hero::jump(bool on)
     jumpCounter = -1;
   jumping = on;
 
-  if(on)
+  if(on && jumpCounter == 80)
     sfx->playSound(4, false);
 }
 
