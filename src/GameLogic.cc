@@ -2,8 +2,9 @@
 #include <stdlib.h>
 
 GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx)
-  : input(i), graphics(gfx), sound(sfx), mode(GAME), oldTime(SDL_GetTicks()),
-    lastFrameTime(SDL_GetTicks() / 1000.0), cyclesLeftOver(0), quitGame(false)
+  : input(i), graphics(gfx), sound(sfx), oldTime(SDL_GetTicks()),
+    lastFrameTime(SDL_GetTicks() / 1000.0), cyclesLeftOver(0), quitGame(false),
+    level(0), menu(0)
 {
   srand(time(0));
 
@@ -16,6 +17,10 @@ GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx)
 		     "../gfx/nest.xml",
 		     "../gfx/shot.xml",
 		     "../gfx/hud.xml",
+		     "../gfx/explosion.xml",
+		     "../gfx/smoke.xml",
+		     "../gfx/numbers.xml",
+		     "../gfx/drone.xml",
 		     0};
   for(int i = 0;sprites[i];i++)
     {
@@ -24,8 +29,13 @@ GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx)
 
   scoreKeeper = new ScoreKeeper();
 
-  /* Pass on graphics, input, and score keeper objects to the level. */
-  level = new Level(graphics, sound, input, scoreKeeper);
+  // scoreKeeper->setSkillLevel(5);
+
+  mode = MENU;
+
+  menu = new Menu(graphics, sound, input, scoreKeeper);
+//   /* Pass on graphics, input, and score keeper objects to the level. */
+//   level = new Level(graphics, sound, input, scoreKeeper);
 }
 
 GameLogic::~GameLogic()
@@ -50,15 +60,31 @@ GameLogic::update()
       switch(mode)
 	{
 	case MENU:
+	  mode = menu->update();
+	  if(mode != MENU)
+	    {
+	      delete menu;
+	      switch(mode)
+		{
+		case GAME:
+		  level = new Level(graphics, sound, input, scoreKeeper);
+		  break;
+		}
+	    }
+	  break;
+
 	case GAME:
 	  mode = level->update(0);
 	  break;
+
 	case SCORE:
+	  scoreKeeper->calculateScore();
 	  scoreKeeper->nextLevel();
 	  delete level;
 	  level = new Level(graphics, sound, input, scoreKeeper);
 	  mode = GAME;
 	  break;
+
 	case QUIT:
 	  quitGame = true;
 	  break;

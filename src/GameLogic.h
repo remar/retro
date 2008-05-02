@@ -9,6 +9,7 @@
 #include "Level.h"
 #include "ScoreKeeper.h"
 #include "GameMode.h"
+#include "Menu.h"
 
 class GameLogic
 {
@@ -25,6 +26,8 @@ class GameLogic
 
   ScoreKeeper *scoreKeeper;
 
+  /* Game modes */
+  Menu *menu;
   Level *level;
 
   GameMode mode;
