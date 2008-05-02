@@ -18,12 +18,6 @@ int main()
       printf("SDL_mixer says: %s\n", Mix_GetError());
     }
 
-//   int audio_rate = 22050;
-//   Uint16 audio_format = AUDIO_S16SYS;
-//   int audio_channels = 2;
-//   int audio_buffers = 1024;
-//   Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers);
-
   Input *input = new Input();
 
   remar2d *gfx = new remar2d(WIDTH, HEIGHT, BPP, FS, "Retrobattle");
@@ -43,9 +37,10 @@ int main()
       SDL_Delay(5);
     }
 
+  delete gameLogic;
+  delete sfx;
   delete gfx;
   delete input;
-  delete gameLogic;
 
   Mix_CloseAudio();
   SDL_Quit();
