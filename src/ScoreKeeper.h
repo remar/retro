@@ -46,6 +46,10 @@ class ScoreKeeper
 
   void calculateScore();
 
+  void setTimer(int t) { timer = t; }
+  int getTimer() { return timer; }
+  int decTimer() { timer--; }
+
  private:
   int skillLevel;
   int level; /* Level we're on */
@@ -55,6 +59,8 @@ class ScoreKeeper
   int top;
 
   int kills[7];
+
+  int timer;
 };
 
 #endif

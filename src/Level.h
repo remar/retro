@@ -98,6 +98,7 @@ class Level
      timer should be decremented... (every 60 frames I guess) */
   int timer;
   int timerTimer;
+  bool timerPaused;
 
   HUD *hud;
 };

@@ -20,8 +20,10 @@ Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
   loadFailed = false;
   hero = 0;
 
-  timer = 200;
+  // timer = 5;
+  scoreKeeper->setTimer(200);
   timerTimer = 60;
+  timerPaused = true;
 
   gfx->setupTileBackground(32, 32);
 
@@ -61,50 +63,10 @@ Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
 
   sfx->playMusic(0);
 }
-
-// void
-// Level::setupHUD()
-// {
-//   hudSprite = gfx->createSpriteInstance("hud");
-//   gfx->setAnimation(hudSprite, "normal");
-//   gfx->showSprite(hudSprite, true);
-//   gfx->moveSpriteAbs(hudSprite, 32, 8);
-//   gfx->neverRedraw(hudSprite, true);
-
-//   score = new Counter(gfx, 8);
-//   score->setPosition(298, 20);
-//   score->setCounter(scoreKeeper->getScore());
-
-//   topScore = new Counter(gfx, 8);
-//   topScore->setPosition(522, 20);
-//   topScore->setCounter(scoreKeeper->getTopScore());
-
-//   time = new Counter(gfx, 3);
-//   time->setPosition(713, 20);
-//   time->setCounter(timer);
-
-//   lives = new Counter(gfx, 2);
-//   lives->setPosition(298, 50);
-//   lives->setCounter(scoreKeeper->getLives());
-
-//   level = new Counter(gfx, 2);
-//   level->setPosition(458, 50);
-//   level->setCounter(scoreKeeper->getLevel());
-
-//   skill = new Counter(gfx, 1);
-//   skill->setPosition(618, 50);
-//   skill->setCounter(scoreKeeper->getSkillLevel());
-
-// }
-
 Level::~Level()
 {
-  printf("Level destroyed\n");
+  delete hud;
   clearLevel();
-
-//   delete lives;
-//   delete score;
-//   delete level;
 }
 
 bool
@@ -259,18 +221,18 @@ Level::update(int delta)
 	  if((winTimer / 10) % 2)
 	    {
 	      /* Set bright blue background */
-	      printf("BRIGHT BLUE BACKGROUND\n");
+	      field->redrawAll(true);
 	    }
 	  else
 	    {
 	      /* Set normal background */
-	      printf("NORMAL BLUE BACKGROUND\n");
+	      field->redrawAll(false);
 	    }
 	}
 
       /* When done, go to score tally screen */
       if(winTimer == 0)
-	return SCORE;
+	  return SCORE;
       else
 	return GAME;
     }
@@ -280,21 +242,33 @@ Level::update(int delta)
   if(paused)
     return GAME;
 
-  if(!hero->isBlinking() && --timerTimer == 0)
+
+  if(hero->isDead())
+    {
+      timerPaused = true;
+    }
+
+  if(timerPaused && !hero->isBlinking() && !hero->isDead())
+    {
+      timerPaused = false;
+    }
+
+  if(!timerPaused && --timerTimer == 0)
     {
       timerTimer = 60;
 
-      if(timer > 0)
+      if(scoreKeeper->getTimer() > 0)
 	{
-	  timer--;
+	  scoreKeeper->decTimer();
+	
+	  hud->setValue(HUD::TIME, scoreKeeper->getTimer());
 
-	  if(timer == 0)
+	  if(scoreKeeper->getTimer() == 0)
 	    {
 	      hero->die();
-	      timer = 100;
+	      scoreKeeper->setTimer(100);
+	      timerPaused = true;
 	    }
-
-	  hud->setValue(HUD::TIME, timer);
 	}
     }
 
@@ -352,6 +326,9 @@ Level::update(int delta)
     {
       scoreKeeper->heroKilled();
       hud->setValue(HUD::LIVES, scoreKeeper->getLives());
+      hud->setValue(HUD::TIME, scoreKeeper->getTimer());
+
+      timerPaused = true;
 
       if(scoreKeeper->getLives() <= 0)
 	{
