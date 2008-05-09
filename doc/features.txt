@@ -1,12 +1,10 @@
 LIST OF FEATURES TO IMPLEMENT
 -------------------------------------------------------------------------------
 
-Font system (remar2d)
 Keep track of blaster ammunition supply
 Power-ups
 If walking right, then pressing left, walk left until left is released...
-Enemies: Drone,
-	 Space Viper,
+Enemies: Space Viper,
 	 Bounty Hunter,
 	 Red Fuzz,
 	 Gold Drone,
@@ -39,3 +37,5 @@ Respawning of broken blocks
 Shooting and bullet handling
 Level completion (moving to the next level)
 HUD at top of screen
+Font system (remar2d)
+Enemy: Drone
