@@ -27,7 +27,6 @@ Spawner::Spawner(list<Object *> *objects, int type, int maxNumber)
     {
       if(Nest *nest = dynamic_cast<Nest *>(*it))
 	{
-	  printf("NEST!\n");
 	  nests.push_back(nest);
 	  numberOfNests++;
 	}
