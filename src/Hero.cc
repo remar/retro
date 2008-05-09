@@ -6,7 +6,7 @@ Hero::Hero(remar2d *gfx, SoundManager *sfx)
     channel(-1)
 {
   setAnimation("blink right");
-  setBoundingBox(10, 20, 3, 4);
+  setBoundingBox(6, 20, 5, 4);
 
   flame = gfx->createSpriteInstance("flame");
   gfx->showSprite(flame, false);

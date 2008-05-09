@@ -18,6 +18,7 @@ class Hero : public Object
   void die();
   void update();
   bool isBlinking() { return blinking; }
+  bool isDead() { return dead; }
 
  private:
   void updateAnimation(float xDir, float yDir);
