@@ -21,7 +21,7 @@
 
 Input::Input()
 {
-  Input(500);
+  setTimeout(500);
 }
 
 Input::Input(int _timeout)
@@ -54,6 +54,12 @@ Input::getInput()
 	  keys[event.key.keysym.sym].pressed = 0;
 	  keys[event.key.keysym.sym].checked = 0;
 	  keys[event.key.keysym.sym].timeout = 0;
+	  break;
+
+	case SDL_JOYBUTTONDOWN:
+	  printf("Joystick: %d, button: %d\n",
+		 event.jbutton.which,
+		 event.jbutton.button);
 	  break;
 
 	case SDL_QUIT:
