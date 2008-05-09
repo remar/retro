@@ -11,10 +11,12 @@ class HUD
   enum Display { SCORE, TOP, TIME, LIVES, STAGE, SKILL, BULLET, RELOAD };
 
   HUD(remar2d *gfx, ScoreKeeper *scoreKeeper);
+  ~HUD();
   void update();  
   void setValue(Display display, int value);
 
  private:
+  remar2d *gfx;
   Counter *counters[6];
   ScoreKeeper *scoreKeeper;
 

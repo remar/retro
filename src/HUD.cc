@@ -10,6 +10,7 @@ HUD::HUD(remar2d *gfx, ScoreKeeper *scoreKeeper)
   /*   Counter *skill; */
 
   this->scoreKeeper = scoreKeeper;
+  this->gfx = gfx;
 
   hudSprite = gfx->createSpriteInstance("hud");
   gfx->setAnimation(hudSprite, "normal");
@@ -35,6 +36,14 @@ HUD::HUD(remar2d *gfx, ScoreKeeper *scoreKeeper)
   counters[LIVES]->setCounter(scoreKeeper->getLives());
   counters[STAGE]->setCounter(scoreKeeper->getLevel());
   counters[SKILL]->setCounter(scoreKeeper->getSkillLevel());
+}
+
+HUD::~HUD()
+{
+  gfx->showSprite(hudSprite, false);
+
+  for(int i = 0;i < 6;i++)
+    delete counters[i];
 }
 
 void
