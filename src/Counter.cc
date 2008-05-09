@@ -20,7 +20,10 @@ Counter::Counter(remar2d *gfx, int length)
 Counter::~Counter()
 {
   for(int i = 0;i < length;i++)
-    gfx->removeSpriteInstance(sprite_instances[i]);
+    {
+      gfx->showSprite(sprite_instances[i], false);
+      gfx->removeSpriteInstance(sprite_instances[i]);
+    }
 
   delete [] sprite_instances;
 }
