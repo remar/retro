@@ -34,29 +34,37 @@ SoundManager::SoundManager()
 
   sounds = new Mix_Chunk*[files];
 
+  printf("Loading sounds");
   for(int i = 0;soundFiles[i];i++)
     {
       char buf[1024];
       sprintf(buf, "../sfx/%s", soundFiles[i]);
-      printf("Load sound %s\n", buf);
+      //printf("Loading sound \"%s\"\n", buf);
+      printf(".");
       sounds[i] = Mix_LoadWAV(buf);
     }
+  printf("\n");
 
   files = 0;
   for(;musicFiles[files];files++);
 
   songs = new Mix_Music*[files];
 
+  printf("Loading music");
   for(int i = 0;musicFiles[i];i++)
     {
       char buf[1024];
       sprintf(buf, "../sfx/%s", musicFiles[i]);
+      //printf("Loading music \"%s\"\n", buf);
+      printf(".");
       songs[i] = Mix_LoadMUS(buf);
     }
+  printf("\n");
 }
 
 SoundManager::~SoundManager()
 {
+  Mix_HaltChannel(-1);
   Mix_HaltMusic();
 }
 
