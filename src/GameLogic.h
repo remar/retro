@@ -10,6 +10,7 @@
 #include "ScoreKeeper.h"
 #include "GameMode.h"
 #include "Menu.h"
+#include "ScoreScreen.h"
 
 class GameLogic
 {
@@ -29,6 +30,7 @@ class GameLogic
   /* Game modes */
   Menu *menu;
   Level *level;
+  ScoreScreen *scoreScreen;
 
   GameMode mode;
 
@@ -45,7 +47,7 @@ class GameLogic
 
   bool quitGame;
 
-  /* TODO: Classes to handle levels, monsters, player and STUFF! */
+  bool fullScreen;
 };
 
 #endif

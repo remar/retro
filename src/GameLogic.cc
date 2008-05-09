@@ -4,7 +4,7 @@
 GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx)
   : input(i), graphics(gfx), sound(sfx), oldTime(SDL_GetTicks()),
     lastFrameTime(SDL_GetTicks() / 1000.0), cyclesLeftOver(0), quitGame(false),
-    level(0), menu(0)
+    level(0), menu(0), fullScreen(false)
 {
   srand(time(0));
 
@@ -21,27 +21,32 @@ GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx)
 		     "../gfx/smoke.xml",
 		     "../gfx/numbers.xml",
 		     "../gfx/drone.xml",
+		     "../gfx/clock.xml",
 		     0};
+
+  printf("Loading sprites");
   for(int i = 0;sprites[i];i++)
     {
+      printf(".");
       graphics->loadSprite(sprites[i]);
     }
+  printf("\n");
+
+  graphics->loadFont("../gfx/text.xml");
+
+  graphics->loadTileSet("../gfx/background.xml");
 
   scoreKeeper = new ScoreKeeper();
 
-  // scoreKeeper->setSkillLevel(5);
+  //  mode = SCORE;
+  //  scoreScreen = new ScoreScreen(graphics, sound, input, scoreKeeper);
 
   mode = MENU;
-
   menu = new Menu(graphics, sound, input, scoreKeeper);
-//   /* Pass on graphics, input, and score keeper objects to the level. */
-//   level = new Level(graphics, sound, input, scoreKeeper);
 }
 
 GameLogic::~GameLogic()
 {
-  if(level)
-    delete level;
 }
 
 void
@@ -53,6 +58,12 @@ GameLogic::update()
   if(updateIterations > maxCyclesPerFrame * updateInterval)
     {
       updateIterations = maxCyclesPerFrame * updateInterval;
+    }
+
+  if(input->pressed(SDLK_f))
+    {
+      fullScreen = !fullScreen;
+      graphics->setFullScreen(fullScreen);
     }
 
   for(;updateIterations > updateInterval; updateIterations -= updateInterval)
@@ -75,14 +86,40 @@ GameLogic::update()
 
 	case GAME:
 	  mode = level->update(0);
+
+	  if(mode != GAME)
+	    {
+	      delete level;
+	      switch(mode)
+		{
+		case SCORE:
+		  scoreScreen
+		    = new ScoreScreen(graphics, sound, input, scoreKeeper);
+		  break;
+		}
+	    }
+
 	  break;
 
 	case SCORE:
-	  scoreKeeper->calculateScore();
-	  scoreKeeper->nextLevel();
-	  delete level;
-	  level = new Level(graphics, sound, input, scoreKeeper);
-	  mode = GAME;
+// 	  scoreKeeper->calculateScore();
+// 	  scoreKeeper->nextLevel();
+// 	  delete level;
+// 	  level = new Level(graphics, sound, input, scoreKeeper);
+// 	  mode = GAME;
+
+	  mode = scoreScreen->update();
+
+	  if(mode != SCORE)
+	    {
+	      delete scoreScreen;
+	      switch(mode)
+		{
+		case GAME:
+		  level = new Level(graphics, sound, input, scoreKeeper);
+		  break;
+		}
+	    }
 	  break;
 
 	case QUIT:
