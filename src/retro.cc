@@ -9,7 +9,7 @@ const int HEIGHT = 600;
 const int BPP = 32;
 const int FS = 0;
 
-int main()
+int main(int argc, char *argv[])
 {
   SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 
