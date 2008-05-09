@@ -14,7 +14,7 @@ Field::Field(remar2d *gfx, SoundManager *sfx,
   this->blocksTakeTwoHits = blocksTakeTwoHits;
 
   /* Load tilesets */
-  backgroundBlocks = gfx->loadTileSet("../gfx/background.xml");
+  backgroundBlocks = "background";
   blocks = gfx->loadTileSet("../gfx/block1.xml");
   solids = gfx->loadTileSet("../gfx/solid1.xml");
   dots = gfx->loadTileSet("../gfx/dot.xml");
@@ -119,56 +119,90 @@ Field::drawBlock(int x, int y)
 }
 
 void
-Field::redrawAll()
+Field::redrawAll(bool bright)
 {
+  int offset = 0;
+  if(bright)
+    offset = 13;
+
   /* Draw background */
   int map1[] = {2, 2, 4, 0};
   int map2[] = {6, 6, 8, 1};
   int map3[] = {0, 5, 7, 3};
   int map4[] = {0, 5, 6, 2};
   int map5[] = {0, 10, 9, 0};
+  int map6[] = {6, 2, 1, 9};
+  int map7[] = {5, 2, 3, 10};
+  
+  int i1;
 
   for(int i = 0;i < 25;i++)
     {
-      gfx->setTile(i, 0, backgroundBlocks, 0, 0);
-      gfx->setTile(i, 1, backgroundBlocks, 0, 0);
-      gfx->setTile(i, 2, backgroundBlocks, 4, 0);
-      gfx->setTile(i, 18, backgroundBlocks, 2, 0);
+      gfx->setTile(i, 0, backgroundBlocks, 0+offset, 0);
+      gfx->setTile(i, 1, backgroundBlocks, 0+offset, 0);
+      gfx->setTile(i, 2, backgroundBlocks, 4+offset, 0);
+      gfx->setTile(i, 18, backgroundBlocks, 2+offset, 0);
     }
 
   if(field[0][3] == Field::SOLID)
     {
-      gfx->setTile(0, 2, backgroundBlocks, 0, 0);
-      gfx->setTile(1, 2, backgroundBlocks, 11, 0);
-      gfx->setTile(24, 2, backgroundBlocks, 0, 0);
-      gfx->setTile(23, 2, backgroundBlocks, 12, 0);
+      gfx->setTile(0, 2, backgroundBlocks, 0+offset, 0);
+      gfx->setTile(1, 2, backgroundBlocks, 11+offset, 0);
+      gfx->setTile(24, 2, backgroundBlocks, 0+offset, 0);
+      gfx->setTile(23, 2, backgroundBlocks, 12+offset, 0);
     }
 
   if(field[0][17] == Field::SOLID)
     {
-      gfx->setTile(0, 18, backgroundBlocks, 0, 0);
-      if(field[2][17] == Field::SOLID)
+      gfx->setTile(0, 18, backgroundBlocks, 0+offset, 0);
+      gfx->setTile(24, 18, backgroundBlocks, 0+offset, 0);
+      gfx->setTile(1, 18, backgroundBlocks, 0+offset, 0);
+      gfx->setTile(23, 18, backgroundBlocks, 0+offset, 0);
+
+      if(field[0][16] == Field::SOLID)
 	{
-	  gfx->setTile(1, 18, backgroundBlocks, 0, 0);
+	  gfx->setTile(0, 17, backgroundBlocks, 0+offset, 0);
+	  gfx->setTile(24, 17, backgroundBlocks, 0+offset, 0);
 	}
       else
 	{
-	  gfx->setTile(1, 18, backgroundBlocks, 9, 0);
+	  gfx->setTile(0, 17, backgroundBlocks, 2+offset, 0);
+	  gfx->setTile(24, 17, backgroundBlocks, 2+offset, 0);
 	}
-      gfx->setTile(24, 18, backgroundBlocks, 0, 0);
-      gfx->setTile(23, 18, backgroundBlocks, 10, 0);
+
+      if(field[2][17] == Field::EMPTY)
+	{
+	  gfx->setTile(1, 18, backgroundBlocks, 9+offset, 0);
+	}
+      if(field[22][17] == Field::EMPTY)
+	{
+	  gfx->setTile(23, 18, backgroundBlocks, 10+offset, 0);
+	}
+
+      i1 = (field[1][16] << 1) + field[2][17];
+      gfx->setTile(1, 17, backgroundBlocks, map6[i1]+offset, 0);
+
+      i1 = (field[23][16] << 1) + field[22][17];
+      gfx->setTile(23, 17, backgroundBlocks, map7[i1]+offset, 0);
+    }
+  else
+    {
+      gfx->setTile(0, 17, spikes, 0, 0);
+      gfx->setTile(1, 17, spikes, 0, 0);
+      gfx->setTile(23, 17, spikes, 0, 0);
+      gfx->setTile(24, 17, spikes, 0, 0);
     }
 
   for(int i = 3;i < 17;i++)
     {
       if(field[0][i] == Field::SOLID)
 	{
-	  int i1 = (field[0][i-1] << 1) + field[0][i+1];
+	  i1 = (field[0][i-1] << 1) + field[0][i+1];
 	  
-	  gfx->setTile(0, i, backgroundBlocks, map1[i1], 0);
-	  gfx->setTile(24, i, backgroundBlocks, map1[i1], 0);
-	  gfx->setTile(1, i, backgroundBlocks, map2[i1], 0);
-	  gfx->setTile(23, i, backgroundBlocks, map3[i1], 0);
+	  gfx->setTile(0, i, backgroundBlocks, map1[i1]+offset, 0);
+	  gfx->setTile(24, i, backgroundBlocks, map1[i1]+offset, 0);
+	  gfx->setTile(1, i, backgroundBlocks, map2[i1]+offset, 0);
+	  gfx->setTile(23, i, backgroundBlocks, map3[i1]+offset, 0);
 	}
     }
 
@@ -178,9 +212,9 @@ Field::redrawAll()
 	gfx->setTile(i, 17, spikes, 0, 0);
       else
 	{
-	  int i1 = (field[i-1][17] << 1) + field[i+1][17];
-	  gfx->setTile(i, 17, backgroundBlocks, map4[i1], 0);
-	  gfx->setTile(i, 18, backgroundBlocks, map5[i1], 0);
+	  i1 = (field[i-1][17] << 1) + field[i+1][17];
+	  gfx->setTile(i, 17, backgroundBlocks, map4[i1]+offset, 0);
+	  gfx->setTile(i, 18, backgroundBlocks, map5[i1]+offset, 0);
 	}
     }
 

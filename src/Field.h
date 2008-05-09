@@ -33,7 +33,7 @@ class Field
   void repairBlock(int x, int y);
   void drawBlock(int x, int y);
   void drawBlockAndSurrounding(int x, int y);
-  void redrawAll();
+  void redrawAll(bool bright = false);
   void randomBlocks();
   void moveObjectRel(Object *object, int *x, int *y);
 
