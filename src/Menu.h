@@ -32,6 +32,13 @@ class Menu
   int level;
 
   int nextTimer;
+
+  /* Strings */
+  int remar_games_2008;
+  int enter_to_start;
+  int stage;
+  int skill;
+
 };
 
 #endif

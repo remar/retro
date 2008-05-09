@@ -14,14 +14,29 @@ Menu::Menu(remar2d *gfx, SoundManager *sfx, Input *input,
 
   drawBackground();
 
+  remar_games_2008 = gfx->print("text", "remar games 2008");
+  gfx->showSprite(remar_games_2008, true);
+  gfx->moveSpriteAbs(remar_games_2008, 144, 208);
+
+  enter_to_start = gfx->print("text", "press enter to start");
+  gfx->showSprite(enter_to_start, true);
+  gfx->moveSpriteAbs(enter_to_start, 240, 304);
+
+  stage = gfx->print("text", "stage");
+  gfx->showSprite(stage, true);
+  gfx->moveSpriteAbs(stage, 336, 336);
+
   levelCounter = new Counter(gfx, 2);
-  levelCounter->setPosition(400, 300);
+  levelCounter->setPosition(432, 336);
   levelCounter->setCounter(level);
 }
 
 Menu::~Menu()
 {
-  printf("Delete menu\n");
+  gfx->removeSpriteInstance(remar_games_2008);
+  gfx->removeSpriteInstance(enter_to_start);
+  gfx->removeSpriteInstance(stage);
+  delete levelCounter;
 }
 
 GameMode
