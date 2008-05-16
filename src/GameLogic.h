@@ -32,7 +32,9 @@ class GameLogic
   Level *level;
   ScoreScreen *scoreScreen;
 
-  GameMode mode;
+  GameMode *gameMode;
+
+  Mode mode;
 
   int oldTime;
 

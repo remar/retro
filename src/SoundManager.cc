@@ -19,6 +19,7 @@ SoundManager::SoundManager()
       "dot.wav",   /* 12 */
       "pause.wav", /* 13 */
       "start.wav", /* 14 */
+      "scoretick.wav", /* 15 */
       0
     };
   
@@ -84,4 +85,10 @@ void
 SoundManager::playMusic(int i, bool loop)
 {
   Mix_PlayMusic(songs[i], loop ? -1 : 0);
+}
+
+void
+SoundManager::stopMusic()
+{
+  Mix_HaltMusic();
 }

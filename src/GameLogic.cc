@@ -8,6 +8,14 @@ GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx)
 {
   srand(time(0));
 
+  graphics->setupTileBackground(32, 32);
+  graphics->loadFont("../gfx/text.xml");
+
+  int loading = graphics->print("text", "loading");
+  graphics->showSprite(loading, true);
+  graphics->moveSpriteAbs(loading, 0, 0);
+  graphics->redraw();
+
   /* Read in graphics */
   char *sprites[] = {"../gfx/good.xml",
 		     "../gfx/fuzz.xml",
@@ -22,6 +30,8 @@ GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx)
 		     "../gfx/numbers.xml",
 		     "../gfx/drone.xml",
 		     "../gfx/clock.xml",
+		     "../gfx/ammo.xml",
+		     "../gfx/reload.xml",
 		     0};
 
   printf("Loading sprites");
@@ -32,21 +42,29 @@ GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx)
     }
   printf("\n");
 
-  graphics->loadFont("../gfx/text.xml");
 
   graphics->loadTileSet("../gfx/background.xml");
 
   scoreKeeper = new ScoreKeeper();
 
-  //  mode = SCORE;
-  //  scoreScreen = new ScoreScreen(graphics, sound, input, scoreKeeper);
+  graphics->showSprite(loading, false);
+  graphics->removeSpriteInstance(loading);
+
+//   scoreKeeper->setSkillLevel(3);
+//   scoreKeeper->setTimer(178);
+//   scoreKeeper->killed(ScoreKeeper::Fuzz);
+//   scoreKeeper->killed(ScoreKeeper::Fuzz);
+//   scoreKeeper->killed(ScoreKeeper::Drone);
 
   mode = MENU;
-  menu = new Menu(graphics, sound, input, scoreKeeper);
+  gameMode = new Menu(graphics, sound, input, scoreKeeper);
+//   mode = SCORE;
+//   gameMode = new ScoreScreen(graphics, sound, input, scoreKeeper);
 }
 
 GameLogic::~GameLogic()
 {
+  delete scoreKeeper;
 }
 
 void
@@ -68,63 +86,34 @@ GameLogic::update()
 
   for(;updateIterations > updateInterval; updateIterations -= updateInterval)
     {
-      switch(mode)
+      Mode oldMode = mode;
+
+      if(gameMode)
 	{
-	case MENU:
-	  mode = menu->update();
-	  if(mode != MENU)
+	  mode = gameMode->update();
+	}
+      
+      if(oldMode != mode)
+	{
+	  delete gameMode;
+	  switch(mode)
 	    {
-	      delete menu;
-	      switch(mode)
-		{
-		case GAME:
-		  level = new Level(graphics, sound, input, scoreKeeper);
-		  break;
-		}
+	    case MENU:	
+	      gameMode = new Menu(graphics, sound, input, scoreKeeper);
+	      break;
+
+	    case GAME:
+	      gameMode = new Level(graphics, sound, input, scoreKeeper);
+	      break;
+
+	    case SCORE:
+	      gameMode = new ScoreScreen(graphics, sound, input, scoreKeeper);
+	      break;
+
+	    case QUIT:
+	      quitGame = true;
+	      break;
 	    }
-	  break;
-
-	case GAME:
-	  mode = level->update(0);
-
-	  if(mode != GAME)
-	    {
-	      delete level;
-	      switch(mode)
-		{
-		case SCORE:
-		  scoreScreen
-		    = new ScoreScreen(graphics, sound, input, scoreKeeper);
-		  break;
-		}
-	    }
-
-	  break;
-
-	case SCORE:
-// 	  scoreKeeper->calculateScore();
-// 	  scoreKeeper->nextLevel();
-// 	  delete level;
-// 	  level = new Level(graphics, sound, input, scoreKeeper);
-// 	  mode = GAME;
-
-	  mode = scoreScreen->update();
-
-	  if(mode != SCORE)
-	    {
-	      delete scoreScreen;
-	      switch(mode)
-		{
-		case GAME:
-		  level = new Level(graphics, sound, input, scoreKeeper);
-		  break;
-		}
-	    }
-	  break;
-
-	case QUIT:
-	  quitGame = true;
-	  break;
 	}
     }
 
@@ -139,5 +128,6 @@ GameLogic::quit()
   // TODO: The application should only quit if the player chooses QUIT
   // in the menu
 
-  return (input->quit() || input->pressed(SDLK_ESCAPE) || quitGame);
+  return quitGame;
+  //return (input->quit() || input->pressed(SDLK_ESCAPE) || quitGame);
 }

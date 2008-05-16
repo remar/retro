@@ -10,26 +10,28 @@
 #include "Fuzz.h"
 #include "Drone.h"
 
-class ScoreScreen
+class ScoreScreen : public GameMode
 {
  public:
   ScoreScreen(remar2d *gfx, SoundManager *sfx, Input *input,
 	      ScoreKeeper *scoreKeeper);
   ~ScoreScreen();
-  GameMode update();
+  Mode update();
 
  private:
   void drawBackground();
 
-  remar2d *gfx;
-  SoundManager *sfx;
-  Input *input;
-  ScoreKeeper *scoreKeeper;
-  
+  enum State { TIME, COINS, FUZZ, DRONES, VIPERS, HUNTERS, DONE };
+  enum SubState { SHOW, TICK, TICKDELAY };
+
+  State state;
+  SubState subState;
+
+  int delayTimer;
+  int tickDelayTimer;
+
   char *mainTiles;
 
-  int frameCounter;
-  
   int nextTimer;
 
   /* Strings */
@@ -37,29 +39,38 @@ class ScoreScreen
   int score;
   int stage;
 
-  int scorePerTime;
-  int scorePerCoin;
-  int scorePerFuzz;
-  int scorePerDrone;
-  int scorePerViper;
-  int scorePerHunter;
-
   Counter *topScoreCounter;
   Counter *scoreCounter;
-
   Counter *level;
 
   int clock;
   Counter *time;
+  int scorePerTime;
 
+  int coinSprite;
   Counter *coins;
-  Counter *fuzzes;
-  Counter *drones;
-  Counter *vipers;
-  Counter *hunters;
+  int coinsCounted;
+  int scorePerCoin;
 
-  Fuzz *fuzz;
-  Drone *drone;
+  int fuzzSprite;
+  Counter *fuzzes;
+  int fuzzesCounted;
+  int scorePerFuzz;
+
+  int droneSprite;
+  Counter *drones;
+  int dronesCounted;
+  int scorePerDrone;
+
+  int viperSprite;
+  Counter *vipers;
+  int vipersCounted;
+  int scorePerViper;
+
+  int hunterSprite;
+  Counter *hunters;
+  int huntersCounted;
+  int scorePerHunter;
 };
 
 #endif

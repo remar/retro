@@ -8,28 +8,27 @@
 #include "GameMode.h"
 #include "Counter.h"
 
-class Menu
+class Menu : public GameMode
 {
  public:
   Menu(remar2d *gfx, SoundManager *sfx, Input *input,
        ScoreKeeper *scoreKeeper);
   ~Menu();
-  GameMode update();
+  Mode update();
 
  private:
   void drawBackground();
   void increaseLevel();
   void decreaseLevel();
-
-  remar2d *gfx;
-  SoundManager *sfx;
-  Input *input;
-  ScoreKeeper *scoreKeeper;
+  void increaseSkillLevel();
   
   char *mainTiles;
 
   Counter *levelCounter;
   int level;
+
+  Counter *skillCounter;
+  int skill;
 
   int nextTimer;
 
@@ -37,8 +36,9 @@ class Menu
   int remar_games_2008;
   int enter_to_start;
   int stage;
-  int skill;
-
+  int skillLevel;
+  int score;
+  int topScore;
 };
 
 #endif

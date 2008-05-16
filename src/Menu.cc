@@ -2,15 +2,13 @@
 
 Menu::Menu(remar2d *gfx, SoundManager *sfx, Input *input,
 	   ScoreKeeper *scoreKeeper)
-  : nextTimer(0), level(1)
+  : nextTimer(0), level(1), GameMode(gfx, sfx, input, scoreKeeper)
 {
-  this->gfx = gfx;
-  this->sfx = sfx;
-  this->input = input;
-  this->scoreKeeper = scoreKeeper;
-
   gfx->setupTileBackground(16, 16);
   mainTiles = gfx->loadTileSet("../gfx/maintiles.xml");
+
+  level = scoreKeeper->getLevel();
+  skill = scoreKeeper->getSkillLevel();
 
   drawBackground();
 
@@ -29,6 +27,27 @@ Menu::Menu(remar2d *gfx, SoundManager *sfx, Input *input,
   levelCounter = new Counter(gfx, 2);
   levelCounter->setPosition(432, 336);
   levelCounter->setCounter(level);
+
+  skillLevel = gfx->print("text", "skill");
+  gfx->showSprite(skillLevel, true);
+  gfx->moveSpriteAbs(skillLevel, 336, 336+32);
+
+  skillCounter = new Counter(gfx, 1);
+  skillCounter->setPosition(432+16, 336+32);
+  skillCounter->setCounter(skill);
+
+  char buf[32];
+  sprintf(buf, "score %8.8d", scoreKeeper->getScore());
+
+  score = gfx->print("text", buf);
+  gfx->showSprite(score, true);
+  gfx->moveSpriteAbs(score, 16*18, 16*27 + 4);
+
+  sprintf(buf, " top  %8.8d", scoreKeeper->getTopScore());
+
+  topScore = gfx->print("text", buf);
+  gfx->showSprite(topScore, true);
+  gfx->moveSpriteAbs(topScore, 16*18, 16*27+32  - 4);
 }
 
 Menu::~Menu()
@@ -36,10 +55,12 @@ Menu::~Menu()
   gfx->removeSpriteInstance(remar_games_2008);
   gfx->removeSpriteInstance(enter_to_start);
   gfx->removeSpriteInstance(stage);
+  gfx->removeSpriteInstance(skillLevel);
   delete levelCounter;
+  delete skillCounter;
 }
 
-GameMode
+Mode
 Menu::update()
 {
   if(nextTimer > 0)
@@ -47,6 +68,8 @@ Menu::update()
       --nextTimer;
       if(nextTimer == 0)
 	{
+	  scoreKeeper->setScore(0);
+
 	  return GAME;
 	}
     }
@@ -54,6 +77,7 @@ Menu::update()
   if(input->pressed(SDLK_RETURN))
     {
       scoreKeeper->setLevel(level);
+      scoreKeeper->setSkillLevel(skill);
 
       nextTimer = 60;
       sfx->playSound(14);
@@ -65,6 +89,10 @@ Menu::update()
   else if(input->pressed(SDLK_LEFT))
     {
       decreaseLevel();
+    }
+  else if(input->pressed(SDLK_DOWN))
+    {
+      increaseSkillLevel();
     }
   else if(input->pressed(SDLK_ESCAPE))
     return QUIT;
@@ -93,13 +121,32 @@ Menu::drawBackground()
 
   int xOffset = 8;
   int yOffset = 4;
-
   int i;
+
   for(int y = 0; y < 8;y++)
     for(int x = 0;x < 35;x++)
       {
 	i = y * 35 + x;
 	gfx->setTile(x + xOffset, y + yOffset, mainTiles, battle[i]%6, battle[i]/6);
+      }
+
+  int score[] =
+    {
+      1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+      6, B, B, B, B, B, B, B, B, B, B, B, B, B, B, 6,
+      6, B, B, B, B, B, B, B, B, B, B, B, B, B, B, 6,
+      6, B, B, B, B, B, B, B, B, B, B, B, B, B, B, 6,
+      7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8,
+    };
+
+  xOffset = 17;
+  yOffset = 26;
+
+  for(int y = 0;y < 5;y++)
+    for(int x = 0;x < 16;x++)
+      {
+	i = y * 16 + x;
+	gfx->setTile(x + xOffset, y + yOffset, mainTiles, score[i]%6, score[i]/6);	
       }
 }
 
@@ -121,4 +168,14 @@ Menu::decreaseLevel()
     level = 32;
 
   levelCounter->setCounter(level);
+}
+
+void
+Menu::increaseSkillLevel()
+{
+  skill++;
+  if(skill > 8)
+    skill = 1;
+
+  skillCounter->setCounter(skill);
 }

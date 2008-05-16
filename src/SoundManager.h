@@ -11,6 +11,7 @@ class SoundManager
   int playSound(int i, bool loop = false);
   void stopSound(int channel);
   void playMusic(int i, bool loop = true);
+  void stopMusic();
 
  private:
   Mix_Chunk **sounds;

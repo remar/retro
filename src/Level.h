@@ -25,14 +25,15 @@
 #include "Counter.h"
 #include "Drone.h"
 #include "HUD.h"
+#include "BulletHandler.h"
 
-class Level
+class Level : public GameMode
 {
  public:
   Level(remar2d *gfx, SoundManager *sfx, Input *input,
 	ScoreKeeper *scoreKeeper);
   ~Level();
-  GameMode update(int delta);
+  Mode update();
 
  private:
   bool loadLevel(char *lev);
@@ -44,19 +45,11 @@ class Level
   void showAllObjects(bool show);
   void deleteAllObjects();
   void setupHUD();
+  void performWipe(Mode modeToReturn);
 
   Spawner *spawner;
 
   Field *field;
-
-  /* Graphics engine pointer */
-  remar2d *gfx;
-
-  SoundManager *sfx;
-
-  Input *input;
-
-  ScoreKeeper *scoreKeeper;
 
   bool paused;
 
@@ -64,8 +57,8 @@ class Level
   Hero *hero;
 
   /* Coins */
-  int coins;
-  Coin *coin[8];
+/*   int coins; */
+/*   Coin *coin[8]; */
 
   /* Bullets flying through the air! (KERPOWW!!) */
   int bullets;
@@ -75,11 +68,16 @@ class Level
   list<Object *> objects;
   list<Enemy *> enemies;
   list<Collectible *> collectibles;
+  list<Coin *> coins;
 
 /*   Mix_Music *music; */
 /*   Mix_Chunk *shoot; */
 /*   Mix_Chunk *pling; */
 /*   Mix_Chunk *explosion; */
+
+  bool doWipe;
+  int wipeTimer;
+  int wipeCounter;
 
   bool win;
   int winTimer;
@@ -101,6 +99,10 @@ class Level
   bool timerPaused;
 
   HUD *hud;
+
+  BulletHandler *bulletHandler;
+
+  Mode returnMode;
 };
 
 #endif

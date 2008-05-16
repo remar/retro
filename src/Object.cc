@@ -1,7 +1,7 @@
 #include "Object.h"
 
 Object::Object(remar2d *gfx, char *sprite, SoundManager *sfx)
-  : destroyMe(false)
+  : destroyMe(false), destroyTimer(0)
 {
   this->gfx = gfx;
   this->sfx = sfx;
@@ -223,5 +223,12 @@ Object::destroy()
 void
 Object::update()
 {
-  
+  if(destroyTimer > 0)
+    {
+      --destroyTimer;
+      if(destroyTimer == 0)
+	{
+	  destroyMe = true;
+	}
+    }
 }

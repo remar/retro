@@ -6,13 +6,8 @@ int DEBUG = 0;
 
 Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
 	     ScoreKeeper *scoreKeeper)
+  : GameMode(gfx, sfx, input, scoreKeeper)
 {
-  this->gfx = gfx;
-  this->sfx = sfx;
-  this->input = input;
-  this->scoreKeeper = scoreKeeper;
-
-  coins = 0;
   bullets = 0;
   paused = false;
   win = false;
@@ -20,16 +15,18 @@ Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
   loadFailed = false;
   hero = 0;
 
-  // timer = 5;
   scoreKeeper->setTimer(200);
   timerTimer = 60;
   timerPaused = true;
+
+  doWipe = false;
+  wipeTimer = 70;
+  wipeCounter = 0;
 
   gfx->setupTileBackground(32, 32);
 
   for(int i = 0;i < 8;i++)
     {
-      coin[i] = 0;
       bullet[i] = 0;
     }
 
@@ -50,9 +47,9 @@ Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
       loadFailed = true;
     }
 
-  // setupHUD();
-  
   hud = new HUD(gfx, scoreKeeper);
+
+  bulletHandler = new BulletHandler(hud);
 
   spawner = new Spawner(&objects,
 			scoreKeeper->redFuzzes(),
@@ -63,9 +60,12 @@ Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
 
   sfx->playMusic(0);
 }
+
 Level::~Level()
 {
-  delete hud;
+  if(hud)
+    delete hud;
+
   clearLevel();
 }
 
@@ -83,9 +83,8 @@ Level::loadLevel(char *lev)
 
   */
 
-  printf("Load level: %s\n", lev);
-
   clearLevel();
+  scoreKeeper->resetCoins();
 
   std::ifstream file(lev);
   if(!file)
@@ -125,13 +124,14 @@ Level::loadLevel(char *lev)
 	      break;
 
 	    case 5:
-	      if(coins <= 7)
-		{
-		  coin[coins] = new Coin(gfx, sfx);
-		  coin[coins]->setVisible(true);
-		  coin[coins]->moveAbs(x*32+8, (y+3)*32+4);
-		  coins++;
-		}
+	      {
+		  Coin *coin = new Coin(gfx, sfx);
+		  coin->setVisible(true);
+		  coin->moveAbs(x*32+8, (y+3)*32 + 4);
+		  coins.push_back(coin);
+
+		  scoreKeeper->addCoin();
+	      }
 	      break;
 	    }
 	}
@@ -207,11 +207,39 @@ Level::respawn(int x, int y)
   return true;
 }
 
-GameMode
-Level::update(int delta)
+Mode
+Level::update()
 {
   if(loadFailed)
     return QUIT;
+
+  if(doWipe)
+    {
+      --wipeTimer;
+
+      if(wipeTimer == 0)
+	{
+	  return returnMode;
+	}
+
+       if(wipeTimer % 2 && wipeCounter < 19)
+ 	{
+	  for(int x = 0;x < 25;x++)
+	    {
+	      gfx->setTile(x, wipeCounter, 0, 0, 0);
+	    }
+
+	  wipeCounter++;
+ 	}
+
+      return GAME;
+    }
+
+  if(input->pressed(SDLK_ESCAPE))
+    {
+      performWipe(MENU);
+      return GAME;
+    }
 
   if(win)
     {
@@ -232,9 +260,11 @@ Level::update(int delta)
 
       /* When done, go to score tally screen */
       if(winTimer == 0)
-	  return SCORE;
-      else
-	return GAME;
+	{
+	  performWipe(SCORE);
+	}
+
+      return GAME;
     }
 
   if(input->pressed(SDLK_p)) pause();
@@ -321,6 +351,8 @@ Level::update(int delta)
 	}
     }
 
+  bulletHandler->update();
+
   hero->update();
   if(hero->destroy())
     {
@@ -335,8 +367,9 @@ Level::update(int delta)
 	  /* GAME OVER */
 	  printf("\n\nGAME OVER\n\n");
 
-	  /* Obviously we're not supposed to quit when this happens... :-P */
-	  return QUIT;
+	  performWipe(SCORE);
+	  return GAME;
+	  // return SCORE;
 	}
 
       delete hero;
@@ -354,7 +387,8 @@ Level::update(int delta)
   if(input->held(SDLK_RIGHT))  move_x++;
   if(input->pressed(SDLK_UP))  hero->jump(true);
   if(input->released(SDLK_UP)) hero->jump(false);
-  if(input->pressed(SDLK_z))   hero->shoot(&bullets, &bullet[0]);
+  if(input->pressed(SDLK_z) && bulletHandler->fire())
+    hero->shoot(&bullets, &bullet[0]);
   if(input->pressed(SDLK_d))   hero->die();
 
   spawner->update();
@@ -382,32 +416,34 @@ Level::update(int delta)
       hero->moveRel(move_x, move_y);
     }
 
-  /* Check for collision between Captain Good and coins */
-  for(int i = 0;i < 8;i++)
+  for(list<Coin *>::iterator it = coins.begin();it != coins.end();)
     {
-      if(collides(hero, coin[i]))
+      (*it)->update();
+      if((*it)->destroy())
 	{
-	  if(coin[i]->collect())
+	  delete (*it);
+	  it = coins.erase(it);
+
+	  continue;
+	}
+
+      if((*it)->collides(hero) && (*it)->collect())
+	{
+	  scoreKeeper->collectCoin();
+
+	  if(scoreKeeper->coinsLeft() == 0)
 	    {
-	      coins--;
-	      if(coins == 0)
-		{
-		  printf("YOU WIN!!!\n");
-		  win = true;
-		  winTimer = 3*60; /* Blink background for 3 seconds */
-
-		  sfx->playMusic(1, false);
-		  deleteAllObjects();//showAllObjects(false);
-
-		  return GAME;
-		  /*
-		    - Remove objects (hero, fuzzes, other stuff)
-		    - Blink with background
-		    - Go to score tally screen
-		  */
-		}
+	      win = true;
+	      winTimer = 3*60; /* Blink background for 3 seconds */
+	      
+	      sfx->playMusic(1, false);
+	      deleteAllObjects();
+	      
+	      return GAME;
 	    }
 	}
+
+      it++;
     }
 
   for(int i = 0;i < 8;i++)
@@ -524,14 +560,19 @@ Level::removeBullet(int i)
 void
 Level::showAllObjects(bool show)
 {
-  /* Remove all enemies */
+  /* Show/hide all enemies */
   for(list<Enemy *>::iterator it = enemies.begin();it != enemies.end();it++)
     {
       (*it)->setVisible(show);
     }
 
-  /* Remove other objects */
+  /* Show/hide other objects */
   for(list<Object *>::iterator it = objects.begin();it != objects.end();it++)
+    {
+      (*it)->setVisible(show);
+    }
+
+  for(list<Coin *>::iterator it = coins.begin();it != coins.end();it++)
     {
       (*it)->setVisible(show);
     }
@@ -540,9 +581,6 @@ Level::showAllObjects(bool show)
 
   for(int i = 0;i < 8;i++)
     {
-      if(coin[i])
-	coin[i]->setVisible(show);
-
       if(bullet[i])
 	bullet[i]->setVisible(show);
     }
@@ -565,15 +603,11 @@ Level::deleteAllObjects()
       it = objects.erase(it);
     }
 
-  for(int i = 0;i < coins;i++)
+  for(list<Coin *>::iterator it = coins.begin();it != coins.end();)
     {
-      if(coin[i])
-	{
-	  delete coin[i];
-	  coin[i] = 0;
-	}
+      delete (*it);
+      it = coins.erase(it);
     }
-  coins = 0;
 
   if(hero)
     {
@@ -589,4 +623,18 @@ Level::deleteAllObjects()
 	  bullet[i] = 0;
 	}
     }
+}
+
+void
+Level::performWipe(Mode modeToReturn)
+{
+  sfx->stopMusic();
+
+  deleteAllObjects();
+  
+  delete hud;
+  hud = 0;
+
+  returnMode = modeToReturn;
+  doWipe = true;
 }

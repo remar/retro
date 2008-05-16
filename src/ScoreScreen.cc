@@ -2,20 +2,11 @@
 
 ScoreScreen::ScoreScreen(remar2d *gfx, SoundManager *sfx, Input *input,
 			 ScoreKeeper *scoreKeeper)
-  : frameCounter(0)
+  : GameMode(gfx, sfx, input, scoreKeeper), state(TIME), delayTimer(60),
+    subState(SHOW), coinsCounted(0), fuzzesCounted(0), dronesCounted(0),
+    vipers(0), hunters(0)
 {
-  this->gfx = gfx;
-  this->sfx = sfx;
-  this->input = input;
-  this->scoreKeeper = scoreKeeper;
-
   gfx->setupTileBackground(32, 32);
-
-  for(int y = 0;y < 19;y++)
-    for(int x = 0;x < 25;x++)
-      {
-	gfx->setTile(x, y, "background", 0, 0);
-      }
 
   drawBackground();
 
@@ -44,22 +35,87 @@ ScoreScreen::ScoreScreen(remar2d *gfx, SoundManager *sfx, Input *input,
   scoreCounter->setCounter(scoreKeeper->getScore());
 
   clock = gfx->createSpriteInstance("clock");
-  gfx->showSprite(clock, true);
+  gfx->showSprite(clock, false);
   gfx->setAnimation(clock, "normal");
   gfx->moveSpriteAbs(clock, 10*32+16, 9*32+8);
   
   scorePerTime = gfx->print("text", "20#");
-  gfx->showSprite(scorePerTime, true);
+  gfx->showSprite(scorePerTime, false);
   gfx->moveSpriteAbs(scorePerTime, 11*32+16, 9*32+8);
 
-  time = new Counter(gfx, 3);
-  time->setPosition(13*32, 9*32+8);
-  time->setCounter(scoreKeeper->getTimer());
+  coinSprite = gfx->createSpriteInstance("coin");
+  gfx->showSprite(coinSprite, false);
+  gfx->setAnimation(coinSprite, "blink");
+  gfx->pauseAnimation(coinSprite, true);
+  gfx->moveSpriteAbs(coinSprite, 10*32 + 16, 10*32+4);
+
+  char buf[5];
+  snprintf(buf, 5, "%d#", 100 * scoreKeeper->getSkillLevel());
+
+  scorePerCoin = gfx->print("text", buf);
+  gfx->showSprite(scorePerCoin, false);
+  gfx->moveSpriteAbs(scorePerCoin, 11*32+16, 10*32+8);
+
+
+  fuzzSprite = gfx->createSpriteInstance("fuzz");
+  gfx->showSprite(fuzzSprite, false);
+  gfx->setAnimation(fuzzSprite, "roll left");
+  gfx->pauseAnimation(fuzzSprite, true);
+  gfx->moveSpriteAbs(fuzzSprite, 10*32+16, 11*32+4);
+
+  scorePerFuzz = gfx->print("text", "120#");
+  gfx->showSprite(scorePerFuzz, false);
+  gfx->moveSpriteAbs(scorePerFuzz, 11*32+16, 11*32+8);
+
+
+  droneSprite = gfx->createSpriteInstance("drone");
+  gfx->showSprite(droneSprite, false);
+  gfx->setAnimation(droneSprite, "normal");
+  gfx->pauseAnimation(droneSprite, true);
+  gfx->moveSpriteAbs(droneSprite, 10*32+16, 12*32+4);
+
+  scorePerDrone = gfx->print("text", "200#");
+  gfx->showSprite(scorePerDrone, false);
+  gfx->moveSpriteAbs(scorePerDrone, 11*32+16, 12*32+8);
+}
+
+ScoreScreen::~ScoreScreen()
+{
+  /* Delete counters */
+  delete topScoreCounter;
+  delete scoreCounter;
+  delete level;
+  delete time;
+  delete coins;
+  delete fuzzes;
+  delete drones;
+  if(vipers)  delete vipers;
+  if(hunters) delete hunters;
+
+  gfx->removeSpriteInstance(scorePerTime);
+  gfx->removeSpriteInstance(scorePerCoin);
+  gfx->removeSpriteInstance(scorePerFuzz);
+  gfx->removeSpriteInstance(scorePerDrone);
+  gfx->removeSpriteInstance(scorePerViper);
+  gfx->removeSpriteInstance(scorePerHunter);
+  gfx->removeSpriteInstance(top);
+  gfx->removeSpriteInstance(score);
+  gfx->removeSpriteInstance(stage);
+  gfx->removeSpriteInstance(clock);
+  gfx->removeSpriteInstance(coinSprite);
+  gfx->removeSpriteInstance(fuzzSprite);
+  gfx->removeSpriteInstance(droneSprite);
 }
 
 void
 ScoreScreen::drawBackground()
 {
+  for(int y = 0;y < 19;y++)
+    for(int x = 0;x < 25;x++)
+      {
+	gfx->setTile(x, y, "background", 0, 0);
+      }
+
   int offsetX = 7, offsetY = 3;
 
   int smallWindows[] =
@@ -109,15 +165,269 @@ ScoreScreen::drawBackground()
       }
 }
 
-ScoreScreen::~ScoreScreen()
-{
+/*
 
-}
+SCRIPT
 
-GameMode
+1. delay 1 second
+2. show clock and time left
+3. delay 1 second
+4. tick down 1 second and add score
+5. delay 1/4 second
+6. if time != 0, goto 4
+7. delay 1 second
+8. show coin and coins collected
+9. delay 1 second
+10 tick down 1 coin and add score
+11 delay 1/2 second
+12 if coins != 8, goto 10
+13 delay 1 second
+14 show fuzz
+15 delay 1 second
+16 tick down 1 fuzz and add score
+17 delay 1/2 second
+18 if fuzz != fuzz killed, goto 16
+19 ...
+
+
+*/
+
+Mode
 ScoreScreen::update()
 {
-  frameCounter++;
+  if(input->held(SDLK_RETURN) && state != DONE)
+    {
+      if(delayTimer > 0)
+	delayTimer = 0;
+
+      if(subState == TICKDELAY)
+	{
+	  tickDelayTimer = 0;
+	  subState = TICK;
+	}	
+    }
+
+  if(input->pressed(SDLK_RETURN) && state == DONE)
+    {
+      if(subState == TICKDELAY)
+	{
+	  tickDelayTimer = 0;
+	  subState = TICK;
+	}
+    }
+
+  if(delayTimer > 0)
+    {
+      --delayTimer;
+      return SCORE;
+    }
+
+  if(subState == TICKDELAY)
+    {
+      if(--tickDelayTimer == 0)
+	{
+	  subState = TICK;
+	}
+    }
+
+//   enum State { TIME = 0, COINS, FUZZ, DRONES, VIPERS, HUNTERS };
+//   enum SubState { SHOW, TICK, TICKDELAY };
+
+  char *stateChar[] = {"TIME", "COINS", "FUZZ", "DRONES", "VIPERS", "HUNTERS"};
+  char *subStateChar[] = {"SHOW", "TICK", "TICKDELAY"};
+
+  switch(state)
+    {
+    case TIME:
+      switch(subState)
+	{
+	case SHOW:
+	  gfx->showSprite(clock, true);
+	  gfx->showSprite(scorePerTime, true);
+	  
+	  time = new Counter(gfx, 3);
+	  time->setPosition(13*32, 9*32+8);
+	  time->setCounter(scoreKeeper->getTimer());
+
+	  tickDelayTimer = 60;
+	  subState = TICKDELAY;
+	  break;
+	  
+	case TICK:
+	  if(scoreKeeper->getTimer() == 0)
+	    {
+	      state = COINS;
+	      subState = SHOW;
+	      delayTimer = 60;
+	    }
+	  else
+	    {
+	      int t = scoreKeeper->getTimer();
+	      if(t > 100)
+		{
+		  scoreKeeper->setTimer(t - 100);
+		  scoreKeeper->addScore(100 * 20);
+		}
+	      else if(t > 10)
+		{
+		  scoreKeeper->setTimer(t - 10);
+		  scoreKeeper->addScore(10 * 20);
+		}
+	      else
+		{
+		  scoreKeeper->setTimer(t - 1);
+		  scoreKeeper->addScore(1 * 20);
+		}
+
+	      time->setCounter(scoreKeeper->getTimer());
+	      
+	      tickDelayTimer = 6;
+
+	      sfx->playSound(15);
+	    }
+	  break;
+	  
+	}
+      break;
+
+    case COINS:
+      switch(subState)
+	{
+	case SHOW:
+	  gfx->showSprite(coinSprite, true);
+	  gfx->showSprite(scorePerCoin, true);
+
+	  coins = new Counter(gfx, 1);
+	  coins->setPosition(14*32, 10*32+8);
+	  coins->setCounter(0);
+
+	  tickDelayTimer = 60;
+	  subState = TICKDELAY;
+	  break;
+
+	case TICK:
+	  if(coinsCounted == scoreKeeper->getCoinsCollected())
+	    {
+	      state = FUZZ;
+	      subState = SHOW;
+	      delayTimer = 60;
+	    }
+	  else
+	    {
+	      coinsCounted++;
+
+	      coins->setCounter(coinsCounted);
+	      scoreKeeper->addScore(100 * scoreKeeper->getSkillLevel());
+
+	      tickDelayTimer = 12;
+
+	      sfx->playSound(15);
+	    }
+	  break;
+	}
+      break;
+
+    case FUZZ:
+      switch(subState)
+	{
+	case SHOW:
+	  gfx->showSprite(fuzzSprite, true);
+	  gfx->showSprite(scorePerFuzz, true);
+
+	  fuzzes = new Counter(gfx, 2);
+	  fuzzes->setPosition(13*32+16, 11*32+8);
+	  fuzzes->setCounter(0);
+
+	  tickDelayTimer = 60;
+	  subState = TICKDELAY;
+	  break;
+
+	case TICK:
+	  if(fuzzesCounted == scoreKeeper->howManyKilled(ScoreKeeper::Fuzz))
+	    {
+	      state = DRONES;
+	      subState = SHOW;
+	      delayTimer = 60;
+	    }
+	  else
+	    {
+	      fuzzesCounted++;
+
+	      fuzzes->setCounter(fuzzesCounted);
+	      scoreKeeper->addScore(120);
+
+	      tickDelayTimer = 12;
+	      sfx->playSound(15);
+	    }
+	  break;
+	}
+      break;
+
+    case DRONES:
+      switch(subState)
+	{
+	case SHOW:
+	  gfx->showSprite(droneSprite, true);
+	  gfx->showSprite(scorePerDrone, true);
+
+	  drones = new Counter(gfx, 2);
+	  drones->setPosition(13*32+16, 12*32+8);
+	  drones->setCounter(0);
+
+	  tickDelayTimer = 60;
+	  subState = TICKDELAY;
+	  break;
+
+	case TICK:
+	  if(dronesCounted == scoreKeeper->howManyKilled(ScoreKeeper::Drone))
+	    {
+	      state = DONE;
+	      subState = SHOW;
+	      delayTimer = 60;
+	    }
+	  else
+	    {
+	      dronesCounted++;
+
+	      drones->setCounter(dronesCounted);
+	      scoreKeeper->addScore(200);
+
+	      tickDelayTimer = 12;
+	      sfx->playSound(15);
+	    }
+	  break;
+	}
+      break;
+
+    case DONE:
+      switch(subState)
+	{
+	case SHOW:
+	  tickDelayTimer = 3*60;
+	  subState = TICKDELAY;
+	  break;
+
+	case TICK:
+
+	  scoreKeeper->nextLevel();
+	  scoreKeeper->resetKills();
+
+	  if(scoreKeeper->getLives() > 0)
+	    return GAME;
+	  else
+	    return MENU;
+
+	  break;
+	}
+      break;
+    }
+
+  if(subState == TICK)
+    {
+      scoreCounter->setCounter(scoreKeeper->getScore());
+      topScoreCounter->setCounter(scoreKeeper->getTopScore());
+      subState = TICKDELAY;
+    }
 
   return SCORE;
 }
