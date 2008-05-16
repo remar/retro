@@ -8,7 +8,7 @@
 class HUD
 {
  public:
-  enum Display { SCORE, TOP, TIME, LIVES, STAGE, SKILL, BULLET, RELOAD };
+  enum Display { SCORE, TOP, TIME, LIVES, STAGE, SKILL, RELOAD, BULLET };
 
   HUD(remar2d *gfx, ScoreKeeper *scoreKeeper);
   ~HUD();
@@ -16,18 +16,17 @@ class HUD
   void setValue(Display display, int value);
 
  private:
+  void setAmmo(int value);
+  void setReload(int value);
+
   remar2d *gfx;
   Counter *counters[6];
   ScoreKeeper *scoreKeeper;
 
   int hudSprite;
 
-/*   Counter *score; */
-/*   Counter *topScore; */
-/*   Counter *time; */
-/*   Counter *lives; */
-/*   Counter *level; */
-/*   Counter *skill; */
+  int ammoSprites[8];
+  int reloadSprites[8];
 };
 
 #endif
