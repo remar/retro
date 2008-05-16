@@ -1,7 +1,9 @@
 LIST OF FEATURES TO IMPLEMENT
 -------------------------------------------------------------------------------
 
-Keep track of blaster ammunition supply
+Show ammunition left above Captain Good when firing and getting back ammo
+Fast Fuzzes
+Fuzzes should fall 2 pixels/frame
 Power-ups
 If walking right, then pressing left, walk left until left is released...
 Enemies: Space Viper,
@@ -11,16 +13,12 @@ Enemies: Space Viper,
 	 Dire Space Viper,
 	 Dark Bounty Hunter
 Spawning of various enemies
-Start screen
-Between-level screen
 Key binding redefinition
 Bonus levels
-Fullscreen option
-Sounds
-Music
 Extra lives
-Font system
 Demo recording & playback
+Variable location of data files (currently ../ )
+Show "Stage X" right before stage starts
 
 
 -------------------------------------------------------------------------------
@@ -39,3 +37,10 @@ Level completion (moving to the next level)
 HUD at top of screen
 Font system (remar2d)
 Enemy: Drone
+Start screen
+Between-level screen
+Fullscreen option
+Sound system
+Music
+Font system
+Keep track of blaster ammunition supply
