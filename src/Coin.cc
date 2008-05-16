@@ -13,6 +13,9 @@ Coin::collect()
 {
   if(!collected)
     {
+      /* Delete object after 120 frames */
+      destroyTimer = 120;
+
       setAnimation("pling");
       collected = true;
       sfx->playSound(1, false);
