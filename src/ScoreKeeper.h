@@ -5,6 +5,7 @@ class ScoreKeeper
 {
  public:
   ScoreKeeper();
+  ~ScoreKeeper();
 
   enum EnemyType
     {
@@ -32,8 +33,11 @@ class ScoreKeeper
   void nextLevel();
 
   bool blocksTakeTwoHits();
+
   void resetKills();
   void killed(EnemyType type);
+  int howManyKilled(EnemyType type);
+
   void heroKilled();
   int getLives();
 
@@ -48,7 +52,14 @@ class ScoreKeeper
 
   void setTimer(int t) { timer = t; }
   int getTimer() { return timer; }
-  int decTimer() { timer--; }
+  void decTimer() { timer--; }
+
+  void resetCoins() { coinsCollected = 0; coinsInLevel = 0; }
+  void addCoin() { coinsInLevel++; }
+  void collectCoin() { coinsCollected++; }
+  int getCoinsCollected() { return coinsCollected; }
+  int getCoinsInLevel() { return coinsInLevel; }
+  int coinsLeft() { return coinsInLevel - coinsCollected; }
 
  private:
   int skillLevel;
@@ -61,6 +72,9 @@ class ScoreKeeper
   int kills[7];
 
   int timer;
+
+  int coinsCollected;
+  int coinsInLevel;
 };
 
 #endif

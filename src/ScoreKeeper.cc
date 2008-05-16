@@ -1,10 +1,22 @@
 #include "ScoreKeeper.h"
 #include <stdio.h>
+#include "FileManager.h"
 
 ScoreKeeper::ScoreKeeper()
   : skillLevel(1), level(1), score(0), top(0), lives(3)
 {
+  resetKills();
 
+  FileManager fileManager;
+
+  top = fileManager.readTopScore();
+}
+
+ScoreKeeper::~ScoreKeeper()
+{
+  FileManager fileManager;
+
+  fileManager.writeTopScore(top);
 }
 
 bool
@@ -67,6 +79,8 @@ void
 ScoreKeeper::nextLevel()
 {
   level++;
+  if(level > 32)
+    level = 1;
 }
 
 bool
@@ -98,6 +112,12 @@ ScoreKeeper::killed(EnemyType type)
   kills[type]++;
 }
 
+int
+ScoreKeeper::howManyKilled(EnemyType type)
+{
+  return kills[type];
+}
+
 void
 ScoreKeeper::heroKilled()
 {
@@ -114,13 +134,18 @@ ScoreKeeper::getLives()
 void
 ScoreKeeper::addScore(int s)
 {
-  score += s;
+//   score += s;
+
+  setScore(score + s);
 }
 
 void
 ScoreKeeper::setScore(int s)
 {
   score = s;
+
+  if(score > top)
+    top = score;
 }
 
 int
