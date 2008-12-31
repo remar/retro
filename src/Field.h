@@ -26,7 +26,9 @@ class Field
   Field(remar2d *gfx, SoundManager *sfx,
 	list<BrokenBlock *> *brokenBlocks,
 	list<Object *> *objects,
-	bool blocksTakeTwoHits);
+	bool blocksTakeTwoHits,
+	int skill,
+	bool redBackground);
 
   bool blockHit(int x, int y);
   void breakBlock(int x, int y);
@@ -60,6 +62,7 @@ class Field
   list<BrokenBlock *> *brokenBlocks;
   list<Object *> *objects;
   bool blocksTakeTwoHits;
+  int skill;
 
   /* Names of tilesets */
   char *backgroundBlocks;

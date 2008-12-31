@@ -1,16 +1,16 @@
 #include "Hero.h"
 
-Hero::Hero(remar2d *gfx, SoundManager *sfx)
+Hero::Hero(remar2d *gfx, SoundManager *sfx, list<Bullet *> *bullets)
   : Object(gfx, "good", sfx),  blinking(true), jumping(false), dead(false),
     direction(RIGHT), jumpCounter(80), currentAnimation(STANDING),
-    channel(-1)
+    channel(-1), oldXDir(0), oldYDir(0), bullets(bullets)
 {
   setAnimation("blink right");
   setBoundingBox(6, 20, 5, 4);
 
   flame = gfx->createSpriteInstance("flame");
-  gfx->showSprite(flame, false);
   gfx->setAnimation(flame, "right");
+  gfx->showSprite(flame, false);
 }
 
 Hero::~Hero()
@@ -198,7 +198,7 @@ Hero::updateAnimation(float xDir, float yDir)
 }
 
 void
-Hero::shoot(int *bullets, Bullet **bullet)
+Hero::shoot() //int *bullets, Bullet **bullet)
 {
   if(dead)
     return;
@@ -209,32 +209,31 @@ Hero::shoot(int *bullets, Bullet **bullet)
       updateAnimation(0, 0);
     }
 
-  if(*bullets < 8)
+  Bullet *b = new Bullet(gfx, sfx);
+  if(direction == LEFT)
     {
-      Bullet *b = new Bullet(gfx, sfx);
-      if(direction == LEFT)
-	{
-	  b->moveAbs(getX()-4, getY()+8);
-	  b->moveLeft();
-	}
-      else if(direction == RIGHT)
-	{
-	  b->moveAbs(getX()+16, getY()+8);
-	  b->moveRight();
-	}
-      b->setVisible(true);
-
-      for(int i = 0;i < 8;i++)
-	if(bullet[i] == 0)
-	  {
-	    bullet[i] = b;
-	    break;
-	  }
-
-      (*bullets)++;
-
-      sfx->playSound(6, false);
+      b->moveAbs(getX()-4, getY()+8);
+      b->moveLeft();
     }
+  else if(direction == RIGHT)
+    {
+      b->moveAbs(getX()+16, getY()+8);
+      b->moveRight();
+    }
+  b->setVisible(true);
+
+  //       for(int i = 0;i < 8;i++)
+  // 	if(bullet[i] == 0)
+  // 	  {
+  // 	    bullet[i] = b;
+  // 	    break;
+  // 	  }
+
+  //       (*bullets)++;
+
+  bullets->push_back(b);
+
+  sfx->playSound(6, false);
 }
 
 void

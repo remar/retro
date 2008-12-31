@@ -8,7 +8,8 @@
 class Nest : public Object
 {
  public:
-  Nest(remar2d *gfx, SoundManager *sfx, list<Enemy *> *enemies);
+  Nest(remar2d *gfx, SoundManager *sfx, list<Enemy *> *enemies,
+       bool fastFuzzes);
   void update();
   void blink(bool on);
   void spawn(); //Fuzz **fuzz);
@@ -17,6 +18,7 @@ class Nest : public Object
  private:
   list<Enemy *> *enemies;
   int spawnTimer;
+  bool fastFuzzes;
 };
 
 #endif

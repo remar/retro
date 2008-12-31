@@ -4,13 +4,8 @@
 #include <remar2d.h>
 #include "SoundManager.h"
 #include "Input.h"
-#include "Hero.h"
-#include "Fuzz.h"
-#include "Level.h"
 #include "ScoreKeeper.h"
 #include "GameMode.h"
-#include "Menu.h"
-#include "ScoreScreen.h"
 
 class GameLogic
 {
@@ -27,16 +22,9 @@ class GameLogic
 
   ScoreKeeper *scoreKeeper;
 
-  /* Game modes */
-  Menu *menu;
-  Level *level;
-  ScoreScreen *scoreScreen;
-
+  /* Game mode */
   GameMode *gameMode;
-
   Mode mode;
-
-  int oldTime;
 
   /* Fixed interval time-based animation */
   static const int maximumFrameRate = 60;

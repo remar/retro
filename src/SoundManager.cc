@@ -20,6 +20,7 @@ SoundManager::SoundManager()
       "pause.wav", /* 13 */
       "start.wav", /* 14 */
       "scoretick.wav", /* 15 */
+      "bonus.wav", /* 16 */
       0
     };
   
@@ -27,6 +28,7 @@ SoundManager::SoundManager()
     {
       "test.wav", /* 0 */
       "clear.wav", /* 1 */
+      "bstage.wav", /* 2 */
       0
     };
 

@@ -1,9 +1,11 @@
 #include "Nest.h"
 
-Nest::Nest(remar2d *gfx, SoundManager *sfx, list<Enemy *> *enemies)
+Nest::Nest(remar2d *gfx, SoundManager *sfx, list<Enemy *> *enemies,
+	   bool fastFuzzes)
   : Object(gfx, "nest", sfx), spawnTimer(0)
 {
   this->enemies = enemies;
+  this->fastFuzzes = fastFuzzes;
 
   setAnimation("normal");
 
@@ -22,6 +24,9 @@ Nest::update()
 	  fuzz->setVisible(true);
 	  fuzz->moveAbs(getX(), getY());
 	  fuzz->rollRandom();  
+
+	  if(fastFuzzes)
+	    fuzz->isFast();
 
 	  enemies->push_back(fuzz);
 

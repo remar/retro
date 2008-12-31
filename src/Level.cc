@@ -8,7 +8,7 @@ Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
 	     ScoreKeeper *scoreKeeper)
   : GameMode(gfx, sfx, input, scoreKeeper)
 {
-  bullets = 0;
+  //bullets = 0;
   paused = false;
   win = false;
   debugOutputTimer = 60;
@@ -25,15 +25,17 @@ Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
 
   gfx->setupTileBackground(32, 32);
 
-  for(int i = 0;i < 8;i++)
-    {
-      bullet[i] = 0;
-    }
+//   for(int i = 0;i < 8;i++)
+//     {
+//       bullet[i] = 0;
+//     }
 
   scoreKeeper->resetKills();
 
   field = new Field(gfx, sfx, &brokenBlocks, &objects,
-		    scoreKeeper->blocksTakeTwoHits());
+		    scoreKeeper->blocksTakeTwoHits(),
+		    scoreKeeper->getSkillLevel(),
+		    false /* normal blue background */);
 
   char buf[1024];
   sprintf(buf, "../levels/%d.lev", scoreKeeper->getLevel());
@@ -57,6 +59,17 @@ Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
 
   for(int i = 0;i < scoreKeeper->numberOfEnemy(ScoreKeeper::Drone);i++)
     enemies.push_back(new Drone(gfx, sfx));
+
+  if(scoreKeeper->numberOfEnemy(ScoreKeeper::SpaceViper))
+    {
+      SpaceViper *v = new SpaceViper(gfx, sfx, &enemies);
+      enemies.push_front(v);
+    }
+
+  if(scoreKeeper->numberOfEnemy(ScoreKeeper::BountyHunter))
+    {
+      enemies.push_back(new BountyHunter(gfx, sfx, &enemies, &objects));
+    }
 
   sfx->playMusic(0);
 }
@@ -116,7 +129,8 @@ Level::loadLevel(char *lev)
 
 	    case 4:
 	      {
-		  Nest *nest = new Nest(gfx, sfx, &enemies);
+		Nest *nest = new Nest(gfx, sfx, &enemies,
+				      scoreKeeper->fastFuzzes());
 		  nest->setVisible(true);
 		  nest->moveAbs(x*32+3, y*32+3*32+3);
 		  objects.push_back(nest);
@@ -143,7 +157,7 @@ Level::loadLevel(char *lev)
 	}
     }
 
-  hero = new Hero(gfx, sfx);
+  hero = new Hero(gfx, sfx, &bullets);
   hero->setVisible(true);
   hero->moveAbs(heroStartX, heroStartY);
 
@@ -192,9 +206,10 @@ Level::respawn(int x, int y)
 	return false;
     }
 
-  for(int i = 0;i < 8;i++)
+  for(int i = 0;i < 8;i++);
+  for(list<Bullet *>::iterator it = bullets.begin();it != bullets.end();it++)
     {
-      if(bullet[i] && block.collides(bullet[i]))
+      if(block.collides(*it))
 	return false;
     }
 
@@ -341,14 +356,16 @@ Level::update()
     }
 
   list<Object *>::iterator objIt;
-  for(objIt = objects.begin();objIt != objects.end();objIt++)
+  for(objIt = objects.begin();objIt != objects.end();)
     {
       (*objIt)->update();
       if((*objIt)->destroy())
 	{
 	  delete (*objIt);
 	  objIt = objects.erase(objIt);
+	  continue;
 	}
+      objIt++;
     }
 
   bulletHandler->update();
@@ -373,7 +390,7 @@ Level::update()
 	}
 
       delete hero;
-      hero = new Hero(gfx, sfx);
+      hero = new Hero(gfx, sfx, &bullets);
       hero->setVisible(true);
       hero->moveAbs(heroStartX, heroStartY);      
     }
@@ -387,8 +404,10 @@ Level::update()
   if(input->held(SDLK_RIGHT))  move_x++;
   if(input->pressed(SDLK_UP))  hero->jump(true);
   if(input->released(SDLK_UP)) hero->jump(false);
+//   if(input->pressed(SDLK_z) && bulletHandler->fire())
+//     hero->shoot(&bullets, &bullet[0]);
   if(input->pressed(SDLK_z) && bulletHandler->fire())
-    hero->shoot(&bullets, &bullet[0]);
+    hero->shoot(); //&bullets, &bullet[0]);
   if(input->pressed(SDLK_d))   hero->die();
 
   spawner->update();
@@ -446,50 +465,72 @@ Level::update()
       it++;
     }
 
-  for(int i = 0;i < 8;i++)
+  //for(int i = 0;i < 8;i++);
+  for(list<Bullet *>::iterator b = bullets.begin();b != bullets.end();)
     {
-      if(bullet[i])
+//       if(bullet[i])
+// 	{
+      /* check collision between bullet and various stuff... */
+      int x = (*b)->getX(), y = (*b)->getY();
+      int blockX, blockY;
+      if(x < -5 || x > 799)
 	{
-	  /* check collision between bullet and various stuff... */
-	  int x = bullet[i]->getX(), y = bullet[i]->getY();
-	  int blockX, blockY;
-	  if(x < -5 || x > 799)
+	  //removeBullet(i);
+	  delete (*b);
+	  b = bullets.erase(b);
+	  continue;
+	}
+      else if(field->objectCollidesWithBackground((*b), &blockX, &blockY))
+	{
+	  if(!field->blockHit(blockX, blockY))
 	    {
-	      removeBullet(i);
-	      continue;
-	    }
-	  else if(field->objectCollidesWithBackground(bullet[i], &blockX, &blockY))
-	    {
-	      if(!field->blockHit(blockX, blockY))
-		{
-		  objects.push_back(new Explosion(gfx, sfx, x-9, y-9));
-		}
-	      removeBullet(i);
-
-	      sfx->playSound(3, false);
-
-	      continue;
+	      objects.push_back(new Explosion(gfx, sfx, x-9, y-9));
 	    }
 
-	  for(list<Enemy *>::iterator it = enemies.begin();it != enemies.end();
-	      it++)
+	  sfx->playSound(3, false);
+
+	  //removeBullet(i);
+	  delete (*b);
+	  b = bullets.erase(b);
+
+	  continue;
+	}
+
+      bool bulletRemoved = false;
+      bool removeBullet = false;
+
+      for(list<Enemy *>::iterator it = enemies.begin();it != enemies.end();
+	  it++)
+	{
+	  if((*b)->collides(*it))
 	    {
-	      if(bullet[i]->collides(*it))
+	      if((*it)->hit())
 		{
-		  if((*it)->hit())
+		  if(!removeBullet)
 		    {
 		      objects.push_back(new Explosion(gfx, sfx, x-9, y-9));
 		      sfx->playSound(3, false);
-		      removeBullet(i);
-		      break;
 		    }
+
+		  removeBullet = true;
+
+		  //removeBullet(i);
+		  break;
 		}
 	    }
-
-	  if(bullet[i])
-	    bullet[i]->update();
 	}
 
+      if(removeBullet)
+	{
+	  delete (*b);
+	  b = bullets.erase(b);
+	  bulletRemoved = true;
+	}
+
+      if(!bulletRemoved)
+	(*b)->update();
+
+      b++;
     }
 
   for(list<Enemy *>::iterator it = enemies.begin();it != enemies.end();)
@@ -507,6 +548,15 @@ Level::update()
 	  else if(dynamic_cast<Drone *>(*it))
 	    {
  	      scoreKeeper->killed(ScoreKeeper::Drone);
+	    }
+	  else if(dynamic_cast<SpaceViper *>(*it))
+	    {
+	      scoreKeeper->killed(ScoreKeeper::SpaceViper);
+	    }
+	  else if(dynamic_cast<BountyHunter *>(*it))
+	    {
+	      scoreKeeper->killed(ScoreKeeper::BountyHunter);
+	      // TODO: Add explosions
 	    }
 
 	  delete (*it);
@@ -547,17 +597,6 @@ Level::pause()
 }
 
 void
-Level::removeBullet(int i)
-{
-  if(bullet[i] && bullets)
-    {
-      delete bullet[i];
-      bullet[i] = 0;
-      bullets--;
-    }
-}
-
-void
 Level::showAllObjects(bool show)
 {
   /* Show/hide all enemies */
@@ -579,10 +618,9 @@ Level::showAllObjects(bool show)
 
   hero->setVisible(show);
 
-  for(int i = 0;i < 8;i++)
+  for(list<Bullet *>::iterator it = bullets.begin();it != bullets.end();it++)
     {
-      if(bullet[i])
-	bullet[i]->setVisible(show);
+      (*it)->setVisible(show);
     }
 }
 
@@ -615,13 +653,10 @@ Level::deleteAllObjects()
       hero = 0;
     }
 
-  for(int i = 0;i < 8;i++)
+  for(list<Bullet *>::iterator it = bullets.begin();it != bullets.end();it++)
     {
-      if(bullet[i])
-	{
-	  delete bullet[i];
-	  bullet[i] = 0;
-	}
+      delete (*it);
+      it = bullets.erase(it);
     }
 }
 

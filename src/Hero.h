@@ -8,13 +8,13 @@
 class Hero : public Object
 {
  public:
-  Hero(remar2d *gfx, SoundManager *sfx);
+  Hero(remar2d *gfx, SoundManager *sfx, list<Bullet *> *bullets);
   ~Hero();
   void moveRel(float xDir, float yDir); //, bool onGround);
   void stop();
   void jump(bool on);
   bool jumps(int decrease);
-  void shoot(int *bullets, Bullet **bullet);
+  void shoot(); //int *bullets, Bullet **bullet);
   void die();
   void update();
   bool isBlinking() { return blinking; }
@@ -60,6 +60,8 @@ class Hero : public Object
   int channel;
 
   int deathTimer;
+
+  list<Bullet *> *bullets;
 };
 
 #endif

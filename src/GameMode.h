@@ -10,7 +10,9 @@ enum Mode
   {
     MENU,
     GAME,
+    BONUS,
     SCORE,
+    BONUSSCORE,
     QUIT
   };
 
@@ -18,7 +20,7 @@ class GameMode
 {
  public:
   GameMode(remar2d *gfx, SoundManager *sfx, Input *input,
-	ScoreKeeper *scoreKeeper);
+	   ScoreKeeper *scoreKeeper);
   virtual ~GameMode();
   virtual Mode update();
 

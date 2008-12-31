@@ -2,8 +2,6 @@ LIST OF FEATURES TO IMPLEMENT
 -------------------------------------------------------------------------------
 
 Show ammunition left above Captain Good when firing and getting back ammo
-Fast Fuzzes
-Fuzzes should fall 2 pixels/frame
 Power-ups
 If walking right, then pressing left, walk left until left is released...
 Enemies: Space Viper,
@@ -14,12 +12,11 @@ Enemies: Space Viper,
 	 Dark Bounty Hunter
 Spawning of various enemies
 Key binding redefinition
-Bonus levels
 Extra lives
 Demo recording & playback
 Variable location of data files (currently ../ )
 Show "Stage X" right before stage starts
-
+NO BONUS if dead/timeout/time ran out
 
 -------------------------------------------------------------------------------
 DONE
@@ -44,3 +41,7 @@ Sound system
 Music
 Font system
 Keep track of blaster ammunition supply
+Fast Fuzzes
+Fuzzes should fall 2 pixels/frame (always)
+Correct color of background depending on skill level
+Bonus levels

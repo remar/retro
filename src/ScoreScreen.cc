@@ -2,9 +2,19 @@
 
 ScoreScreen::ScoreScreen(remar2d *gfx, SoundManager *sfx, Input *input,
 			 ScoreKeeper *scoreKeeper)
-  : GameMode(gfx, sfx, input, scoreKeeper), state(TIME), delayTimer(60),
-    subState(SHOW), coinsCounted(0), fuzzesCounted(0), dronesCounted(0),
-    vipers(0), hunters(0)
+  : GameMode(gfx, sfx, input, scoreKeeper),
+    state(TIME),
+    subState(SHOW),
+    delayTimer(60),
+    coinsCounted(0),
+    fuzzesCounted(0),
+    dronesCounted(0),
+    viperSprite(0),
+    vipers(0),
+    vipersCounted(0),
+    hunterSprite(0),
+    hunters(0),
+    huntersCounted(0)
 {
   gfx->setupTileBackground(32, 32);
 
@@ -35,8 +45,8 @@ ScoreScreen::ScoreScreen(remar2d *gfx, SoundManager *sfx, Input *input,
   scoreCounter->setCounter(scoreKeeper->getScore());
 
   clock = gfx->createSpriteInstance("clock");
-  gfx->showSprite(clock, false);
   gfx->setAnimation(clock, "normal");
+  gfx->showSprite(clock, false);
   gfx->moveSpriteAbs(clock, 10*32+16, 9*32+8);
   
   scorePerTime = gfx->print("text", "20#");
@@ -44,8 +54,8 @@ ScoreScreen::ScoreScreen(remar2d *gfx, SoundManager *sfx, Input *input,
   gfx->moveSpriteAbs(scorePerTime, 11*32+16, 9*32+8);
 
   coinSprite = gfx->createSpriteInstance("coin");
-  gfx->showSprite(coinSprite, false);
   gfx->setAnimation(coinSprite, "blink");
+  gfx->showSprite(coinSprite, false);
   gfx->pauseAnimation(coinSprite, true);
   gfx->moveSpriteAbs(coinSprite, 10*32 + 16, 10*32+4);
 
@@ -58,8 +68,8 @@ ScoreScreen::ScoreScreen(remar2d *gfx, SoundManager *sfx, Input *input,
 
 
   fuzzSprite = gfx->createSpriteInstance("fuzz");
-  gfx->showSprite(fuzzSprite, false);
   gfx->setAnimation(fuzzSprite, "roll left");
+  gfx->showSprite(fuzzSprite, false);
   gfx->pauseAnimation(fuzzSprite, true);
   gfx->moveSpriteAbs(fuzzSprite, 10*32+16, 11*32+4);
 
@@ -69,14 +79,36 @@ ScoreScreen::ScoreScreen(remar2d *gfx, SoundManager *sfx, Input *input,
 
 
   droneSprite = gfx->createSpriteInstance("drone");
-  gfx->showSprite(droneSprite, false);
   gfx->setAnimation(droneSprite, "normal");
+  gfx->showSprite(droneSprite, false);
   gfx->pauseAnimation(droneSprite, true);
   gfx->moveSpriteAbs(droneSprite, 10*32+16, 12*32+4);
 
   scorePerDrone = gfx->print("text", "200#");
   gfx->showSprite(scorePerDrone, false);
   gfx->moveSpriteAbs(scorePerDrone, 11*32+16, 12*32+8);
+
+
+  viperSprite = gfx->createSpriteInstance("snake head");
+  gfx->setAnimation(viperSprite, "right");
+  gfx->showSprite(viperSprite, false);
+  gfx->pauseAnimation(viperSprite, true);
+  gfx->moveSpriteAbs(viperSprite, 10*32+8, 13*32);
+
+  scorePerViper = gfx->print("text", "1200#");
+  gfx->showSprite(scorePerViper, false);
+  gfx->moveSpriteAbs(scorePerViper, 11*32+16, 13*32+8);
+
+
+  hunterSprite = gfx->createSpriteInstance("hunter");
+  gfx->setAnimation(hunterSprite, "right");
+  gfx->showSprite(hunterSprite, false);
+  gfx->pauseAnimation(hunterSprite, true);
+  gfx->moveSpriteAbs(hunterSprite, 10*32+16, 14*32);
+
+  scorePerHunter = gfx->print("text", "1000#");
+  gfx->showSprite(scorePerHunter, false);
+  gfx->moveSpriteAbs(scorePerHunter, 11*32+16, 14*32+8);
 }
 
 ScoreScreen::~ScoreScreen()
@@ -105,6 +137,8 @@ ScoreScreen::~ScoreScreen()
   gfx->removeSpriteInstance(coinSprite);
   gfx->removeSpriteInstance(fuzzSprite);
   gfx->removeSpriteInstance(droneSprite);
+  gfx->removeSpriteInstance(viperSprite);
+  gfx->removeSpriteInstance(hunterSprite);
 }
 
 void
@@ -233,8 +267,8 @@ ScoreScreen::update()
 //   enum State { TIME = 0, COINS, FUZZ, DRONES, VIPERS, HUNTERS };
 //   enum SubState { SHOW, TICK, TICKDELAY };
 
-  char *stateChar[] = {"TIME", "COINS", "FUZZ", "DRONES", "VIPERS", "HUNTERS"};
-  char *subStateChar[] = {"SHOW", "TICK", "TICKDELAY"};
+//char *stateChar[] = {"TIME", "COINS", "FUZZ", "DRONES", "VIPERS", "HUNTERS"};
+//char *subStateChar[] = {"SHOW", "TICK", "TICKDELAY"};
 
   switch(state)
     {
@@ -286,7 +320,9 @@ ScoreScreen::update()
 	      sfx->playSound(15);
 	    }
 	  break;
-	  
+
+	case TICKDELAY:
+	  break;
 	}
       break;
 
@@ -324,6 +360,9 @@ ScoreScreen::update()
 	      sfx->playSound(15);
 	    }
 	  break;
+
+	case TICKDELAY:
+	  break;
 	}
       break;
 
@@ -360,6 +399,9 @@ ScoreScreen::update()
 	      sfx->playSound(15);
 	    }
 	  break;
+
+	case TICKDELAY:
+	  break;
 	}
       break;
 
@@ -381,7 +423,11 @@ ScoreScreen::update()
 	case TICK:
 	  if(dronesCounted == scoreKeeper->howManyKilled(ScoreKeeper::Drone))
 	    {
-	      state = DONE;
+	      if(scoreKeeper->getSkillLevel() >= 2)
+		state = VIPERS;
+	      else
+		state = DONE;
+
 	      subState = SHOW;
 	      delayTimer = 60;
 	    }
@@ -395,6 +441,92 @@ ScoreScreen::update()
 	      tickDelayTimer = 12;
 	      sfx->playSound(15);
 	    }
+	  break;
+
+	case TICKDELAY:
+	  break;
+	}
+      break;
+
+    case VIPERS:
+      switch(subState)
+	{
+	case SHOW:
+	  gfx->showSprite(viperSprite, true);
+	  gfx->showSprite(scorePerViper, true);
+
+	  vipers = new Counter(gfx, 1);
+	  vipers->setPosition(14*32, 13*32+8);
+	  vipers->setCounter(0);
+
+	  tickDelayTimer = 60;
+	  subState = TICKDELAY;
+	  break;
+
+	case TICK:
+	  if(vipersCounted
+	     == scoreKeeper->howManyKilled(ScoreKeeper::SpaceViper))
+	    {
+	      if(scoreKeeper->getSkillLevel() >= 3)
+		state = HUNTERS;
+	      else
+		state = DONE;
+	      subState = SHOW;
+	      delayTimer = 60;
+	    }
+	  else
+	    {
+	      vipersCounted++;
+
+	      vipers->setCounter(vipersCounted);
+	      scoreKeeper->addScore(1200);
+
+	      tickDelayTimer = 12;
+	      sfx->playSound(15);
+	    }
+	  break;
+
+	case TICKDELAY:
+	  break;
+	}
+      break;
+
+    case HUNTERS:
+      switch(subState)
+	{
+	case SHOW:
+	  gfx->showSprite(hunterSprite, true);
+	  gfx->showSprite(scorePerHunter, true);
+
+	  hunters = new Counter(gfx, 1);
+	  hunters->setPosition(14*32, 14*32+8);
+	  hunters->setCounter(0);
+
+	  tickDelayTimer = 60;
+	  subState = TICKDELAY;
+	  break;
+
+	case TICK:
+	  if(huntersCounted
+	     == scoreKeeper->howManyKilled(ScoreKeeper::BountyHunter))
+	    {
+	      state = DONE;
+	      subState = SHOW;
+	      delayTimer = 60;
+	    }
+	  else
+	    {
+	      huntersCounted++;
+
+	      hunters->setCounter(huntersCounted);
+	      scoreKeeper->addScore(1000);
+
+	      tickDelayTimer = 12;
+	      sfx->playSound(15);
+	    }
+	  break;
+
+	case TICKDELAY:
 	  break;
 	}
       break;
@@ -413,10 +545,19 @@ ScoreScreen::update()
 	  scoreKeeper->resetKills();
 
 	  if(scoreKeeper->getLives() > 0)
-	    return GAME;
+	    {
+	      scoreKeeper->levelCompleted();
+	      if(scoreKeeper->nextLevelIsBonus())
+		return BONUS;
+	      else
+		return GAME;
+	    }
 	  else
 	    return MENU;
 
+	  break;
+
+	case TICKDELAY:
 	  break;
 	}
       break;

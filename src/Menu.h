@@ -18,6 +18,7 @@ class Menu : public GameMode
 
  private:
   void drawBackground();
+  void drawPattern(int *arr, int xOffset ,int yOffset, int width, int height);
   void increaseLevel();
   void decreaseLevel();
   void increaseSkillLevel();

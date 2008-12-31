@@ -27,10 +27,18 @@ class ScoreKeeper
 
   void setSkillLevel(int level);
   int  getSkillLevel();
+  void incSkillLevel();
 
   int getLevel();
   void setLevel(int lev);
   void nextLevel();
+
+  int getBonusLevel() { return bonusLevel; }
+  void setBonusLevel(int lev) { bonusLevel = lev; }
+  void nextBonusLevel() { (++bonusLevel > 8) ? bonusLevel = 1:0; }
+
+  void levelCompleted() { ++levelsCompleted; }
+  bool nextLevelIsBonus();    
 
   bool blocksTakeTwoHits();
 
@@ -40,6 +48,7 @@ class ScoreKeeper
 
   void heroKilled();
   int getLives();
+  void setLives(int l);
 
   void addScore(int s);
   void setScore(int s);
@@ -63,7 +72,12 @@ class ScoreKeeper
 
  private:
   int skillLevel;
+
   int level; /* Level we're on */
+  int bonusLevel;
+
+  int levelsCompleted;
+
   int lives;
 
   int score;

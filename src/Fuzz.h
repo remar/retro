@@ -25,6 +25,7 @@ class Fuzz : public Enemy // Object
   void setMoveDir(Direction dir) { moveDirection = dir; }
   bool isStunned();
   bool hit();
+  void isFast();
 
  private:
   void attach(int posX1, int posX2, int posY1, int posY2, Direction direction);

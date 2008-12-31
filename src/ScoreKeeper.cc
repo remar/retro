@@ -3,13 +3,16 @@
 #include "FileManager.h"
 
 ScoreKeeper::ScoreKeeper()
-  : skillLevel(1), level(1), score(0), top(0), lives(3)
+  : skillLevel(1), level(1), bonusLevel(1), levelsCompleted(0), score(0),
+    top(0), lives(3)
 {
   resetKills();
 
   FileManager fileManager;
 
   top = fileManager.readTopScore();
+
+  resetCoins();
 }
 
 ScoreKeeper::~ScoreKeeper()
@@ -63,6 +66,13 @@ ScoreKeeper::getSkillLevel()
   return skillLevel;
 }
 
+void
+ScoreKeeper::incSkillLevel()
+{
+  if(skillLevel < 8)
+    skillLevel++;
+}
+
 int
 ScoreKeeper::getLevel()
 {
@@ -83,6 +93,17 @@ ScoreKeeper::nextLevel()
     level = 1;
 }
 
+bool
+ScoreKeeper::nextLevelIsBonus()
+{
+  if(levelsCompleted == 1)
+    {
+      levelsCompleted = 0;
+      return true;
+    }
+  return false;
+}
+			  
 bool
 ScoreKeeper::blocksTakeTwoHits()
 {
@@ -132,10 +153,14 @@ ScoreKeeper::getLives()
 }
 
 void
+ScoreKeeper::setLives(int l)
+{
+  lives = l;
+}
+
+void
 ScoreKeeper::addScore(int s)
 {
-//   score += s;
-
   setScore(score + s);
 }
 

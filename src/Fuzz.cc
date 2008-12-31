@@ -101,7 +101,7 @@ Fuzz::update(Field *field, Hero *hero)
     }
 
   /* Change direction if we hit the spikes */
-  if(!falling && !stunned && posY2 == SPIKES_LEVEL)
+  if(!falling && !stunned && posY2 >= SPIKES_LEVEL)
     {
       if(rollDirection == RIGHT)
 	{
@@ -127,65 +127,71 @@ Fuzz::update(Field *field, Hero *hero)
 
   if(falling)
     {
-      // printf("FALLING %d\n", SDL_GetTicks());
-
-      /* See if we collide with anything, then start rolling in the
-	 rollDirection, else just keep falling */
-      if(!field->emptyBlock(posX1/32, (posY2 + 1)/32)
-	 || !field->emptyBlock(posX2/32, (posY2 + 1)/32)
-	 || posY2 == SPIKES_LEVEL)
+      for(int i = 0;i < 2;i++)
 	{
-	  /* Collision! */
-	  // printf("COLLISION\n");
 
-	  falling = false;
+	  /* See if we collide with anything, then start rolling in the
+	     rollDirection, else just keep falling */
+	  if(!field->emptyBlock(posX1/32, (posY2 + 1)/32)
+	     || !field->emptyBlock(posX2/32, (posY2 + 1)/32)
+	     || posY2 == SPIKES_LEVEL)
+	    {
+	      /* Collision! */
+	      // printf("COLLISION\n");
+	      
+	      falling = false;
 
-	  if(stunned)
-	    {
-	      /* If fuzz is stunned and has either fallen far enough
-		 or hits spikes, kill fuzz */
-	      // printf("posY2: %d, SPIKES_LEVEL: %d\n", posY2, SPIKES_LEVEL);
-	      if(fallDistance > FALL_LIMIT
-		 || posY2 >= SPIKES_LEVEL)
+	      if(stunned)
 		{
-		  die();
-		  return;
-		}
-	    }
-	  else
-	    {
-	      if(rollDirection == LEFT)
-		{
-		  setMoveDir(LEFT);
-		  rollLeft();
+		  /* If fuzz is stunned and has either fallen far enough
+		     or hits spikes, kill fuzz */
+		  // printf("posY2: %d, SPIKES_LEVEL: %d\n", posY2, SPIKES_LEVEL);
+		  if(fallDistance > FALL_LIMIT
+		     || posY2 >= SPIKES_LEVEL)
+		    {
+		      die();
+		      return;
+		    }
 		}
 	      else
 		{
-		  setMoveDir(RIGHT);
-		  rollRight();
+		  if(rollDirection == LEFT)
+		    {
+		      setMoveDir(LEFT);
+		      rollLeft();
+		    }
+		  else
+		    {
+		      setMoveDir(RIGHT);
+		      rollRight();
+		    }
+		  pauseAnimation(false);
 		}
-	      pauseAnimation(false);
-	    }
+	      
+	      if(posY2 >= SPIKES_LEVEL)
+		{
+		  attachNone();
+		  
+		  /* Special Roll-On-Spikes mode */
+		  onSpikes = true;
+		}
+	      else
+		{
+		  /* Now we're attached to this/these block(s) */
+		  attach(posX1, posX2, posY1, posY2, DOWN);
+		}
 
-	  if(posY2 >= SPIKES_LEVEL)
-	    {
-	      attachNone();
-
-	      /* Special Roll-On-Spikes mode */
-	      onSpikes = true;
+	      break;
 	    }
 	  else
 	    {
-	      /* Now we're attached to this/these block(s) */
-	      attach(posX1, posX2, posY1, posY2, DOWN);
-	    }
-	}
-      else
-	{
-	  fallDistance++;
-	  moveRel(0, 1);
+	      fallDistance++;
+	      moveRel(0, 1);
 
-	  attachNone();
+	      posY1++; posY2++;
+	      
+	      attachNone();
+	    }
 	}
     }
   else if(!stunned) // not falling and not stunned (rolling on ground...)
@@ -219,22 +225,10 @@ Fuzz::update(Field *field, Hero *hero)
       /* Use this looked-up variable to check for collision (left) */
       int collision_dir[] = {0, 0, 1, 2, 3};
       int collision_dir_lookup[5];
-      for(int i = 1;i < 5;i++)
-	{
-	  /* This is so fucking ugly... bleargh! :,( */
-	  collision_dir_lookup[i] = positions[collision_dir[i]];
-	}
-
-      // enum MoveDir {NONE, LEFT, RIGHT, UP, DOWN};
-
 
       /* Use this looked-up variable to check for an empty block */
       int empty_dir[] = {0, 1, 0, 3, 2};
       int empty_dir_lookup[5];
-      for(int i = 1;i < 5;i++)
-	{
-	  empty_dir_lookup[i] = positions[empty_dir[i]];
-	}
 
       int nearest_x[] = {0, 0, 1, 0, 0};
       int nearest_y[] = {0, 2, 2, 2, 3};
@@ -268,6 +262,27 @@ Fuzz::update(Field *field, Hero *hero)
       
       for(int i = 0;i < times;i++)
 	{
+	  posX = getX();
+	  posY = getY();
+	  box = getBoundingBox();
+	  posX1 = posX + box->x;
+	  posX2 = posX + box->x + box->w;
+	  posY1 = posY + box->y;
+	  posY2 = posY + box->y + box->h;
+
+	  positions[X1] = posX1;
+	  positions[X2] = posX2;
+	  positions[Y1] = posY1;
+	  positions[Y2] = posY2;
+
+	  mDir = moveDirection;
+  
+	  for(int i = 1;i < 5;i++)
+	    collision_dir_lookup[i] = positions[collision_dir[i]];
+
+	  for(int i = 1;i < 5;i++)
+	    empty_dir_lookup[i] = positions[empty_dir[i]];
+
 	  move_x = move_x_table[mDir];
 	  move_y = move_y_table[mDir];
 
@@ -313,7 +328,7 @@ Fuzz::update(Field *field, Hero *hero)
 		  if(field->emptyBlock((x+move_x+xinc)/32,
 				       (y+move_y+yinc)/32))
 		    {
-// 		      printf("Approaching edge, turn!\n");
+ 		      //printf("Approaching edge, turn!\n");
 		      // no block underneath!
 		      move_x = move_x_empty_left[mDir];
 		      move_y = move_y_empty_left[mDir];
@@ -323,11 +338,12 @@ Fuzz::update(Field *field, Hero *hero)
 		    }
 		}
 	      
-// 	      printf("Real move %d, %d\n", move_x, move_y);
+ 	      //printf("Real move %d, %d\n", move_x, move_y);
 	      moveRel(move_x, move_y);
 	      attach(posX1+move_x, posX2+move_x,
 		     posY1+move_y, posY2+move_y,
 		     attachDir);
+
 	      if(getX() < -25)
 		moveAbs(801, getY());
 	      else if(getX() > 802)
@@ -375,7 +391,7 @@ Fuzz::update(Field *field, Hero *hero)
 		  if(field->emptyBlock((x+move_x+xinc)/32,
 				       (y+move_y+yinc)/32))
 		    {
-// 		      printf("Approaching edge, turn!\n");
+		      //printf("Approaching edge, turn!\n");
 		      // no block underneath!
 		      move_x = move_x_empty_right[mDir];
 		      move_y = move_y_empty_right[mDir];
@@ -385,11 +401,12 @@ Fuzz::update(Field *field, Hero *hero)
 		    }
 		}
 
-// 	      printf("Real move %d, %d\n", move_x, move_y);
+ 	      //printf("Real move %d, %d\n", move_x, move_y);
 	      moveRel(move_x, move_y);
 	      attach(posX1+move_x, posX2+move_x,
 		     posY1+move_y, posY2+move_y,
 		     attachDir);
+
 	      if(getX() < -25)
 		moveAbs(801, getY());
 	      else if(getX() > 802)
@@ -410,7 +427,13 @@ Fuzz::update(Field *field, Hero *hero)
 	}
       else if(stunTimer == 0)
 	{
-	  rollRandom();
+	  //rollRandom();
+	  if(rollDirection == LEFT)
+	    setAnimation("roll left");
+	  else
+	    setAnimation("roll right");
+
+	  stunned = false;
 	  sfx->playSound(10, false);
 	}
     }
@@ -512,7 +535,7 @@ Fuzz::stun()
       setAnimation("stunned");
       pauseAnimation(false);
       stunned = true;
-      rollDirection = NONE;
+      // rollDirection = NONE;
       blinkTime = SDL_GetTicks() + 2000;
       if(lastAttachDirection != DOWN)
 	{
@@ -602,4 +625,10 @@ Fuzz::attachNone()
   last1_x = last1_y = last2_x = last2_y = -1;
 
   lastAttachDirection = NONE;
+}
+
+void
+Fuzz::isFast()
+{
+  fastFuzz = true;
 }

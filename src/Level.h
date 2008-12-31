@@ -26,6 +26,8 @@
 #include "Drone.h"
 #include "HUD.h"
 #include "BulletHandler.h"
+#include "SpaceViper.h"
+#include "BountyHunter.h"
 
 class Level : public GameMode
 {
@@ -56,24 +58,17 @@ class Level : public GameMode
   /* Da player. */
   Hero *hero;
 
-  /* Coins */
-/*   int coins; */
-/*   Coin *coin[8]; */
-
   /* Bullets flying through the air! (KERPOWW!!) */
-  int bullets;
-  Bullet *bullet[8];
+
+/*   int bullets; */
+/*   Bullet *bullet[8]; */
 
   list<BrokenBlock *> brokenBlocks;
   list<Object *> objects;
   list<Enemy *> enemies;
   list<Collectible *> collectibles;
   list<Coin *> coins;
-
-/*   Mix_Music *music; */
-/*   Mix_Chunk *shoot; */
-/*   Mix_Chunk *pling; */
-/*   Mix_Chunk *explosion; */
+  list<Bullet *> bullets;
 
   bool doWipe;
   int wipeTimer;
@@ -89,8 +84,6 @@ class Level : public GameMode
   int debugOutputTimer;
 
   bool loadFailed;
-
-  int hudSprite;
 
   /* Timer counts down from 200 to 0, timerTimer keeps track of when
      timer should be decremented... (every 60 frames I guess) */

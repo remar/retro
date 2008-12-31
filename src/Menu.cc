@@ -2,10 +2,11 @@
 
 Menu::Menu(remar2d *gfx, SoundManager *sfx, Input *input,
 	   ScoreKeeper *scoreKeeper)
-  : nextTimer(0), level(1), GameMode(gfx, sfx, input, scoreKeeper)
+  : GameMode(gfx, sfx, input, scoreKeeper), level(1), nextTimer(0)
 {
   gfx->setupTileBackground(16, 16);
-  mainTiles = gfx->loadTileSet("../gfx/maintiles.xml");
+
+  scoreKeeper->setBonusLevel(1);
 
   level = scoreKeeper->getLevel();
   skill = scoreKeeper->getSkillLevel();
@@ -69,6 +70,7 @@ Menu::update()
       if(nextTimer == 0)
 	{
 	  scoreKeeper->setScore(0);
+	  scoreKeeper->setLives(3);
 
 	  return GAME;
 	}
@@ -119,17 +121,6 @@ Menu::drawBackground()
       7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 
     };
 
-  int xOffset = 8;
-  int yOffset = 4;
-  int i;
-
-  for(int y = 0; y < 8;y++)
-    for(int x = 0;x < 35;x++)
-      {
-	i = y * 35 + x;
-	gfx->setTile(x + xOffset, y + yOffset, mainTiles, battle[i]%6, battle[i]/6);
-      }
-
   int score[] =
     {
       1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
@@ -139,14 +130,22 @@ Menu::drawBackground()
       7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8,
     };
 
-  xOffset = 17;
-  yOffset = 26;
+  drawPattern(battle, 8, 4, 35, 8);
 
-  for(int y = 0;y < 5;y++)
-    for(int x = 0;x < 16;x++)
+  drawPattern(score, 17, 26, 16, 5);
+}
+
+void
+Menu::drawPattern(int *arr, int xOffset ,int yOffset, int width, int height)
+{
+  int i;
+
+  for(int y = 0; y < height;y++)
+    for(int x = 0;x < width;x++)
       {
-	i = y * 16 + x;
-	gfx->setTile(x + xOffset, y + yOffset, mainTiles, score[i]%6, score[i]/6);	
+	i = y * width + x;
+	gfx->setTile(x + xOffset, y + yOffset, "maintiles",
+		     arr[i]%6, arr[i]/6);
       }
 }
 

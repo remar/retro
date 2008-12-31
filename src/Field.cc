@@ -4,7 +4,9 @@
 Field::Field(remar2d *gfx, SoundManager *sfx,
 	     list<BrokenBlock *> *brokenBlocks,
 	     list<Object *> *objects,
-	     bool blocksTakeTwoHits)
+	     bool blocksTakeTwoHits,
+	     int skill,
+	     bool redBackground)
   : SPIKES_LEVEL(600 - 32 - 16)
 {
   this->gfx = gfx;
@@ -12,11 +14,22 @@ Field::Field(remar2d *gfx, SoundManager *sfx,
   this->brokenBlocks = brokenBlocks;
   this->objects = objects;
   this->blocksTakeTwoHits = blocksTakeTwoHits;
+  this->skill = skill;
+
+  char buf[1024];
 
   /* Load tilesets */
-  backgroundBlocks = "background";
-  blocks = gfx->loadTileSet("../gfx/block1.xml");
-  solids = gfx->loadTileSet("../gfx/solid1.xml");
+  if(redBackground)
+    backgroundBlocks = "red background";
+  else
+    backgroundBlocks = "background";
+
+  sprintf(buf, "../gfx/block%d.xml", skill);
+  blocks = gfx->loadTileSet(buf);
+
+  sprintf(buf, "../gfx/solid%d.xml", skill);
+  solids = gfx->loadTileSet(buf);
+
   dots = gfx->loadTileSet("../gfx/dot.xml");
   spikes = gfx->loadTileSet("../gfx/spikes.xml");
 }
@@ -114,7 +127,7 @@ Field::drawBlock(int x, int y)
     }
   else if(field[x][y] == Field::BROKEN)
     {
-      gfx->setTile(x, y, dots, 0, 0);
+      gfx->setTile(x, y, dots, skill-1, 0);
     }
 }
 
