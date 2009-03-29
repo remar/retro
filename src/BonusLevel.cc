@@ -133,7 +133,7 @@ BonusLevel::loadLevel(char *lev)
 	}
     }
 
-  hero = new Hero(gfx, sfx, &bullets, 0);
+  hero = new Hero(gfx, sfx, &bullets, 0, 0);
   hero->setVisible(true);
   hero->moveAbs(heroStartX, heroStartY);
 
@@ -333,7 +333,7 @@ BonusLevel::update()
 	}
     }
 
-  hero->update();
+  hero->update(input, field);
   if(hero->destroy())
     {
       scoreKeeper->heroKilled();
@@ -348,46 +348,46 @@ BonusLevel::update()
 	}
 
       delete hero;
-      hero = new Hero(gfx, sfx, &bullets, 0);
+      hero = new Hero(gfx, sfx, &bullets, 0, 0);
       hero->setVisible(true);
       hero->moveAbs(heroStartX, heroStartY);      
     }
 
   // TODO: Move movement code for Captain Good to Hero class
 
-  int move_x = 0;
-  int move_y = 1; /* Constantly fall.. :-) */
+//   int move_x = 0;
+//   int move_y = 1; /* Constantly fall.. :-) */
 
-  if(input->held(SDLK_LEFT))   move_x--;
-  if(input->held(SDLK_RIGHT))  move_x++;
-  if(input->pressed(SDLK_UP))  hero->jump(true);
-  if(input->released(SDLK_UP)) hero->jump(false);
-  if(input->pressed(SDLK_z))
-    hero->shoot();
-  if(input->pressed(SDLK_d))   hero->die();
+//   if(input->held(SDLK_LEFT))   move_x--;
+//   if(input->held(SDLK_RIGHT))  move_x++;
+//   if(input->pressed(SDLK_UP))  hero->jump(true);
+//   if(input->released(SDLK_UP)) hero->jump(false);
+//   if(input->pressed(SDLK_z))
+//     hero->shoot();
+//   if(input->pressed(SDLK_d))   hero->die();
 
-  if(hero->jumps(1))
-    move_y = -1;
+//   if(hero->jumps(1))
+//     move_y = -1;
 
-  int heroX = hero->getX();
-  int heroY = hero->getY();
+//   int heroX = hero->getX();
+//   int heroY = hero->getY();
 
-  if(heroY + 24 == field->SPIKES_LEVEL)
-    hero->die();
+//   if(heroY + 24 == field->SPIKES_LEVEL)
+//     hero->die();
 
-  if(heroX < -25)
-    {
-      hero->moveAbs(801, heroY);
-    }
-  else if(heroX > 802)
-    {
-      hero->moveAbs(-24, heroY);
-    }
-  else
-    {
-      field->moveObjectRel(hero, &move_x, &move_y);
-      hero->moveRel(move_x, move_y);
-    }
+//   if(heroX < -25)
+//     {
+//       hero->moveAbs(801, heroY);
+//     }
+//   else if(heroX > 802)
+//     {
+//       hero->moveAbs(-24, heroY);
+//     }
+//   else
+//     {
+//       field->moveObjectRel(hero, &move_x, &move_y);
+//       hero->moveRel(move_x, move_y);
+//     }
 
   for(list<Coin *>::iterator it = coins.begin();it != coins.end();)
     {

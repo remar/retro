@@ -1,10 +1,8 @@
 #include "BulletHandler.h"
 
-BulletHandler::BulletHandler(HUD *hud, Hero *hero)
-  : hero(hero)
+BulletHandler::BulletHandler(HUD *hud)
+  : hud(hud)
 {
-  this->hud = hud;
-
   reset();
 //   ammo = 8;
 //   refillCounter = 0;
@@ -76,8 +74,9 @@ void
 BulletHandler::addOne()
 {
   if(ammo == 0)
-    ammo++;
-
-  hud->setValue(HUD::BULLET, ammo);
-  hero->showNote(ammo);
+    {
+      ammo++;
+      hud->setValue(HUD::BULLET, ammo);
+      hero->showNote(ammo);
+    }
 }

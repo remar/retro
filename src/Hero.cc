@@ -3,11 +3,12 @@
 #include "LaserBeam.h"
 
 Hero::Hero(remar2d *gfx, SoundManager *sfx, list<Bullet *> *bullets,
-	   HUD *hud)
+	   BulletHandler *bulletHandler, HUD *hud)
   : Object(gfx, "good", sfx),  blinking(true), jumping(false), dead(false),
     direction(RIGHT), weapon(STANDARD), jumpCounter(80),
     currentAnimation(STANDING), channel(-1), oldXDir(0), oldYDir(0),
-    bullets(bullets), hud(hud), noteShown(false), hasStoppedSound(false)
+    bullets(bullets), bulletHandler(bulletHandler), hud(hud), noteShown(false),
+    hasStoppedSound(false)
 {
   setAnimation("blink right");
   setBoundingBox(6, 20, 5, 4);
@@ -116,7 +117,7 @@ Hero::moveRel(float xDir, float yDir)
 	     gfx->setAnimation(flame, "right");
 	     flameDirection = RIGHT;
 	    }
-	  gfx->moveSpriteAbs(flame, getX()-3, getY()+13);
+	  gfx->moveSpriteAbs(flame, getX()-4, getY()+13);
 	}
       flameShown = true;
     }
@@ -221,9 +222,9 @@ Hero::updateAnimation(float xDir, float yDir)
   else
     {
       if(direction == LEFT)
-	setAnimation("stand left");
+	setAnimation("fly left");
       else
-	setAnimation("stand right");
+	setAnimation("fly right");
 
       if(channel != -1)
 	{
@@ -315,7 +316,7 @@ Hero::die()
 }
 
 void
-Hero::update()
+Hero::update(Input *input, Field *field)
 {
   if(noteTimer)
     {
@@ -332,7 +333,51 @@ Hero::update()
 
       if(deathTimer == 0)
 	destroyMe = true;
+
+      return;
     }
+
+  int move_x = 0;
+  int move_y = 1; /* Constantly fall.. :-) */
+
+  if(input->held(SDLK_LEFT))   move_x--;
+  if(input->held(SDLK_RIGHT))  move_x++;
+  if(input->pressed(SDLK_UP))  jump(true);
+  if(input->released(SDLK_UP)) jump(false);
+  if(input->pressed(SDLK_z) && (!bulletHandler || bulletHandler->fire()))
+    {
+      shoot();
+    }
+
+  if(jumps(1))
+    move_y = -1;
+
+  int heroX = getX();
+  int heroY = getY();
+
+  if(heroY + 24 == field->SPIKES_LEVEL)
+    die();
+
+  if(heroX < -25)
+    {
+      moveAbs(801, heroY);
+    }
+  else if(heroX > 802)
+    {
+      moveAbs(-24, heroY);
+    }
+  else
+    {
+      field->moveObjectRel(this, &move_x, &move_y);
+      moveRel(move_x, move_y);
+    }
+}
+
+void
+Hero::blink()
+{
+  blinking = true;
+  setAnimation("blink right");
 }
 
 void

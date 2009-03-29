@@ -27,6 +27,7 @@ Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
   wipeCounter = 0;
 
   hud = new HUD(gfx, scoreKeeper);
+  bulletHandler = new BulletHandler(hud);
   
   scoreKeeper->resetKills();
 
@@ -47,7 +48,7 @@ Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
       loadFailed = true;
     }
 
-  bulletHandler = new BulletHandler(hud, hero);
+  bulletHandler->setHero(hero);
 
   spawner = new Spawner(&objects,
 			scoreKeeper->redFuzzes(),
@@ -158,7 +159,7 @@ Level::loadLevel(char *lev)
 	}
     }
 
-  hero = new Hero(gfx, sfx, &bullets, hud);
+  hero = new Hero(gfx, sfx, &bullets, bulletHandler, hud);
   hero->setVisible(true);
   hero->moveAbs(heroStartX, heroStartY);
 
@@ -372,7 +373,8 @@ Level::update()
 
   bulletHandler->update();
 
-  hero->update();
+  // DONE: Move movement code for Captain Good to Hero class
+  hero->update(input, field);
   if(hero->destroy())
     {
       scoreKeeper->heroKilled();
@@ -388,53 +390,15 @@ Level::update()
 	  return GAME;
 	}
 
-      delete hero;
-      hero = new Hero(gfx, sfx, &bullets, hud);
+//       delete hero;
+//       hero = new Hero(gfx, sfx, &bullets, bulletHandler, hud);
       hero->setVisible(true);
       hero->moveAbs(heroStartX, heroStartY);
+      hero->blink();
       bulletHandler->reset();
     }
 
-  // TODO: Move movement code for Captain Good to Hero class
-
-  int move_x = 0;
-  int move_y = 1; /* Constantly fall.. :-) */
-
-  if(input->held(SDLK_LEFT))   move_x--;
-  if(input->held(SDLK_RIGHT))  move_x++;
-  if(input->pressed(SDLK_UP))  hero->jump(true);
-  if(input->released(SDLK_UP)) hero->jump(false);
-  if(input->pressed(SDLK_z) && bulletHandler->fire())
-    {
-      hero->shoot();
-    }
-  if(input->pressed(SDLK_d))   hero->die();
-
   spawner->update();
-
-  if(hero->jumps(1))
-    move_y = -1;
-
-  int heroX = hero->getX();
-  int heroY = hero->getY();
-
-  if(heroY + 24 == field->SPIKES_LEVEL)
-    hero->die();
-
-  if(heroX < -25)
-    {
-      hero->moveAbs(801, heroY);
-    }
-  else if(heroX > 802)
-    {
-      hero->moveAbs(-24, heroY);
-    }
-  else
-    {
-      field->moveObjectRel(hero, &move_x, &move_y);
-      hero->moveRel(move_x, move_y);
-    }
-
   bonusSpawner->update(hero);
 
   for(list<Bonus *>::iterator it = bonuses.begin();it != bonuses.end();)

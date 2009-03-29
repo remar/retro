@@ -68,6 +68,17 @@
     <frame x="0" y="0" dur="1" />
   </animation>
 
+  <animation name="fly right" loop="false">
+    <image path="goodright.bmp" size_x="16" size_y="24" key="000000"
+           orig_x="0" orig_y="0" />
+    <frame x="2" y="0" dur="1" />
+  </animation>
+  <animation name="fly left" loop="false">
+    <image path="goodleft.bmp" size_x="16" size_y="24" key="000000"
+           orig_x="0" orig_y="0" />
+    <frame x="2" y="0" dur="1" />
+  </animation>
+
   <animation name="blink right" loop="true">
     <image path="goodright.bmp" size_x="16" size_y="24" key="000000"
            orig_x="0" orig_y="0" />

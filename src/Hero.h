@@ -5,12 +5,18 @@
 #include <list>
 #include "Object.h"
 #include "Bullet.h"
+#include "BulletHandler.h"
 #include "HUD.h"
+#include "Field.h"
+#include "Input.h"
+
+class BulletHandler; // defined in BulletHandler.h (FIXME: Circular dependency)
 
 class Hero : public Object
 {
  public:
-  Hero(remar2d *gfx, SoundManager *sfx, list<Bullet *> *bullets, HUD *hud);
+  Hero(remar2d *gfx, SoundManager *sfx, list<Bullet *> *bullets,
+       BulletHandler *bulletHandler, HUD *hud);
   ~Hero();
   void moveRel(float xDir, float yDir); //, bool onGround);
   void setVisible(bool visible);
@@ -19,7 +25,8 @@ class Hero : public Object
   bool jumps(int decrease);
   void shoot(); //int *bullets, Bullet **bullet);
   void die();
-  void update();
+  void update(Input *input, Field *field);
+  void blink();
   bool isBlinking() { return blinking; }
   bool isDead() { return dead; }
   void showNote(int ammo);
@@ -82,6 +89,7 @@ class Hero : public Object
   int deathTimer;
 
   list<Bullet *> *bullets;
+  BulletHandler *bulletHandler;
 
   HUD *hud;
 
