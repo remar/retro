@@ -32,12 +32,12 @@ BonusLevel::BonusLevel(remar2d *gfx, SoundManager *sfx, Input *input,
   sprintf(buf, "../levels/b%d.lev", scoreKeeper->getBonusLevel());
 
   // TODO: Use exceptions instead of this error handling
-  printf("Load bonus level \"%s\"\n", buf);
   bool success = loadLevel(buf);
 
   if(!success)
     {
-      printf("OMG! Failed to load level %d!\n", scoreKeeper->getLevel());
+      printf("OMG! Failed to load bonus level %d!\n",
+	     scoreKeeper->getBonusLevel());
       loadFailed = true;
     }
 
@@ -133,7 +133,7 @@ BonusLevel::loadLevel(char *lev)
 	}
     }
 
-  hero = new Hero(gfx, sfx, &bullets);
+  hero = new Hero(gfx, sfx, &bullets, 0);
   hero->setVisible(true);
   hero->moveAbs(heroStartX, heroStartY);
 
@@ -343,14 +343,12 @@ BonusLevel::update()
       if(scoreKeeper->getLives() <= 0)
 	{
 	  /* GAME OVER */
-	  printf("\n\nGAME OVER\n\n");
-
 	  performWipe(BONUSSCORE);
 	  return BONUS;
 	}
 
       delete hero;
-      hero = new Hero(gfx, sfx, &bullets);
+      hero = new Hero(gfx, sfx, &bullets, 0);
       hero->setVisible(true);
       hero->moveAbs(heroStartX, heroStartY);      
     }

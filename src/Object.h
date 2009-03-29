@@ -5,6 +5,8 @@
 #include <remar2d.h>
 #include "SoundManager.h"
 
+using namespace std;
+
 /* Animated object in the game */
 class Object
 {
@@ -13,7 +15,7 @@ class Object
   virtual ~Object();
   void moveAbs(float x, float y);
   void moveRel(float x, float y);
-  void setVisible(bool visible);
+  virtual void setVisible(bool visible);
   void setAnimation(char *animation);
   void pauseAnimation(bool on);
   void setBoundingBox(int width, int height, int offset_x, int offset_y);

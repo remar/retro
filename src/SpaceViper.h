@@ -7,16 +7,22 @@
 class SpaceViper : public Enemy
 {
  public:
-  SpaceViper(remar2d *gfx, SoundManager *sfx, list<Enemy *> *enemies);
+  SpaceViper(remar2d *gfx, SoundManager *sfx, ScoreKeeper *scoreKeeper,
+	     list<Enemy *> *enemies, int length);
   ~SpaceViper();
   void update(Field *field, Hero *hero);
   bool hit();
 
  private:
+  enum Direction {NONE, LEFT, RIGHT, UP, DOWN};
+
   void die();
   void updateAnimation();
   bool tailAtPosition(int blockX, int blockY);
+  void getBlockAtDirection(Direction direction, int *blockX, int *blockY);
   
+  Object *block;
+
   list<Enemy *> *enemies;
 
   /* Head sprite */
@@ -24,8 +30,6 @@ class SpaceViper : public Enemy
 
   /* Body objects */
   list<SpaceViperBody *> body;
-
-  enum Direction {NONE, LEFT, RIGHT, UP, DOWN};
 
   Direction moveDirection;
   int hitPoints;

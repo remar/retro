@@ -7,12 +7,15 @@
 class BulletHandler
 {
  public:
-  BulletHandler(HUD *hud);
+  BulletHandler(HUD *hud, Hero *hero);
   void update();
   bool fire();
+  void reset();
+  void addOne(); // Always allow firing of SPECIAL WEAPONS (add one bullet)
 
  private:
   HUD *hud;
+  Hero *hero;
 
   int ammo;
   int refillCounter;

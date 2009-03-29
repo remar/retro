@@ -6,7 +6,7 @@
 class Drone : public Enemy
 {
  public:
-  Drone(remar2d *gfx, SoundManager *sfx);
+  Drone(remar2d *gfx, SoundManager *sfx, ScoreKeeper *scoreKeeper);
   void update(Field *field, Hero *hero);
   bool hit();
 

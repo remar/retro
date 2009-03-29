@@ -28,6 +28,9 @@
 #include "BulletHandler.h"
 #include "SpaceViper.h"
 #include "BountyHunter.h"
+#include "DamagingExplosion.h"
+#include "Bonus.h"
+#include "BonusSpawner.h"
 
 class Level : public GameMode
 {
@@ -48,8 +51,11 @@ class Level : public GameMode
   void deleteAllObjects();
   void setupHUD();
   void performWipe(Mode modeToReturn);
+  void powerBulletHit(int blockX, int blockY);
+  void fireLaserBeam(int x, int y, Bullet::Direction direction);
 
   Spawner *spawner;
+  BonusSpawner *bonusSpawner;
 
   Field *field;
 
@@ -69,6 +75,8 @@ class Level : public GameMode
   list<Collectible *> collectibles;
   list<Coin *> coins;
   list<Bullet *> bullets;
+  list<DamagingExplosion *> damagingExplosions;
+  list<Bonus *> bonuses;
 
   bool doWipe;
   int wipeTimer;
@@ -95,7 +103,7 @@ class Level : public GameMode
 
   BulletHandler *bulletHandler;
 
-  Mode returnMode;
+  Mode returnMode;  
 };
 
 #endif

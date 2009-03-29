@@ -96,7 +96,7 @@ ScoreKeeper::nextLevel()
 bool
 ScoreKeeper::nextLevelIsBonus()
 {
-  if(levelsCompleted == 1)
+  if(levelsCompleted == 4)
     {
       levelsCompleted = 0;
       return true;
@@ -120,16 +120,6 @@ ScoreKeeper::resetKills()
 void
 ScoreKeeper::killed(EnemyType type)
 {
-  char *enemyChar[] = { "Fuzz",
-			"Drone",
-			"Space Viper",
-			"Bounty Hunter",
-			"Gold Drone",
-			"Dire Space Viper",
-			"Dark Bounty Hunter"};
-
-  printf("Killed a %s\n", enemyChar[type]);
-
   kills[type]++;
 }
 

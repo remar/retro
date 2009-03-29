@@ -12,8 +12,11 @@ class Bullet : public Object
   void moveRight();
   void update();
 
- private:
   enum Direction {LEFT, RIGHT};
+  Direction getDirection();
+
+
+ protected:
   Direction direction;
 };
 

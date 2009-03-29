@@ -57,8 +57,6 @@ Field::blockHit(int x, int y)
     }
   else if(field[x][y] == Field::DAMAGED)
     {
-      // sfx->playSound(3, false);
-
       breakBlock(x, y);
       redraw = true;
       brokeABlock = true;

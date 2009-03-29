@@ -17,6 +17,8 @@ Demo recording & playback
 Variable location of data files (currently ../ )
 Show "Stage X" right before stage starts
 NO BONUS if dead/timeout/time ran out
+Pushing fuzz outside of screen should wrap it around (2 sprites?)
+
 
 -------------------------------------------------------------------------------
 DONE

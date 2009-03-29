@@ -2,6 +2,7 @@
 #define FIELD_H
 
 #include <remar2d.h>
+#include <list>
 #include "SoundManager.h"
 #include "BrokenBlock.h"
 #include "Object.h"

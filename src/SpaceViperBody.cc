@@ -1,7 +1,7 @@
 #include "SpaceViperBody.h"
 
 SpaceViperBody::SpaceViperBody(remar2d *gfx, SoundManager *sfx, bool bright)
-  : Enemy(gfx, "snake body", sfx)
+  : Enemy(gfx, "snake body", sfx, 0)
 {
   if(bright)
     setAnimation("light green");
@@ -23,8 +23,6 @@ SpaceViperBody::update(Field *field, Hero *hero)
 bool
 SpaceViperBody::hit()
 {
-  printf("Bodyshot!\n");
-
   /* Remove bullet, but no effect on the Spaaaaace Viiiiipeeeeeer! */
   return true;
 }

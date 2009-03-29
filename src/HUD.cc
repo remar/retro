@@ -38,6 +38,13 @@ HUD::HUD(remar2d *gfx, ScoreKeeper *scoreKeeper)
       counters[i]->setPosition(pos_x[i], pos_y[i]);
     }
 
+  powerText = gfx->print("text", "power");
+  laserText = gfx->print("text", "laser");
+  gfx->showSprite(powerText, false);
+  gfx->moveSpriteAbs(powerText, 32*21+10, 32*1+16+2);
+  gfx->showSprite(laserText, false);
+  gfx->moveSpriteAbs(laserText, 32*21+10, 32*1+16+2);
+
   setValue(SCORE, scoreKeeper->getScore());
   setValue(TOP, scoreKeeper->getTopScore());
   setValue(TIME, 200);
@@ -58,6 +65,9 @@ HUD::~HUD()
       gfx->removeSpriteInstance(ammoSprites[i]);
       gfx->removeSpriteInstance(reloadSprites[i]);
     }
+
+  gfx->removeSpriteInstance(powerText);
+  gfx->removeSpriteInstance(laserText);
 }
 
 void
@@ -75,6 +85,8 @@ HUD::setValue(Display display, int value)
     setAmmo(value);
   else if(display == RELOAD)
     setReload(value);
+  else if(display == WEAPON)
+    setWeapon(value);
 }
 
 void
@@ -98,5 +110,27 @@ HUD::setReload(int value)
 	gfx->setAnimation(reloadSprites[i], "show");
       else
 	gfx->setAnimation(reloadSprites[i], "hide");
+    }
+}
+
+void
+HUD::setWeapon(int value)
+{
+  switch(value)
+    {
+    case 0: // No special weapon
+      gfx->showSprite(powerText, false);
+      gfx->showSprite(laserText, false);
+      break;
+
+    case 1: // POWER gun
+      gfx->showSprite(powerText, true);
+      gfx->showSprite(laserText, false);
+      break;
+
+    case 2: // LASER gun
+      gfx->showSprite(powerText, false);
+      gfx->showSprite(laserText, true);
+      break;
     }
 }

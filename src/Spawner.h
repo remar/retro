@@ -15,6 +15,8 @@ class Spawner
   Spawner(list<Object *> *objects, int type, int maxNumber);
   void update();
   void addFuzz();
+  void lockNests();
+  void cancelSpawningNests();
 
  private:
   // Fuzz **findEmptyFuzz();
@@ -28,12 +30,12 @@ class Spawner
   int numberOfNests;
 
   int countDown; /* Countdown to next spawn */
-  int nestCountDown[8]; /* Countdown for the individial nests when
-			   spawn is about to happen */
 
   int inQueue; /* Number of fuzzes waiting to spawn */
 
   bool startSpawn; /* Indicates if this is the fast "start spawn" */
+
+  int nestLockTimer;
 };
 
 #endif

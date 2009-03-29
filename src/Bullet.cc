@@ -27,3 +27,9 @@ Bullet::update()
   else
     moveRel(3, 0);
 }
+
+Bullet::Direction
+Bullet::getDirection()
+{
+  return direction;
+}

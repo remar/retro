@@ -6,7 +6,7 @@
 class BountyHunter : public Enemy
 {
  public:
-  BountyHunter(remar2d *gfx, SoundManager *sfx,
+  BountyHunter(remar2d *gfx, SoundManager *sfx, ScoreKeeper *scoreKeeper,
 	       list<Enemy *> *enemies, list<Object *> *objects);
   void update(Field *field, Hero *hero);
   bool hit();

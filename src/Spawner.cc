@@ -1,7 +1,7 @@
 #include "Spawner.h"
 
 Spawner::Spawner(list<Object *> *objects, int type, int maxNumber)
-  : numberOfNests(0)
+  : numberOfNests(0), nestLockTimer(0)
 {
   this->objects = objects;
   this->type = type;
@@ -10,11 +10,6 @@ Spawner::Spawner(list<Object *> *objects, int type, int maxNumber)
   startSpawn = true;
   inQueue = maxNumber;
   countDown = 60; /* 60 frames to next spawn */
-
-  for(int i = 0;i < 8;i++)
-    {
-      nestCountDown[i] = 0;
-    }
 
   list<Object *>::iterator it;
   for(it = objects->begin();it != objects->end();it++)
@@ -30,6 +25,20 @@ Spawner::Spawner(list<Object *> *objects, int type, int maxNumber)
 void
 Spawner::update()
 {
+  if(nestLockTimer)
+    {
+      if(--nestLockTimer == 0)
+	{
+	  // Unlock nests
+	  for(list<Nest *>::iterator it = nests.begin();it != nests.end();it++)
+	    {
+	      (*it)->lock(false);
+	    }
+	}
+
+      return;
+    }
+
   list<Nest *>::iterator it;
   int i;
 
@@ -69,4 +78,32 @@ void
 Spawner::addFuzz()
 {
   inQueue++;
+}
+
+void
+Spawner::lockNests()
+{
+  nestLockTimer = 50*60; // 50 seconds
+
+  cancelSpawningNests();
+
+  for(list<Nest *>::iterator it = nests.begin();it != nests.end();it++)
+    {
+      (*it)->lock(true);
+    }
+}
+
+void
+Spawner::cancelSpawningNests()
+{
+  for(list<Nest *>::iterator it = nests.begin();it != nests.end();it++)
+    {
+      if((*it)->isSpawning())
+	{
+	  (*it)->cancelSpawning();
+
+	  // Spawn fuzz a little later
+	  addFuzz();
+	}
+    }
 }

@@ -12,7 +12,7 @@ class Fuzz : public Enemy // Object
  public:
   enum Direction {NONE, LEFT, RIGHT, UP, DOWN};
 
-  Fuzz(remar2d *gfx, SoundManager *sfx);
+  Fuzz(remar2d *gfx, SoundManager *sfx, ScoreKeeper *scoreKeeper);
   void update(Field *field, Hero *hero);
   void rollLeft();
   void rollRight();

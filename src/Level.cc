@@ -1,6 +1,8 @@
 #include "Level.h"
 #include <fstream>
 #include <iostream>
+#include "PowerBullet.h"
+#include "LaserBeam.h"
 
 int DEBUG = 0;
 
@@ -8,7 +10,8 @@ Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
 	     ScoreKeeper *scoreKeeper)
   : GameMode(gfx, sfx, input, scoreKeeper)
 {
-  //bullets = 0;
+  gfx->setupTileBackground(32, 32);
+
   paused = false;
   win = false;
   debugOutputTimer = 60;
@@ -23,13 +26,8 @@ Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
   wipeTimer = 70;
   wipeCounter = 0;
 
-  gfx->setupTileBackground(32, 32);
-
-//   for(int i = 0;i < 8;i++)
-//     {
-//       bullet[i] = 0;
-//     }
-
+  hud = new HUD(gfx, scoreKeeper);
+  
   scoreKeeper->resetKills();
 
   field = new Field(gfx, sfx, &brokenBlocks, &objects,
@@ -49,28 +47,31 @@ Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
       loadFailed = true;
     }
 
-  hud = new HUD(gfx, scoreKeeper);
-
-  bulletHandler = new BulletHandler(hud);
+  bulletHandler = new BulletHandler(hud, hero);
 
   spawner = new Spawner(&objects,
 			scoreKeeper->redFuzzes(),
 			scoreKeeper->numberOfEnemy(ScoreKeeper::Fuzz));
 
   for(int i = 0;i < scoreKeeper->numberOfEnemy(ScoreKeeper::Drone);i++)
-    enemies.push_back(new Drone(gfx, sfx));
+    enemies.push_back(new Drone(gfx, sfx, scoreKeeper));
 
-  if(scoreKeeper->numberOfEnemy(ScoreKeeper::SpaceViper))
+  if(int length = scoreKeeper->numberOfEnemy(ScoreKeeper::SpaceViper))
     {
-      SpaceViper *v = new SpaceViper(gfx, sfx, &enemies);
+      SpaceViper *v = new SpaceViper(gfx, sfx, scoreKeeper, &enemies,
+				     length*8);
       enemies.push_front(v);
     }
 
   if(scoreKeeper->numberOfEnemy(ScoreKeeper::BountyHunter))
     {
-      enemies.push_back(new BountyHunter(gfx, sfx, &enemies, &objects));
+      enemies.push_back(new BountyHunter(gfx, sfx, scoreKeeper, &enemies,
+					 &objects));
     }
 
+  bonusSpawner = new BonusSpawner(gfx, field, &bonuses, &coins,
+				  scoreKeeper->getSkillLevel() >= 4);
+  
   sfx->playMusic(0);
 }
 
@@ -129,7 +130,7 @@ Level::loadLevel(char *lev)
 
 	    case 4:
 	      {
-		Nest *nest = new Nest(gfx, sfx, &enemies,
+		Nest *nest = new Nest(gfx, sfx, scoreKeeper, &enemies,
 				      scoreKeeper->fastFuzzes());
 		  nest->setVisible(true);
 		  nest->moveAbs(x*32+3, y*32+3*32+3);
@@ -157,9 +158,11 @@ Level::loadLevel(char *lev)
 	}
     }
 
-  hero = new Hero(gfx, sfx, &bullets);
+  hero = new Hero(gfx, sfx, &bullets, hud);
   hero->setVisible(true);
   hero->moveAbs(heroStartX, heroStartY);
+
+  hero->powerShot();
 
   field->redrawAll();
 
@@ -206,7 +209,6 @@ Level::respawn(int x, int y)
 	return false;
     }
 
-  for(int i = 0;i < 8;i++);
   for(list<Bullet *>::iterator it = bullets.begin();it != bullets.end();it++)
     {
       if(block.collides(*it))
@@ -382,17 +384,15 @@ Level::update()
       if(scoreKeeper->getLives() <= 0)
 	{
 	  /* GAME OVER */
-	  printf("\n\nGAME OVER\n\n");
-
 	  performWipe(SCORE);
 	  return GAME;
-	  // return SCORE;
 	}
 
       delete hero;
-      hero = new Hero(gfx, sfx, &bullets);
+      hero = new Hero(gfx, sfx, &bullets, hud);
       hero->setVisible(true);
-      hero->moveAbs(heroStartX, heroStartY);      
+      hero->moveAbs(heroStartX, heroStartY);
+      bulletHandler->reset();
     }
 
   // TODO: Move movement code for Captain Good to Hero class
@@ -404,10 +404,10 @@ Level::update()
   if(input->held(SDLK_RIGHT))  move_x++;
   if(input->pressed(SDLK_UP))  hero->jump(true);
   if(input->released(SDLK_UP)) hero->jump(false);
-//   if(input->pressed(SDLK_z) && bulletHandler->fire())
-//     hero->shoot(&bullets, &bullet[0]);
   if(input->pressed(SDLK_z) && bulletHandler->fire())
-    hero->shoot(); //&bullets, &bullet[0]);
+    {
+      hero->shoot();
+    }
   if(input->pressed(SDLK_d))   hero->die();
 
   spawner->update();
@@ -433,6 +433,132 @@ Level::update()
     {
       field->moveObjectRel(hero, &move_x, &move_y);
       hero->moveRel(move_x, move_y);
+    }
+
+  bonusSpawner->update(hero);
+
+  for(list<Bonus *>::iterator it = bonuses.begin();it != bonuses.end();)
+    {
+      (*it)->update();
+      if((*it)->destroy())
+	{
+	  delete (*it);
+	  it = bonuses.erase(it);
+	}
+      else
+	{
+	  if((*it)->collides(hero) && !(*it)->getCollected())
+	    {
+	      (*it)->setCollected();
+
+	      Bonus::BonusType type = (*it)->getType();
+	      bool updateHUD = false;
+
+	      switch(type)
+		{
+		case Bonus::SMALL_COINS:
+		  sfx->playSound(17);
+		  scoreKeeper->addScore(200);
+		  updateHUD = true;
+		  break;
+
+		case Bonus::DIAMOND:
+		  sfx->playSound(17);
+		  scoreKeeper->addScore(250);
+		  updateHUD = true;
+		  break;
+
+		case Bonus::GOLD_BAR:
+		  sfx->playSound(17);
+		  scoreKeeper->addScore(300);
+		  updateHUD = true;
+		  break;
+
+		case Bonus::BLUE_PEARL:
+		  sfx->playSound(17);
+		  scoreKeeper->addScore(400);
+		  updateHUD = true;
+		  break;
+
+		case Bonus::WHITE_BALL:
+		  sfx->playSound(17);
+		  bulletHandler->reset();
+		  break;
+
+		case Bonus::LOCK:
+		  sfx->playSound(17);
+		  spawner->lockNests();
+		  break;
+
+		case Bonus::POWER_GUN:
+		  // inform Hero object that next shot is a power shot
+		  hero->powerShot();
+		  bulletHandler->addOne();
+
+		  sfx->playSound(17);
+		  break;
+
+		case Bonus::LASER_GUN:
+		  // inform Hero object that next shot is a laser shot
+		  hero->laserShot();
+		  bulletHandler->addOne();
+
+		  sfx->playSound(17);
+		  break;
+
+		case Bonus::CLOCK:
+		  {
+		  int newtime = scoreKeeper->getTimer() + 50;
+		  scoreKeeper->setTimer((newtime > 200 ? 200 : newtime));
+		  hud->setValue(HUD::TIME, scoreKeeper->getTimer());
+		  sfx->playSound(17);
+		  }
+		  break;
+
+		case Bonus::BOMB:
+		  for(list<Enemy *>::iterator nmy = enemies.begin();nmy != enemies.end();nmy++)
+		    {
+		      if(Fuzz *f = dynamic_cast<Fuzz *>(*nmy))
+			{
+			  f->stun();
+			}
+		      else
+			{
+			  (*nmy)->hit();
+			  (*nmy)->hit();
+			}
+		    }
+
+		  spawner->cancelSpawningNests();
+		  sfx->playSound(0);
+
+		  break;
+
+		case Bonus::QUAKE:
+		  // damage all undamaged blocks in the Field
+		  for(int y = 0;y < 19;y++)
+		    for(int x = 0;x < 25;x++)
+		      {
+			if(field->field[x][y] == Field::BREAKABLE)
+			  {
+			    field->field[x][y] = Field::DAMAGED;
+			    field->drawBlockAndSurrounding(x, y);
+			  }
+		      }
+		  sfx->playSound(18);
+
+		  break;
+		}
+
+	      if(updateHUD)
+		{
+		  hud->setValue(HUD::SCORE, scoreKeeper->getScore());
+		  hud->setValue(HUD::TOP, scoreKeeper->getTopScore());
+		}
+	    }
+
+	  it++;
+	}
     }
 
   for(list<Coin *>::iterator it = coins.begin();it != coins.end();)
@@ -465,31 +591,42 @@ Level::update()
       it++;
     }
 
-  //for(int i = 0;i < 8;i++);
   for(list<Bullet *>::iterator b = bullets.begin();b != bullets.end();)
     {
-//       if(bullet[i])
-// 	{
       /* check collision between bullet and various stuff... */
       int x = (*b)->getX(), y = (*b)->getY();
       int blockX, blockY;
+
+      if(LaserBeam *lb = dynamic_cast<LaserBeam *>(*b))
+	{
+	  fireLaserBeam(lb->getX()/32, lb->getY()/32, lb->getDirection());
+
+	  b = bullets.erase(b);
+	  continue;
+	}
+
       if(x < -5 || x > 799)
 	{
-	  //removeBullet(i);
 	  delete (*b);
 	  b = bullets.erase(b);
 	  continue;
 	}
       else if(field->objectCollidesWithBackground((*b), &blockX, &blockY))
 	{
-	  if(!field->blockHit(blockX, blockY))
+	  if(dynamic_cast<PowerBullet *>(*b))
 	    {
-	      objects.push_back(new Explosion(gfx, sfx, x-9, y-9));
+	      powerBulletHit(blockX, blockY);
+	    }
+	  else
+	    {
+	      if(!field->blockHit(blockX, blockY))
+		{
+		  objects.push_back(new Explosion(gfx, sfx, x-9, y-9));
+		}
 	    }
 
 	  sfx->playSound(3, false);
 
-	  //removeBullet(i);
 	  delete (*b);
 	  b = bullets.erase(b);
 
@@ -506,7 +643,11 @@ Level::update()
 	    {
 	      if((*it)->hit())
 		{
-		  if(!removeBullet)
+		  if(dynamic_cast<PowerBullet *>(*b))
+		    {
+		      powerBulletHit((*b)->getX()/32, (*b)->getY()/32);
+		    }
+		  else if(!removeBullet)
 		    {
 		      objects.push_back(new Explosion(gfx, sfx, x-9, y-9));
 		      sfx->playSound(3, false);
@@ -514,7 +655,6 @@ Level::update()
 
 		  removeBullet = true;
 
-		  //removeBullet(i);
 		  break;
 		}
 	    }
@@ -533,30 +673,73 @@ Level::update()
       b++;
     }
 
+
+  for(list<DamagingExplosion *>::iterator it = damagingExplosions.begin();
+      it != damagingExplosions.end();)
+    {
+      (*it)->update();
+
+      if((*it)->destroy())
+	{
+	  delete (*it);
+	  it = damagingExplosions.erase(it);
+	}
+      else
+	{
+	  if((*it)->checkCollision())
+	    {
+	      // Check for collision with blocks
+	      int blockX, blockY;
+	      if(field->objectCollidesWithBackground((*it), &blockX, &blockY))
+		{
+		  field->blockHit(blockX, blockY);
+		}
+	      else
+		{
+		  // Check for collision against enemies
+		  for(list<Enemy *>::iterator nmy = enemies.begin();
+		      nmy != enemies.end(); nmy++)
+		    {
+		      if((*nmy)->collides(*it))
+			{
+			  // Two HP damage
+			  (*nmy)->hit();
+			  (*nmy)->hit();
+			}
+		    }
+		}
+	    }
+
+	  it++;
+	}
+    }
+
   for(list<Enemy *>::iterator it = enemies.begin();it != enemies.end();)
     {
       (*it)->update(field, hero);
       if((*it)->destroy())
 	{
-	  /* If this is a Fuzz, make sure that Spawner respawns a Fuzz
-	     later on */
 	  if(dynamic_cast<Fuzz *>(*it))
 	    {
- 	      scoreKeeper->killed(ScoreKeeper::Fuzz);
+	      /* If this is a Fuzz, make sure that Spawner respawns a
+		 Fuzz later on */
 	      spawner->addFuzz();
-	    }
-	  else if(dynamic_cast<Drone *>(*it))
-	    {
- 	      scoreKeeper->killed(ScoreKeeper::Drone);
-	    }
-	  else if(dynamic_cast<SpaceViper *>(*it))
-	    {
-	      scoreKeeper->killed(ScoreKeeper::SpaceViper);
 	    }
 	  else if(dynamic_cast<BountyHunter *>(*it))
 	    {
-	      scoreKeeper->killed(ScoreKeeper::BountyHunter);
-	      // TODO: Add explosions
+	      /* If this is a Bounty Hunter, create 3x3 explosions
+		 that damages other enemies */
+	      int hunter_x = (*it)->getX();
+	      int hunter_y = (*it)->getY();
+
+	      for(int y = -1;y < 2;y++)
+		for(int x = -1;x < 2;x++)
+		  {
+		    damagingExplosions
+		      .push_back(new DamagingExplosion(gfx, sfx, 
+						       hunter_x+x*32,
+						       hunter_y+y*32));
+		  }
 	    }
 
 	  delete (*it);
@@ -622,20 +805,31 @@ Level::showAllObjects(bool show)
     {
       (*it)->setVisible(show);
     }
+
+  for(list<DamagingExplosion *>::iterator it = damagingExplosions.begin();
+      it != damagingExplosions.end();it++)
+    {
+      (*it)->setVisible(show);
+    }
+
+  for(list<Bonus *>::iterator it = bonuses.begin();it != bonuses.end();it++)
+    {
+      (*it)->setVisible(show);
+    }
 }
 
 void
 Level::deleteAllObjects()
 {
   /* Remove all enemies */
-  for(list<Enemy *>::iterator it = enemies.begin();it != enemies.end();)//it++)
+  for(list<Enemy *>::iterator it = enemies.begin();it != enemies.end();)
     {
       delete (*it);
       it = enemies.erase(it);
     }
 
   /* Remove other objects */
-  for(list<Object *>::iterator it = objects.begin();it != objects.end();)//it++)
+  for(list<Object *>::iterator it = objects.begin();it != objects.end();)
     {
       delete (*it);
       it = objects.erase(it);
@@ -653,10 +847,23 @@ Level::deleteAllObjects()
       hero = 0;
     }
 
-  for(list<Bullet *>::iterator it = bullets.begin();it != bullets.end();it++)
+  for(list<Bullet *>::iterator it = bullets.begin();it != bullets.end();)
     {
       delete (*it);
       it = bullets.erase(it);
+    }
+
+  for(list<DamagingExplosion *>::iterator it = damagingExplosions.begin();
+      it != damagingExplosions.end();)
+    {
+      delete (*it);
+      it = damagingExplosions.erase(it);
+    }
+
+  for(list<Bonus *>::iterator it = bonuses.begin();it != bonuses.end();)
+    {
+      delete (*it);
+      it = bonuses.erase(it);
     }
 }
 
@@ -672,4 +879,52 @@ Level::performWipe(Mode modeToReturn)
 
   returnMode = modeToReturn;
   doWipe = true;
+}
+
+void
+Level::powerBulletHit(int blockX, int blockY)
+{
+  // Add 5x5 diamond of explosions
+  //
+  //     x
+  //   x x x
+  // x x X x x
+  //   x x x
+  //     x
+  
+  int x_off[] = {0, -1, 0, 1, -2, -1, 0, 1, 2, -1, 0, 1, 0};
+  int y_off[] = {-2, -1, -1, -1, 0, 0, 0, 0, 0, 1, 1, 1, 2};
+  
+  for(int i = 0;i < 13;i++)
+    {
+      damagingExplosions
+	.push_back(new DamagingExplosion(gfx, sfx, 
+					 (blockX+x_off[i])*32+4,
+					 (blockY+y_off[i])*32+4));
+    }
+}
+
+void
+Level::fireLaserBeam(int x, int y, Bullet::Direction direction)
+{
+  int endX, increment;
+  
+  if(direction == Bullet::LEFT)
+    {
+      endX = -1;
+      increment = -1;
+    }
+  else
+    {
+      endX = 25;
+      increment = 1;
+    }
+  
+  for(int i = x;i != endX;i += increment)
+    {
+      damagingExplosions.push_back(new DamagingExplosion(gfx, sfx,
+							 i*32+4,
+							 y*32+4));
+      
+    }
 }

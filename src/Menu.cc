@@ -177,4 +177,7 @@ Menu::increaseSkillLevel()
     skill = 1;
 
   skillCounter->setCounter(skill);
+
+  // Starting bonuslevel depends on starting skill level
+  scoreKeeper->setBonusLevel(skill);
 }

@@ -1,8 +1,8 @@
 #include "Drone.h"
 
-Drone::Drone(remar2d *gfx, SoundManager *sfx)
-  : Enemy(gfx, "drone", sfx), moved(0), moveThisUpdate(true), hitPoints(2),
-    dead(false)
+Drone::Drone(remar2d *gfx, SoundManager *sfx, ScoreKeeper *scoreKeeper)
+  : Enemy(gfx, "drone", sfx, scoreKeeper), moved(0), moveThisUpdate(true),
+    hitPoints(2), dead(false)
 {
   setAnimation("normal");
   setVisible(true);
@@ -159,6 +159,8 @@ Drone::hit()
 void
 Drone::die()
 {
+  scoreKeeper->killed(ScoreKeeper::Drone);
+
   setAnimation("crash");
   deathTimer = 60;
 

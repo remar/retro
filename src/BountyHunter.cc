@@ -2,9 +2,10 @@
 #include "HunterBullet.h"
 
 BountyHunter::BountyHunter(remar2d *gfx, SoundManager *sfx,
-			   list<Enemy *> *enemies, list<Object *> *objects)
-  : Enemy(gfx, "hunter", sfx), dead(false), hitPoints(4), enemies(enemies),
-    objects(objects)
+			   ScoreKeeper *scoreKeeper, list<Enemy *> *enemies,
+			   list<Object *> *objects)
+  : Enemy(gfx, "hunter", sfx, scoreKeeper), dead(false), hitPoints(4),
+    enemies(enemies), objects(objects)
 {
   setAnimation("left");
   setVisible(false);
@@ -108,6 +109,8 @@ BountyHunter::hit()
 void
 BountyHunter::die()
 {
+  scoreKeeper->killed(ScoreKeeper::BountyHunter);
+
   dead = true;
 }
 

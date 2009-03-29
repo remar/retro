@@ -3,7 +3,7 @@
 
 HunterBullet::HunterBullet(remar2d *gfx, SoundManager *sfx, 
 			   list<Object *> *objects)
-  : Enemy(gfx, "hshot", sfx), objects(objects)
+  : Enemy(gfx, "hshot", sfx, 0), objects(objects)
 {
   setBoundingBox(4, 4, 1, 1);
   setAnimation("normal");

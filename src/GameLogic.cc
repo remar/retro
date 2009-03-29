@@ -42,6 +42,8 @@ GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx)
 		     "../gfx/timered.xml",
 		     "../gfx/hunter.xml",
 		     "../gfx/hshot.xml",
+		     "../gfx/note.xml",
+		     "../gfx/bonus.xml",
 		     0};
 
   printf("Loading sprites");

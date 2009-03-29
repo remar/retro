@@ -21,6 +21,8 @@ SoundManager::SoundManager()
       "start.wav", /* 14 */
       "scoretick.wav", /* 15 */
       "bonus.wav", /* 16 */
+      "pickup.wav", /* 17 */
+      "quake.wav", /* 18 */
       0
     };
   

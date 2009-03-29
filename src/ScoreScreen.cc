@@ -5,7 +5,7 @@ ScoreScreen::ScoreScreen(remar2d *gfx, SoundManager *sfx, Input *input,
   : GameMode(gfx, sfx, input, scoreKeeper),
     state(TIME),
     subState(SHOW),
-    delayTimer(60),
+    delayTimer(tickDelayObjects),
     coinsCounted(0),
     fuzzesCounted(0),
     dronesCounted(0),
@@ -283,7 +283,7 @@ ScoreScreen::update()
 	  time->setPosition(13*32, 9*32+8);
 	  time->setCounter(scoreKeeper->getTimer());
 
-	  tickDelayTimer = 60;
+	  tickDelayTimer = tickDelayObjects;
 	  subState = TICKDELAY;
 	  break;
 	  
@@ -292,7 +292,7 @@ ScoreScreen::update()
 	    {
 	      state = COINS;
 	      subState = SHOW;
-	      delayTimer = 60;
+	      delayTimer = tickDelayObjects;
 	    }
 	  else
 	    {
@@ -315,7 +315,7 @@ ScoreScreen::update()
 
 	      time->setCounter(scoreKeeper->getTimer());
 	      
-	      tickDelayTimer = 6;
+	      tickDelayTimer = tickDelayTime;
 
 	      sfx->playSound(15);
 	    }
@@ -337,7 +337,7 @@ ScoreScreen::update()
 	  coins->setPosition(14*32, 10*32+8);
 	  coins->setCounter(0);
 
-	  tickDelayTimer = 60;
+	  tickDelayTimer = tickDelayObjects;
 	  subState = TICKDELAY;
 	  break;
 
@@ -346,7 +346,7 @@ ScoreScreen::update()
 	    {
 	      state = FUZZ;
 	      subState = SHOW;
-	      delayTimer = 60;
+	      delayTimer = tickDelayObjects;
 	    }
 	  else
 	    {
@@ -355,7 +355,7 @@ ScoreScreen::update()
 	      coins->setCounter(coinsCounted);
 	      scoreKeeper->addScore(100 * scoreKeeper->getSkillLevel());
 
-	      tickDelayTimer = 12;
+	      tickDelayTimer = tickDelayCoins;
 
 	      sfx->playSound(15);
 	    }
@@ -377,7 +377,7 @@ ScoreScreen::update()
 	  fuzzes->setPosition(13*32+16, 11*32+8);
 	  fuzzes->setCounter(0);
 
-	  tickDelayTimer = 60;
+	  tickDelayTimer = tickDelayObjects;
 	  subState = TICKDELAY;
 	  break;
 
@@ -386,7 +386,7 @@ ScoreScreen::update()
 	    {
 	      state = DRONES;
 	      subState = SHOW;
-	      delayTimer = 60;
+	      delayTimer = tickDelayObjects;
 	    }
 	  else
 	    {
@@ -395,7 +395,7 @@ ScoreScreen::update()
 	      fuzzes->setCounter(fuzzesCounted);
 	      scoreKeeper->addScore(120);
 
-	      tickDelayTimer = 12;
+	      tickDelayTimer = tickDelayEnemies;
 	      sfx->playSound(15);
 	    }
 	  break;
@@ -416,7 +416,7 @@ ScoreScreen::update()
 	  drones->setPosition(13*32+16, 12*32+8);
 	  drones->setCounter(0);
 
-	  tickDelayTimer = 60;
+	  tickDelayTimer = tickDelayObjects;
 	  subState = TICKDELAY;
 	  break;
 
@@ -429,7 +429,7 @@ ScoreScreen::update()
 		state = DONE;
 
 	      subState = SHOW;
-	      delayTimer = 60;
+	      delayTimer = tickDelayObjects;
 	    }
 	  else
 	    {
@@ -438,7 +438,7 @@ ScoreScreen::update()
 	      drones->setCounter(dronesCounted);
 	      scoreKeeper->addScore(200);
 
-	      tickDelayTimer = 12;
+	      tickDelayTimer = tickDelayEnemies;
 	      sfx->playSound(15);
 	    }
 	  break;
@@ -459,7 +459,7 @@ ScoreScreen::update()
 	  vipers->setPosition(14*32, 13*32+8);
 	  vipers->setCounter(0);
 
-	  tickDelayTimer = 60;
+	  tickDelayTimer = tickDelayObjects;
 	  subState = TICKDELAY;
 	  break;
 
@@ -472,7 +472,7 @@ ScoreScreen::update()
 	      else
 		state = DONE;
 	      subState = SHOW;
-	      delayTimer = 60;
+	      delayTimer = tickDelayObjects;
 	    }
 	  else
 	    {
@@ -481,7 +481,7 @@ ScoreScreen::update()
 	      vipers->setCounter(vipersCounted);
 	      scoreKeeper->addScore(1200);
 
-	      tickDelayTimer = 12;
+	      tickDelayTimer = tickDelayEnemies;;
 	      sfx->playSound(15);
 	    }
 	  break;
@@ -502,7 +502,7 @@ ScoreScreen::update()
 	  hunters->setPosition(14*32, 14*32+8);
 	  hunters->setCounter(0);
 
-	  tickDelayTimer = 60;
+	  tickDelayTimer = tickDelayObjects;
 	  subState = TICKDELAY;
 	  break;
 
@@ -512,7 +512,7 @@ ScoreScreen::update()
 	    {
 	      state = DONE;
 	      subState = SHOW;
-	      delayTimer = 60;
+	      delayTimer = tickDelayObjects;
 	    }
 	  else
 	    {
@@ -521,7 +521,7 @@ ScoreScreen::update()
 	      hunters->setCounter(huntersCounted);
 	      scoreKeeper->addScore(1000);
 
-	      tickDelayTimer = 12;
+	      tickDelayTimer = tickDelayEnemies;
 	      sfx->playSound(15);
 	    }
 	  break;
@@ -535,7 +535,7 @@ ScoreScreen::update()
       switch(subState)
 	{
 	case SHOW:
-	  tickDelayTimer = 3*60;
+	  tickDelayTimer = 3*tickDelayObjects;
 	  subState = TICKDELAY;
 	  break;
 

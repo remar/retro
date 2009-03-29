@@ -1,9 +1,13 @@
 #include "Hero.h"
+#include "PowerBullet.h"
+#include "LaserBeam.h"
 
-Hero::Hero(remar2d *gfx, SoundManager *sfx, list<Bullet *> *bullets)
+Hero::Hero(remar2d *gfx, SoundManager *sfx, list<Bullet *> *bullets,
+	   HUD *hud)
   : Object(gfx, "good", sfx),  blinking(true), jumping(false), dead(false),
-    direction(RIGHT), jumpCounter(80), currentAnimation(STANDING),
-    channel(-1), oldXDir(0), oldYDir(0), bullets(bullets)
+    direction(RIGHT), weapon(STANDARD), jumpCounter(80),
+    currentAnimation(STANDING), channel(-1), oldXDir(0), oldYDir(0),
+    bullets(bullets), hud(hud), noteShown(false), hasStoppedSound(false)
 {
   setAnimation("blink right");
   setBoundingBox(6, 20, 5, 4);
@@ -11,6 +15,10 @@ Hero::Hero(remar2d *gfx, SoundManager *sfx, list<Bullet *> *bullets)
   flame = gfx->createSpriteInstance("flame");
   gfx->setAnimation(flame, "right");
   gfx->showSprite(flame, false);
+
+  note = gfx->createSpriteInstance("note");
+  gfx->setAnimation(note, "8");
+  gfx->showSprite(note, false);
 }
 
 Hero::~Hero()
@@ -21,6 +29,9 @@ Hero::~Hero()
 
   gfx->showSprite(flame, false);
   gfx->removeSpriteInstance(flame);
+
+  gfx->showSprite(note, false);
+  gfx->removeSpriteInstance(note);
 }
 
 int getDir(float dir)
@@ -43,7 +54,7 @@ Hero::setDirection(float dir)
 }
 
 void
-Hero::moveRel(float xDir, float yDir)//, bool onGround)
+Hero::moveRel(float xDir, float yDir)
 {
   if(dead)
     return;
@@ -81,7 +92,10 @@ Hero::moveRel(float xDir, float yDir)//, bool onGround)
 
   Object::moveRel(xDir, yDir);
 
-  //updateFlame();
+//   if(noteShown)
+    {
+      gfx->moveSpriteAbs(note, getX()+4, getY()-13);
+    }
 
   if(inAir)
     {
@@ -112,6 +126,30 @@ Hero::moveRel(float xDir, float yDir)//, bool onGround)
       flameShown = false;
     }
 
+}
+
+void
+Hero::setVisible(bool visible)
+{
+  Object::setVisible(visible);
+
+  if(flameShown)
+    gfx->showSprite(flame, visible);
+
+  if(noteShown)
+    gfx->showSprite(note, visible);
+
+  if(!visible && channel != -1)
+    {
+      sfx->stopSound(channel);
+      channel = -1;
+      hasStoppedSound = true;
+    }
+  else if(visible && hasStoppedSound)
+    {
+      channel = sfx->playSound(11, true);
+      hasStoppedSound = false;
+    }
 }
 
 void
@@ -198,7 +236,7 @@ Hero::updateAnimation(float xDir, float yDir)
 }
 
 void
-Hero::shoot() //int *bullets, Bullet **bullet)
+Hero::shoot()
 {
   if(dead)
     return;
@@ -209,7 +247,29 @@ Hero::shoot() //int *bullets, Bullet **bullet)
       updateAnimation(0, 0);
     }
 
-  Bullet *b = new Bullet(gfx, sfx);
+  Bullet *b;
+
+  switch(weapon)
+    {
+    case STANDARD:
+      b = new Bullet(gfx, sfx); 
+      b->setVisible(true);
+      break;
+
+    case POWER:
+      b = new PowerBullet(gfx, sfx);
+      b->setVisible(true);
+      weapon = STANDARD;
+      hud->setValue(HUD::WEAPON, 0 /* nothing  */);
+      break;
+
+    case LASER:
+      b = new LaserBeam(gfx, sfx);
+      weapon = STANDARD;
+      hud->setValue(HUD::WEAPON, 0 /* nothing  */);
+      break;
+    }
+
   if(direction == LEFT)
     {
       b->moveAbs(getX()-4, getY()+8);
@@ -220,16 +280,6 @@ Hero::shoot() //int *bullets, Bullet **bullet)
       b->moveAbs(getX()+16, getY()+8);
       b->moveRight();
     }
-  b->setVisible(true);
-
-  //       for(int i = 0;i < 8;i++)
-  // 	if(bullet[i] == 0)
-  // 	  {
-  // 	    bullet[i] = b;
-  // 	    break;
-  // 	  }
-
-  //       (*bullets)++;
 
   bullets->push_back(b);
 
@@ -245,6 +295,10 @@ Hero::die()
   dead = true;
 
   gfx->showSprite(flame, false); /* just in case... */
+  gfx->showSprite(note, false);
+
+  noteTimer = 0;
+  noteShown = false;
 
   /* Stop walking sound */
   if(channel != -1)
@@ -263,6 +317,15 @@ Hero::die()
 void
 Hero::update()
 {
+  if(noteTimer)
+    {
+      if(--noteTimer == 0)
+	{
+	  noteShown = false;
+	  gfx->showSprite(note, false);
+	}
+    }
+
   if(dead)
     {
       deathTimer--;
@@ -270,4 +333,33 @@ Hero::update()
       if(deathTimer == 0)
 	destroyMe = true;
     }
+}
+
+void
+Hero::showNote(int ammo)
+{
+  if(dead)
+    return;
+
+  char *ammoString[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8"};
+
+  gfx->showSprite(note, true);
+  gfx->setAnimation(note, ammoString[ammo]);
+
+  noteShown = true;
+  noteTimer = 60;
+}
+
+void
+Hero::powerShot()
+{
+  weapon = POWER;
+  hud->setValue(HUD::WEAPON, 1 /* POWER */);
+}
+
+void
+Hero::laserShot()
+{
+  weapon = LASER;
+  hud->setValue(HUD::WEAPON, 2 /* LASER */);
 }

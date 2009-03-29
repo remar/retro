@@ -1,27 +1,21 @@
 # PLEASE NOTE: 'remar2d' must be checked out as a neighbour to 'retro',
 #              i.e. /home/benny/retro and /home/benny/remar2d
 
-CFLAGS =	`sdl-config --cflags` -I../../remar2d/src -g -Wall
+CFLAGS =	`sdl-config --cflags` -g -Wall
 CPPFLAGS =	$(CFLAGS)
-LIBS =		`sdl-config --libs` -lSDL_mixer
+LIBS =		`sdl-config --libs` -lSDL_mixer -lremar2d
 
 RETRO =		retro.o Input.o GameLogic.o Hero.o Fuzz.o Object.o Level.o \
 		Coin.o Nest.o ScoreKeeper.o Spawner.o Bullet.o SoundManager.o \
 		BrokenBlock.o Explosion.o Smoke.o Enemy.o Counter.o Drone.o \
 		Field.o Collectible.o HUD.o Menu.o ScoreScreen.o GameMode.o \
 		FileManager.o BulletHandler.o BonusLevel.o BonusScoreScreen.o \
-		SpaceViper.o SpaceViperHead.o SpaceViperBody.o BountyHunter.o \
-		HunterBullet.o \
-		../../remar2d/src/remar2d.o ../../remar2d/src/tinyxml.o \
-		../../remar2d/src/tinystr.o ../../remar2d/src/tinyxmlerror.o \
-		../../remar2d/src/tinyxmlparser.o ../../remar2d/src/Sprite.o \
-		../../remar2d/src/Animation.o \
-		../../remar2d/src/SpriteInstance.o \
-		../../remar2d/src/TileSet.o ../../remar2d/src/Tile.o \
-		../../remar2d/src/Font.o ../../remar2d/src/Character.o
+		SpaceViper.o SpaceViperBody.o BountyHunter.o \
+		HunterBullet.o DamagingExplosion.o Bonus.o BonusSpawner.o \
+		PowerBullet.o LaserBeam.o
 
-retro:		$(RETRO)
+retro:		$(RETRO) /usr/lib/libremar2d.a
 		g++ -o $@ $^ $(LIBS)
 
 clean:
-		rm -f *.o *~ $(PROGS)
+		rm -f *.o *~ core* $(PROGS)

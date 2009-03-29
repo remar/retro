@@ -1,9 +1,9 @@
 #include "Fuzz.h"
 
-Fuzz::Fuzz(remar2d *gfx, SoundManager *sfx)
-  : Enemy(gfx, "fuzz", sfx), moveDirection(NONE), rollDirection(NONE),
-    falling(true), stunned(false), fastFuzz(false), FALL_LIMIT(60),
-    /*SPIKES_LEVEL(600-32-16),*/ dead(false), onSpikes(false)
+Fuzz::Fuzz(remar2d *gfx, SoundManager *sfx, ScoreKeeper *scoreKeeper)
+  : Enemy(gfx, "fuzz", sfx, scoreKeeper), moveDirection(NONE),
+    rollDirection(NONE), falling(true), stunned(false), fastFuzz(false),
+    FALL_LIMIT(60), dead(false), onSpikes(false)
 {
   setAnimation("roll left");
   pauseAnimation(true);
@@ -554,17 +554,15 @@ Fuzz::blink()
 void
 Fuzz::die()
 {
-  // printf("Die\n");
-
   if(dead)
     return;
+
+  scoreKeeper->killed(ScoreKeeper::Fuzz);
 
   dead = true;
   sfx->playSound(8, false);
   setAnimation("splat");
   deathTimer = 60;
-
-  // printf("Uh oh, me dead... :(\n");
 }
 
 bool

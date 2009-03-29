@@ -19,6 +19,11 @@ class ScoreScreen : public GameMode
   Mode update();
 
  private:
+  static const int tickDelayObjects = 30;
+  static const int tickDelayTime = 6;
+  static const int tickDelayCoins = 6;
+  static const int tickDelayEnemies = 12;
+
   void drawBackground();
 
   enum State { TIME, COINS, FUZZ, DRONES, VIPERS, HUNTERS, DONE };
