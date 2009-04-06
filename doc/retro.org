@@ -1,0 +1,57 @@
+#+BEGIN: clocktable :maxlevel 3 :scope file
+#+END:
+
+* Retrobattle
+** Features
+*** Show helmet (location of Captain Good) when pausing
+*** Red Fuzz
+*** Gold Drone
+*** Dire Space Viper
+*** Dark Bounty Hunter
+*** Pushing fuzz outside of screen should wrap it around (2 sprites?)
+    Might be better to make the buffer outside of the screen wider, to
+    allow both Captain Good and a Fuzz to fit outside. Will take
+    longer to walk around the edge of the screen, but it would
+    probably be nicest. This should be much more general (all enemies
+    and Captain Good should adhere to this).
+*** Show "Stage X" right before stage starts
+*** NO BONUS if dead/timeout/time ran out
+*** Extra lives
+*** Key binding redefinition
+*** Demo recording & playback
+*** Variable location of data files (currently ../ )
+** Features done 
+*** Show ammunition left above Captain Good when firing and getting back ammo
+*** Explosions when Bounty Hunter is killed
+   :CLOCK:
+   CLOCK: [2009-03-01 Sun 11:29]--[2009-03-01 Sun 11:29] =>  0:00
+   CLOCK: [2009-03-01 Sun 10:56]--[2009-03-01 Sun 11:29] =>  0:33
+   CLOCK: [2009-01-25 Sun 11:03]--[2009-01-25 Sun 11:04] =>  0:01
+   :END:CLOCK:
+*** Space Viper should break a block if completely surrounded
+   :CLOCK:
+   CLOCK: [2009-03-01 Sun 14:12]--[2009-03-01 Sun 14:12] =>  0:00
+   CLOCK: [2009-03-01 Sun 11:30]--[2009-03-01 Sun 12:11] =>  0:41
+   :END:CLOCK:CLOCK:
+*** Space Viper,
+*** Bounty Hunter,
+*** Correct length of Space Viper
+*** Done power-ups
+**** SMALL_COINS
+**** DIAMOND
+**** GOLD_BAR
+**** BLUE_PEARL
+**** WHITE_BALL
+**** LOCK
+**** CLOCK
+**** POWER_GUN
+   :CLOCK:
+   CLOCK: [2009-03-29 Sun 08:09]--[2009-03-29 Sun 10:42] =>  2:33
+   CLOCK: [2009-03-27 Fri 13:23]--[2009-03-27 Fri 13:23] =>  0:00
+  :END:CLOCK:
+**** LASER_GUN
+     CLOCK: [2009-03-29 Sun 11:30]--[2009-03-29 Sun 12:06] =>  0:36
+**** BOMB
+**** QUAKE
+*** If walking right, then pressing left, walk left until left is released
+*** Space Viper head should replace sprite index
