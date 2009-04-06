@@ -2,6 +2,11 @@
 
 SoundManager::SoundManager()
 {
+  if(Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 1024))
+    {
+      printf("SDL_mixer says: %s\n", Mix_GetError());
+    }
+
   char *soundFiles[] =
     {
       "bomb.wav",  /* 0 */

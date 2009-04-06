@@ -48,7 +48,6 @@ void
 BonusSpawner::resetTimer()
 {
   bonusRespawnTimer = rand()%(33*60)+7*60; // 7 + random(33) seconds
-  bonusRespawnTimer = 300;
 }
 
 void
@@ -63,8 +62,6 @@ BonusSpawner::spawnBonus(Hero *hero)
   while(!bonusSpawned)
     {
       int bonusPositionIndex = rand() % points.size();
-
-      printf("pos: %d\n", bonusPositionIndex);
 
       Point p = points[bonusPositionIndex];
 

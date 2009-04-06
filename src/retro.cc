@@ -13,11 +13,6 @@ int main(int argc, char *argv[])
 {
   SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 
-  if(Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 1024))
-    {
-      printf("SDL_mixer says: %s\n", Mix_GetError());
-    }
-
   Input *input = new Input();
 
   remar2d *gfx = new remar2d(WIDTH, HEIGHT, BPP, FS, "Retrobattle");

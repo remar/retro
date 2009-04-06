@@ -6,10 +6,6 @@ SpaceViper::SpaceViper(remar2d *gfx, SoundManager *sfx,
   : Enemy(gfx, "snake head", sfx, scoreKeeper), enemies(enemies),
     moveDirection(UP), hitPoints(6), dead(false), moved(0)
 {
-  /* This is just a meta object... */
-  setAnimation("up");
-  setVisible(false);
-
   setBoundingBox(19, 19, 6, 6);
 
   for(int i = 0;i < length;i++)
@@ -19,15 +15,14 @@ SpaceViper::SpaceViper(remar2d *gfx, SoundManager *sfx,
       enemies->push_back(b);
     }
 
-  head = gfx->createSpriteInstance("snake head");
-  gfx->setAnimation(head, "up");
-  gfx->showSprite(head, true);
+  gfx->removeSpriteInstance(sprite_instance);
+  sprite_instance = gfx->createSpriteInstance("snake head");
 
+  setVisible(true);
   updateAnimation();
 
   /* Not initialized yet */
   moveAbs(-32, -32);
-  gfx->moveSpriteAbs(head, -32, -32);
 
   // Block used for collision detection (when checking tail location)
   block = new Object(gfx, "shot", sfx);
@@ -37,8 +32,6 @@ SpaceViper::SpaceViper(remar2d *gfx, SoundManager *sfx,
 
 SpaceViper::~SpaceViper()
 {
-  gfx->removeSpriteInstance(head);
-
   delete block;
 }
 
@@ -70,7 +63,6 @@ SpaceViper::update(Field *field, Hero *hero)
 	  if(field->emptyBlock(x/32, y/32))
 	    {
 	      moveAbs(x, y);
-	      gfx->moveSpriteAbs(head, x, y);
 	      list<SpaceViperBody *>::iterator it = body.begin();
 	      for(;it != body.end();it++)
 		{
@@ -150,7 +142,6 @@ SpaceViper::update(Field *field, Hero *hero)
 	      // Uh oh, Space Viper is reaaaaaally stuck. Randomize
 	      // new location and wish for the best
 	      moveAbs(-32, -32);
-	      gfx->moveSpriteAbs(head, -32, -32);
 	    }
 
 	  while(!done)
@@ -199,7 +190,6 @@ SpaceViper::update(Field *field, Hero *hero)
   int move_y = move_y_table[moveDirection];  
 
   moveRel(move_x, move_y);
-  gfx->moveSpriteRel(head, move_x, move_y);
 
   int old_x, old_y;
   int new_x, new_y;
@@ -225,13 +215,11 @@ SpaceViper::update(Field *field, Hero *hero)
   if(getX() <= -32)
     {
       moveAbs(798, getY());
-      gfx->moveSpriteAbs(head, 798, getY());
       moved = 2;
     }
   if(getX() >= 800)
     {
       moveAbs(-30, getY());
-      gfx->moveSpriteAbs(head, -30, getY());
       moved = 2;
     }
 
@@ -261,7 +249,7 @@ SpaceViper::updateAnimation()
 {
   const char *dirStrings[] = {"up", "left", "right", "up", "down"};
 
-  gfx->setAnimation(head, (char *)dirStrings[moveDirection]);
+  setAnimation((char *)dirStrings[moveDirection]);
 }
 
 bool

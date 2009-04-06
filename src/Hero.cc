@@ -4,13 +4,9 @@
 
 Hero::Hero(remar2d *gfx, SoundManager *sfx, list<Bullet *> *bullets,
 	   BulletHandler *bulletHandler, HUD *hud)
-  : Object(gfx, "good", sfx),  blinking(true), jumping(false), dead(false),
-    direction(RIGHT), weapon(STANDARD), jumpCounter(80),
-    currentAnimation(STANDING), channel(-1), oldXDir(0), oldYDir(0),
-    bullets(bullets), bulletHandler(bulletHandler), hud(hud), noteShown(false),
-    hasStoppedSound(false)
+  : Object(gfx, "good", sfx), channel(-1), bullets(bullets),
+    bulletHandler(bulletHandler), hud(hud)
 {
-  setAnimation("blink right");
   setBoundingBox(6, 20, 5, 4);
 
   flame = gfx->createSpriteInstance("flame");
@@ -20,6 +16,8 @@ Hero::Hero(remar2d *gfx, SoundManager *sfx, list<Bullet *> *bullets,
   note = gfx->createSpriteInstance("note");
   gfx->setAnimation(note, "8");
   gfx->showSprite(note, false);
+
+  reset();  
 }
 
 Hero::~Hero()
@@ -340,10 +338,57 @@ Hero::update(Input *input, Field *field)
   int move_x = 0;
   int move_y = 1; /* Constantly fall.. :-) */
 
-  if(input->held(SDLK_LEFT))   move_x--;
-  if(input->held(SDLK_RIGHT))  move_x++;
-  if(input->pressed(SDLK_UP))  jump(true);
-  if(input->released(SDLK_UP)) jump(false);
+  if(input->pressed(SDLK_LEFT))
+    {
+      if(primaryDirection == NONE)
+	primaryDirection = LEFT;
+      else if(primaryDirection == RIGHT && secondaryDirection == NONE)
+	secondaryDirection = LEFT;
+    }
+
+  if(input->pressed(SDLK_RIGHT))
+    {
+      if(primaryDirection == NONE)
+	primaryDirection = RIGHT;
+      else if(primaryDirection == LEFT && secondaryDirection == NONE)
+	secondaryDirection = RIGHT;
+    }
+
+  if(input->released(SDLK_LEFT))
+    {
+      if(secondaryDirection == LEFT)
+	secondaryDirection = NONE;
+      else if(secondaryDirection == RIGHT)
+	{
+	  primaryDirection = RIGHT;
+	  secondaryDirection = NONE;
+	}
+      else if(primaryDirection == LEFT)
+	primaryDirection = NONE;
+    }
+
+  if(input->released(SDLK_RIGHT))
+    {
+      if(secondaryDirection == RIGHT)
+	secondaryDirection = NONE;
+      else if(secondaryDirection == LEFT)
+	{
+	  primaryDirection = LEFT;
+	  secondaryDirection = NONE;
+	}
+      else if(primaryDirection == RIGHT)
+	primaryDirection = NONE;
+    }
+
+  int x_dir[3] = {0, -1, 1};
+
+  if(secondaryDirection != NONE)
+    move_x = x_dir[secondaryDirection];
+  else if(primaryDirection != NONE)
+    move_x = x_dir[primaryDirection];
+
+  if(input->pressed(SDLK_x))  jump(true);
+  if(input->released(SDLK_x)) jump(false);
   if(input->pressed(SDLK_z) && (!bulletHandler || bulletHandler->fire()))
     {
       shoot();
@@ -407,4 +452,34 @@ Hero::laserShot()
 {
   weapon = LASER;
   hud->setValue(HUD::WEAPON, 2 /* LASER */);
+}
+
+void
+Hero::reset()
+{
+  blink();
+  setVisible(true);
+
+  destroyMe = false;
+  destroyTimer = 0;
+
+  gfx->showSprite(flame, false);
+  gfx->showSprite(note, false);
+
+  if(channel != -1)
+    sfx->stopSound(channel);
+
+  jumping = false;
+  dead = false;
+  direction = RIGHT;
+  weapon = STANDARD;
+  jumpCounter = 80;
+  currentAnimation = STANDING;
+  channel = -1;
+  oldXDir = 0;
+  oldYDir = 0;
+  noteShown = false;
+  hasStoppedSound = false;
+  primaryDirection = NONE;
+  secondaryDirection = NONE;
 }

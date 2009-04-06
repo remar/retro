@@ -37,5 +37,4 @@ Bonus::randomize(bool spawnQuake)
 			  QUAKE};
 
   type = weighted[selected];
-  type =  LASER_GUN;
 }

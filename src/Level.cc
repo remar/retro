@@ -163,8 +163,6 @@ Level::loadLevel(char *lev)
   hero->setVisible(true);
   hero->moveAbs(heroStartX, heroStartY);
 
-  hero->powerShot();
-
   field->redrawAll();
 
   return true;
@@ -390,11 +388,8 @@ Level::update()
 	  return GAME;
 	}
 
-//       delete hero;
-//       hero = new Hero(gfx, sfx, &bullets, bulletHandler, hud);
-      hero->setVisible(true);
+      hero->reset();
       hero->moveAbs(heroStartX, heroStartY);
-      hero->blink();
       bulletHandler->reset();
     }
 

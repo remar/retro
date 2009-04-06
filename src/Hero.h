@@ -32,6 +32,7 @@ class Hero : public Object
   void showNote(int ammo);
   void powerShot(); // Fire a POWER bullet on next shoot()
   void laserShot(); // Fire a LASER beam on next shoot()
+  void reset();
 
  private:
   void updateAnimation(float xDir, float yDir);
@@ -39,6 +40,7 @@ class Hero : public Object
 
   enum Direction
     {
+      NONE,
       LEFT,
       RIGHT
     };
@@ -94,6 +96,12 @@ class Hero : public Object
   HUD *hud;
 
   bool hasStoppedSound;
+
+  // These are used to allow twitch-turn (if player presses first left
+  // then right, Hero should go right until right is released, then go
+  // left).
+  Direction primaryDirection;
+  Direction secondaryDirection;
 };
 
 #endif
