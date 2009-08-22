@@ -13,9 +13,9 @@ Menu::Menu(remar2d *gfx, SoundManager *sfx, Input *input,
 
   drawBackground();
 
-  remar_games_2008 = gfx->print("text", "remar games 2008");
-  gfx->showSprite(remar_games_2008, true);
-  gfx->moveSpriteAbs(remar_games_2008, 144, 208);
+  remar_games_2009 = gfx->print("text", "remar games 2009");
+  gfx->showSprite(remar_games_2009, true);
+  gfx->moveSpriteAbs(remar_games_2009, 144, 208);
 
   enter_to_start = gfx->print("text", "press enter to start");
   gfx->showSprite(enter_to_start, true);
@@ -53,7 +53,7 @@ Menu::Menu(remar2d *gfx, SoundManager *sfx, Input *input,
 
 Menu::~Menu()
 {
-  gfx->removeSpriteInstance(remar_games_2008);
+  gfx->removeSpriteInstance(remar_games_2009);
   gfx->removeSpriteInstance(enter_to_start);
   gfx->removeSpriteInstance(stage);
   gfx->removeSpriteInstance(skillLevel);

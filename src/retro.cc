@@ -1,7 +1,6 @@
 #include <remar2d.h>
 #include "Input.h"
 #include "GameLogic.h"
-#include "SDL_mixer.h"
 #include "SoundManager.h"
 
 const int WIDTH = 800;
@@ -37,6 +36,9 @@ int main(int argc, char *argv[])
   delete gfx;
   delete input;
 
+#ifndef NO_SDL_MIXER
   Mix_CloseAudio();
+#endif
+
   SDL_Quit();
 }

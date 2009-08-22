@@ -3,7 +3,8 @@
 
 CFLAGS =	`sdl-config --cflags` -g -Wall
 CPPFLAGS =	$(CFLAGS)
-LIBS =		`sdl-config --libs` -lSDL_mixer -lremar2d
+LIBS =		`sdl-config --libs` -lremar2d
+#LIBS =		`sdl-config --libs` -lSDL_mixer -lremar2d
 
 RETRO =		retro.o Input.o GameLogic.o Hero.o Fuzz.o Object.o Level.o \
 		Coin.o Nest.o ScoreKeeper.o Spawner.o Bullet.o SoundManager.o \
@@ -12,7 +13,9 @@ RETRO =		retro.o Input.o GameLogic.o Hero.o Fuzz.o Object.o Level.o \
 		FileManager.o BulletHandler.o BonusLevel.o BonusScoreScreen.o \
 		SpaceViper.o SpaceViperBody.o BountyHunter.o \
 		HunterBullet.o DamagingExplosion.o Bonus.o BonusSpawner.o \
-		PowerBullet.o LaserBeam.o
+		PowerBullet.o LaserBeam.o Helmet.o RedFuzz.o GoldDrone.o \
+		DireSpaceViper.o DireSpaceViperBody.o DarkBountyHunter.o \
+		DarkHunterBullet.o DarkExplosion.o
 
 retro:		$(RETRO) /usr/lib/libremar2d.a
 		g++ -o $@ $^ $(LIBS)

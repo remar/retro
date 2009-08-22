@@ -9,13 +9,16 @@ class HunterBullet : public Enemy
   HunterBullet(remar2d *gfx, SoundManager *sfx, list<Object *> *objects);
   void moveLeft();
   void moveRight();
-  void update(Field *field, Hero *hero);
+  virtual void update(Field *field, Hero *hero);
   
  private:
   enum Direction {LEFT, RIGHT};
   Direction direction;
 
   list<Object *> *objects;
+
+ protected:
+  virtual void blockHit(Field *field, int blockX, int blockY);
 };
 
 #endif

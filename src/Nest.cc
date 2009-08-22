@@ -1,11 +1,13 @@
 #include "Nest.h"
+#include "RedFuzz.h"
 
 Nest::Nest(remar2d *gfx, SoundManager *sfx, ScoreKeeper *scoreKeeper,
-	   list<Enemy *> *enemies, bool fastFuzzes)
+	   list<Enemy *> *enemies)
   : Object(gfx, "nest", sfx), scoreKeeper(scoreKeeper), spawnTimer(0)
 {
   this->enemies = enemies;
-  this->fastFuzzes = fastFuzzes;
+  this->fastFuzzes = scoreKeeper->fastFuzzes();
+  this->redFuzzes = scoreKeeper->redFuzzes();
 
   setAnimation("normal");
 
@@ -20,7 +22,13 @@ Nest::update()
       --spawnTimer;
       if(spawnTimer == 0)
 	{
-	  Fuzz *fuzz = new Fuzz(gfx, sfx, scoreKeeper);
+	  Fuzz *fuzz;
+
+	  if(!redFuzzes)
+	    fuzz = new Fuzz(gfx, sfx, scoreKeeper);
+	  else
+	    fuzz = new RedFuzz(gfx, sfx, scoreKeeper);
+
 	  fuzz->setVisible(true);
 	  fuzz->moveAbs(getX(), getY());
 	  fuzz->rollRandom();  

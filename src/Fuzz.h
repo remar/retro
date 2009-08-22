@@ -13,7 +13,7 @@ class Fuzz : public Enemy // Object
   enum Direction {NONE, LEFT, RIGHT, UP, DOWN};
 
   Fuzz(remar2d *gfx, SoundManager *sfx, ScoreKeeper *scoreKeeper);
-  void update(Field *field, Hero *hero);
+  virtual void update(Field *field, Hero *hero);
   void rollLeft();
   void rollRight();
   void rollRandom();
@@ -32,7 +32,6 @@ class Fuzz : public Enemy // Object
   void attachNone();
 
   Direction moveDirection;
-  Direction rollDirection;
   Direction lastAttachDirection;
 
   bool stunned;
@@ -52,6 +51,11 @@ class Fuzz : public Enemy // Object
 
   int deathTimer;
   int stunTimer;
+
+  int pauseTimer;
+
+ protected:
+  Direction rollDirection;
 };
 
 #endif

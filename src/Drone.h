@@ -7,13 +7,17 @@ class Drone : public Enemy
 {
  public:
   Drone(remar2d *gfx, SoundManager *sfx, ScoreKeeper *scoreKeeper);
-  void update(Field *field, Hero *hero);
+  virtual void update(Field *field, Hero *hero);
   bool hit();
 
- private:
-  void die();
+ protected:
+  bool aimAtHero;
 
+ private:
   enum Direction {NONE, LEFT, RIGHT, UP, DOWN};
+
+  void die();
+  void getBlockInDirection(Direction dir, int *blockX, int *blockY);
 
   Direction moveDirection;
   int moved;
@@ -23,6 +27,7 @@ class Drone : public Enemy
 
   bool dead;
   int deathTimer;
+
 };
 
 #endif

@@ -10,14 +10,13 @@ class SpaceViper : public Enemy
   SpaceViper(remar2d *gfx, SoundManager *sfx, ScoreKeeper *scoreKeeper,
 	     list<Enemy *> *enemies, int length);
   ~SpaceViper();
-  void update(Field *field, Hero *hero);
+  virtual void update(Field *field, Hero *hero);
   bool hit();
 
  private:
   enum Direction {NONE, LEFT, RIGHT, UP, DOWN};
 
   void die();
-  void updateAnimation();
   bool tailAtPosition(int blockX, int blockY);
   void getBlockAtDirection(Direction direction, int *blockX, int *blockY);
   
@@ -29,8 +28,6 @@ class SpaceViper : public Enemy
   int head;
 
   /* Body objects */
-  list<SpaceViperBody *> body;
-
   Direction moveDirection;
   int hitPoints;
   bool dead;
@@ -40,6 +37,11 @@ class SpaceViper : public Enemy
 
   /* Keep track of how long we've moved, randomize direction every 32 pixels */
   int moved;
+
+protected:
+  void updateAnimation();
+  list<SpaceViperBody *> body;
+  bool aimAtHero;
 };
 
 #endif

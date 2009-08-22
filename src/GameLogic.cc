@@ -44,6 +44,14 @@ GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx)
 		     "../gfx/hshot.xml",
 		     "../gfx/note.xml",
 		     "../gfx/bonus.xml",
+		     "../gfx/helmet.xml",
+		     "../gfx/redfuzz.xml",
+		     "../gfx/golddrone.xml",
+		     "../gfx/diresnakehead.xml",
+		     "../gfx/diresnakebody.xml",
+		     "../gfx/darkhunter.xml",
+		     "../gfx/dhshot.xml",
+		     "../gfx/darkexplo.xml",
 		     0};
 
   printf("Loading sprites");

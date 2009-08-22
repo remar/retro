@@ -10,7 +10,7 @@ class Nest : public Object
 {
  public:
   Nest(remar2d *gfx, SoundManager *sfx, ScoreKeeper *scoreKeeper,
-       list<Enemy *> *enemies, bool fastFuzzes);
+       list<Enemy *> *enemies);
   void update();
   void blink(bool on);
   void spawn(); //Fuzz **fuzz);
@@ -23,6 +23,7 @@ class Nest : public Object
   list<Enemy *> *enemies;
   int spawnTimer;
   bool fastFuzzes;
+  bool redFuzzes;
 };
 
 #endif

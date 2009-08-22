@@ -15,7 +15,6 @@
 #include <map>
 #include <string>
 #include <list>
-#include "SDL_mixer.h"
 #include "GameMode.h"
 #include "BrokenBlock.h"
 #include "Explosion.h"
@@ -31,6 +30,7 @@
 #include "DamagingExplosion.h"
 #include "Bonus.h"
 #include "BonusSpawner.h"
+#include "Helmet.h"
 
 class Level : public GameMode
 {
@@ -102,6 +102,8 @@ class Level : public GameMode
   HUD *hud;
 
   BulletHandler *bulletHandler;
+
+  Helmet *helmet;
 
   Mode returnMode;  
 };

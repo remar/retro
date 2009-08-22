@@ -1,4 +1,5 @@
 #include "Bonus.h"
+#include <stdlib.h>
 
 Bonus::Bonus(remar2d *gfx, bool spawnQuake)
   : Object(gfx, "bonus", 0), isCollected(false)

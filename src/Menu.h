@@ -34,7 +34,7 @@ class Menu : public GameMode
   int nextTimer;
 
   /* Strings */
-  int remar_games_2008;
+  int remar_games_2009;
   int enter_to_start;
   int stage;
   int skillLevel;

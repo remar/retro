@@ -3,11 +3,6 @@
 
 * Retrobattle
 ** Features
-*** Show helmet (location of Captain Good) when pausing
-*** Red Fuzz
-*** Gold Drone
-*** Dire Space Viper
-*** Dark Bounty Hunter
 *** Pushing fuzz outside of screen should wrap it around (2 sprites?)
     Might be better to make the buffer outside of the screen wider, to
     allow both Captain Good and a Fuzz to fit outside. Will take
@@ -20,7 +15,26 @@
 *** Key binding redefinition
 *** Demo recording & playback
 *** Variable location of data files (currently ../ )
+*** Pause enemy while captain goods death animation begins
+*** Fuzz should rotate in the air
+*** No enemies should enter spikes
+*** Show correct enemy variant in score screen
+*** Correct roll direction animation for fuzz (red and blue)
+*** 8th square should be visible
+*** Create .RemarGames/Retrobattle dir if it doesn't exist
+*** Reset score keeper stats when starting over
+*** Nicer death animation for Space Viper/Dire Space Viper
+*** make depend
+
 ** Features done 
+*** Dark Bounty Hunter
+*** Red Fuzz gets stuck for some reason (random direction reason?)
+    Maybe happens when direction gets randomized at exactly the same time
+    that the Fuzz hits the ground for the first time!
+*** Dire Space Viper
+*** Gold Drone
+*** Red Fuzz
+*** Show helmet (location of Captain Good) when pausing
 *** Show ammunition left above Captain Good when firing and getting back ammo
 *** Explosions when Bounty Hunter is killed
    :CLOCK:

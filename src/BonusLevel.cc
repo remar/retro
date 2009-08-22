@@ -51,6 +51,8 @@ BonusLevel::BonusLevel(remar2d *gfx, SoundManager *sfx, Input *input,
   timerCounter = new Counter(gfx, 2);
   timerCounter->setPosition(11*32+42, 1*32+12);
   timerCounter->setCounter(scoreKeeper->getTimer());
+
+  helmet = new Helmet(gfx, sfx);
 }
 
 BonusLevel::~BonusLevel()
@@ -468,12 +470,25 @@ BonusLevel::pause()
       paused = false;
       showAllObjects(true);
       sfx->playSound(13);
+
+      helmet->setVisible(false);
     }
   else
     {
       paused = true;
       showAllObjects(false);
       sfx->playSound(13);
+
+      int helmet_x = hero->getX();
+      int helmet_y = hero->getY();
+
+      if(helmet_x < 1)
+	helmet_x = 1;
+      else if(helmet_x > 800-20)
+	helmet_x = 800-20;
+
+      helmet->moveAbs(helmet_x-1, helmet_y);
+      helmet->setVisible(true);
     }
 
   gfx->pauseAnimations(paused);

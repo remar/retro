@@ -12,7 +12,6 @@
 #include <map>
 #include <string>
 #include <list>
-#include "SDL_mixer.h"
 #include "GameMode.h"
 #include "BrokenBlock.h"
 #include "Explosion.h"
@@ -21,6 +20,7 @@
 #include "Counter.h"
 #include "HUD.h"
 #include "BulletHandler.h"
+#include "Helmet.h"
 
 class BonusLevel : public GameMode
 {
@@ -85,6 +85,8 @@ class BonusLevel : public GameMode
   Mode returnMode;
 
   int hud;
+
+  Helmet *helmet;
 };
 
 #endif

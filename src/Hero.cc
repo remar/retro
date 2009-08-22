@@ -403,13 +403,13 @@ Hero::update(Input *input, Field *field)
   if(heroY + 24 == field->SPIKES_LEVEL)
     die();
 
-  if(heroX < -25)
+  if(heroX < -31)
     {
-      moveAbs(801, heroY);
+      moveAbs(826, heroY);
     }
-  else if(heroX > 802)
+  else if(heroX > 826)
     {
-      moveAbs(-24, heroY);
+      moveAbs(-31, heroY);
     }
   else
     {

@@ -15,7 +15,7 @@ Enemy::~Enemy()
 void
 Enemy::update(Field *field, Hero *hero)
 {
-  
+  Object::update();
 }
 
 bool

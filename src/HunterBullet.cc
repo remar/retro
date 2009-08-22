@@ -24,15 +24,27 @@ HunterBullet::moveRight()
 }
 
 void
+HunterBullet::blockHit(Field *field, int blockX, int blockY)
+{
+  if(!field->blockHit(blockX, blockY))
+    {
+      objects->push_back(new Explosion(gfx, sfx, getX()-9, getY()-9));
+    }
+}
+
+void
 HunterBullet::update(Field *field, Hero *hero)
 {
   if(destroyMe)
     return;
 
-  if(collides(hero))
+  if(collides(hero) && !hero->isBlinking() && !hero->isDead())
     {
       hero->die();
       destroyMe = true;
+
+      blockHit(field, getX()/32, getY()/32);
+
       return;
     }
 
@@ -45,10 +57,8 @@ HunterBullet::update(Field *field, Hero *hero)
   int blockX, blockY;
   if(field->objectCollidesWithBackground(this, &blockX, &blockY))
     {
-      if(!field->blockHit(blockX, blockY))
-	{
-	  objects->push_back(new Explosion(gfx, sfx, getX()-9, getY()-9));
-	}
+      blockHit(field, blockX, blockY);
+
       sfx->playSound(3);
       destroyMe = true;
       return;

@@ -3,6 +3,9 @@
 #include <iostream>
 #include "PowerBullet.h"
 #include "LaserBeam.h"
+#include "GoldDrone.h"
+#include "DireSpaceViper.h"
+#include "DarkBountyHunter.h"
 
 int DEBUG = 0;
 
@@ -28,6 +31,7 @@ Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
 
   hud = new HUD(gfx, scoreKeeper);
   bulletHandler = new BulletHandler(hud);
+  helmet = new Helmet(gfx, sfx);
   
   scoreKeeper->resetKills();
 
@@ -57,6 +61,9 @@ Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
   for(int i = 0;i < scoreKeeper->numberOfEnemy(ScoreKeeper::Drone);i++)
     enemies.push_back(new Drone(gfx, sfx, scoreKeeper));
 
+  for(int i = 0;i < scoreKeeper->numberOfEnemy(ScoreKeeper::GoldDrone);i++)
+    enemies.push_back(new GoldDrone(gfx, sfx, scoreKeeper));
+
   if(int length = scoreKeeper->numberOfEnemy(ScoreKeeper::SpaceViper))
     {
       SpaceViper *v = new SpaceViper(gfx, sfx, scoreKeeper, &enemies,
@@ -64,10 +71,23 @@ Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
       enemies.push_front(v);
     }
 
+  if(int length = scoreKeeper->numberOfEnemy(ScoreKeeper::DireSpaceViper))
+    {
+      DireSpaceViper *v = new DireSpaceViper(gfx, sfx, scoreKeeper, &enemies,
+					     length*8);
+      enemies.push_front(v);
+    }
+
   if(scoreKeeper->numberOfEnemy(ScoreKeeper::BountyHunter))
     {
       enemies.push_back(new BountyHunter(gfx, sfx, scoreKeeper, &enemies,
 					 &objects));
+    }
+
+  if(scoreKeeper->numberOfEnemy(ScoreKeeper::DarkBountyHunter))
+    {
+      enemies.push_back(new DarkBountyHunter(gfx, sfx, scoreKeeper, &enemies,
+					     &objects));
     }
 
   bonusSpawner = new BonusSpawner(gfx, field, &bonuses, &coins,
@@ -80,6 +100,9 @@ Level::~Level()
 {
   if(hud)
     delete hud;
+
+  if(helmet)
+    delete helmet;
 
   clearLevel();
 }
@@ -131,11 +154,10 @@ Level::loadLevel(char *lev)
 
 	    case 4:
 	      {
-		Nest *nest = new Nest(gfx, sfx, scoreKeeper, &enemies,
-				      scoreKeeper->fastFuzzes());
-		  nest->setVisible(true);
-		  nest->moveAbs(x*32+3, y*32+3*32+3);
-		  objects.push_back(nest);
+		Nest *nest = new Nest(gfx, sfx, scoreKeeper, &enemies);
+		nest->setVisible(true);
+		nest->moveAbs(x*32+3, y*32+3*32+3);
+		objects.push_back(nest);
 	      }
 	      break;
 
@@ -727,12 +749,25 @@ Level::pause()
       paused = false;
       showAllObjects(true);
       sfx->playSound(13);
+
+      helmet->setVisible(false);
     }
   else
     {
       paused = true;
       showAllObjects(false);
       sfx->playSound(13);
+
+      int helmet_x = hero->getX();
+      int helmet_y = hero->getY();
+
+      if(helmet_x < 1)
+	helmet_x = 1;
+      else if(helmet_x > 800-20)
+	helmet_x = 800-20;
+
+      helmet->moveAbs(helmet_x-1, helmet_y);
+      helmet->setVisible(true);
     }
 
   gfx->pauseAnimations(paused);

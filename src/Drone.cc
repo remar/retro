@@ -2,13 +2,41 @@
 
 Drone::Drone(remar2d *gfx, SoundManager *sfx, ScoreKeeper *scoreKeeper)
   : Enemy(gfx, "drone", sfx, scoreKeeper), moved(0), moveThisUpdate(true),
-    hitPoints(2), dead(false)
+    hitPoints(2), dead(false), aimAtHero(false)
 {
   setAnimation("normal");
   setVisible(true);
   moveAbs(-32, -32);
 
   setBoundingBox(24, 24, 0, 0);
+}
+
+void
+Drone::getBlockInDirection(Direction dir, int *blockX, int *blockY)
+{
+
+  switch(dir)
+    {
+    case LEFT:
+      *blockX = getX() / 32 - 1;
+      *blockY = getY() / 32;
+      break;
+
+    case RIGHT:
+      *blockX = getX() / 32 + 1;
+      *blockY = getY() / 32;
+      break;
+
+    case UP:
+      *blockX = getX() / 32;
+      *blockY = getY() / 32 - 1;
+      break;
+
+    case DOWN:
+      *blockX = getX() / 32;
+      *blockY = getY() / 32 + 1;
+      break;
+    }
 }
 
 void
@@ -75,34 +103,48 @@ Drone::update(Field *field, Hero *hero)
       bool done = false;
       willDig = false;
 
+      if(aimAtHero && !(hero->isBlinking()))
+	{
+	  bool tryXDirection = (bool)(rand() % 2);
+	  int blockX, blockY;
+
+	  for(int i = 0;i < 2;i++)
+	    {
+	      if(tryXDirection)
+		{
+		  newDirection = getX() > hero->getX() ? LEFT : RIGHT;
+		}
+	      else
+		{
+		  newDirection = getY() > hero->getY() ? UP : DOWN;
+		}
+
+	      getBlockInDirection(newDirection, &blockX, &blockY);
+
+	      if(field->field[blockX][blockY] != Field::SOLID)
+		{
+		  done = true;
+
+		  if(field->field[blockX][blockY] == Field::BREAKABLE
+		      || field->field[blockX][blockY] == Field::DAMAGED)
+		    {
+		      willDig = true;
+		    }
+
+		  break;
+		}
+
+	      tryXDirection = !tryXDirection;
+	    }
+	}
+
       while(!done)
 	{
 	  newDirection = (Direction)(rand()%4 + 1);
 	  bool dig = ((rand()%100) > 91) && !(hero->isBlinking());
 	  int blockX, blockY;
 
-	  switch(newDirection)
-	    {
-	    case LEFT:
-	      blockX = getX() / 32 - 1;
-	      blockY = getY() / 32;
-	      break;
-	      
-	    case RIGHT:
-	      blockX = getX() / 32 + 1;
-	      blockY = getY() / 32;
-	      break;
-
-	    case UP:
-	      blockX = getX() / 32;
-	      blockY = getY() / 32 - 1;
-	      break;
-
-	    case DOWN:
-	      blockX = getX() / 32;
-	      blockY = getY() / 32 + 1;
-	      break;
-	    }
+	  getBlockInDirection(newDirection, &blockX, &blockY);
 
 	  if(field->emptyBlock(blockX, blockY))
 	    done = true;

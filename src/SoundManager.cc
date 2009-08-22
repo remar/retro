@@ -1,7 +1,9 @@
 #include "SoundManager.h"
+#include <stdio.h>
 
 SoundManager::SoundManager()
 {
+#ifndef NO_SDL_MIXER
   if(Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 1024))
     {
       printf("SDL_mixer says: %s\n", Mix_GetError());
@@ -70,34 +72,49 @@ SoundManager::SoundManager()
       songs[i] = Mix_LoadMUS(buf);
     }
   printf("\n");
+
+#else
+  printf("No SDL_Mixer available at compile time!\n");
+#endif
+
 }
 
 SoundManager::~SoundManager()
 {
+#ifndef NO_SDL_MIXER
   Mix_HaltChannel(-1);
   Mix_HaltMusic();
+#endif
 }
 
 int
 SoundManager::playSound(int i, bool loop)
 {
+#ifndef NO_SDL_MIXER
   return Mix_PlayChannel(-1, sounds[i], loop ? -1 : 0);
+#endif
 }
 
 void
 SoundManager::stopSound(int channel)
 {
+#ifndef NO_SDL_MIXER
   Mix_HaltChannel(channel);
+#endif
 }
 
 void
 SoundManager::playMusic(int i, bool loop)
 {
+#ifndef NO_SDL_MIXER
   Mix_PlayMusic(songs[i], loop ? -1 : 0);
+#endif
 }
 
 void
 SoundManager::stopMusic()
 {
+#ifndef NO_SDL_MIXER
   Mix_HaltMusic();
+#endif
 }

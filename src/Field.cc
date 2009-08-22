@@ -36,7 +36,7 @@ Field::Field(remar2d *gfx, SoundManager *sfx,
 
 /* Return true if this destroyed a block, false otherwise */
 bool
-Field::blockHit(int x, int y)
+Field::blockHit(int x, int y, bool createExplosion)
 {
   bool redraw = false;
   bool brokeABlock = false;
@@ -49,7 +49,7 @@ Field::blockHit(int x, int y)
 	}
       else
 	{
-	  breakBlock(x, y);
+	  breakBlock(x, y, createExplosion);
 	  brokeABlock = true;
 	}
 
@@ -57,7 +57,7 @@ Field::blockHit(int x, int y)
     }
   else if(field[x][y] == Field::DAMAGED)
     {
-      breakBlock(x, y);
+      breakBlock(x, y, createExplosion);
       redraw = true;
       brokeABlock = true;
     }
@@ -71,7 +71,7 @@ Field::blockHit(int x, int y)
 }
 
 void
-Field::breakBlock(int x, int y)
+Field::breakBlock(int x, int y, bool createExplosion)
 {
   field[x][y] = Field::BROKEN;
 
@@ -79,7 +79,10 @@ Field::breakBlock(int x, int y)
   // in the future
   brokenBlocks->push_back(new BrokenBlock(x, y));
 
-  objects->push_back(new Explosion(gfx, sfx, x*32+4, y*32+4));
+  if(createExplosion)
+    {
+      objects->push_back(new Explosion(gfx, sfx, x*32+4, y*32+4));
+    }
 
   drawBlockAndSurrounding(x, y);
 }

@@ -31,8 +31,8 @@ class Field
 	int skill,
 	bool redBackground);
 
-  bool blockHit(int x, int y);
-  void breakBlock(int x, int y);
+  bool blockHit(int x, int y, bool createExplosion = true);
+  void breakBlock(int x, int y, bool createExplosion = true);
   void repairBlock(int x, int y);
   void drawBlock(int x, int y);
   void drawBlockAndSurrounding(int x, int y);

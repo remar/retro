@@ -4,7 +4,7 @@ SpaceViper::SpaceViper(remar2d *gfx, SoundManager *sfx,
 		       ScoreKeeper *scoreKeeper, list<Enemy *> *enemies,
 		       int length)
   : Enemy(gfx, "snake head", sfx, scoreKeeper), enemies(enemies),
-    moveDirection(UP), hitPoints(6), dead(false), moved(0)
+    moveDirection(UP), hitPoints(6), dead(false), moved(0), aimAtHero(false)
 {
   setBoundingBox(19, 19, 6, 6);
 
@@ -167,8 +167,38 @@ SpaceViper::update(Field *field, Hero *hero)
 	}
       else
 	{
+	  // Choose direction
+
 	  bool done = false;
 	  int blockX, blockY;
+
+	  if(aimAtHero && !(hero->isBlinking()))
+	    {
+	      bool tryXDirection = (bool)(rand() % 2);
+
+	      for(int i = 0;i < 2;i++)
+		{
+		  if(tryXDirection)
+		    {
+		      moveDirection = getX() > hero->getX() ? LEFT : RIGHT;
+		    }
+		  else
+		    {
+		      moveDirection = getY() > hero->getY() ? UP : DOWN;
+		    }
+
+		  getBlockAtDirection(moveDirection, &blockX, &blockY);
+
+		  if(field->emptyBlock(blockX, blockY)
+		     && !tailAtPosition(blockX, blockY))
+		    {
+		      done = true;
+		      break;
+		    }
+
+		  tryXDirection = !tryXDirection;
+		}
+	    }
 
 	  while(!done)
 	    {

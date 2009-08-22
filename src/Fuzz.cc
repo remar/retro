@@ -3,13 +3,15 @@
 Fuzz::Fuzz(remar2d *gfx, SoundManager *sfx, ScoreKeeper *scoreKeeper)
   : Enemy(gfx, "fuzz", sfx, scoreKeeper), moveDirection(NONE),
     rollDirection(NONE), falling(true), stunned(false), fastFuzz(false),
-    FALL_LIMIT(60), dead(false), onSpikes(false)
+    FALL_LIMIT(60), dead(false), onSpikes(false), pauseTimer(0)
 {
   setAnimation("roll left");
-  pauseAnimation(true);
+  // pauseAnimation(true);
   attachNone();
 
   setBoundingBox(24, 24, 0, 0);
+
+  rollRandom();
 }
 
 void
@@ -37,6 +39,18 @@ Fuzz::update(Field *field, Hero *hero)
       if(--deathTimer == 0)
 	{
 	  destroyMe = true;
+	}
+
+      return;
+    }
+
+  if(pauseTimer)
+    {
+      pauseTimer--;
+
+      if(pauseTimer == 0)
+	{
+	  pauseAnimation(false);
 	}
 
       return;
@@ -130,6 +144,13 @@ Fuzz::update(Field *field, Hero *hero)
       for(int i = 0;i < 2;i++)
 	{
 
+	  // Always die on spikes
+	  if(posY2 == SPIKES_LEVEL)
+	    {
+	      die();
+	      return;
+	    }
+
 	  /* See if we collide with anything, then start rolling in the
 	     rollDirection, else just keep falling */
 	  if(!field->emptyBlock(posX1/32, (posY2 + 1)/32)
@@ -159,11 +180,13 @@ Fuzz::update(Field *field, Hero *hero)
 		    {
 		      setMoveDir(LEFT);
 		      rollLeft();
+		      setAnimation("roll left");
 		    }
 		  else
 		    {
 		      setMoveDir(RIGHT);
 		      rollRight();
+		      setAnimation("roll right");
 		    }
 		  pauseAnimation(false);
 		}
@@ -440,7 +463,7 @@ Fuzz::update(Field *field, Hero *hero)
 
 
   /* Check for collision with Captain Good */
-  if(collides(hero))
+  if(collides(hero) && !hero->isBlinking() && !hero->isDead())
     {
       if(stunned)
 	{
@@ -460,6 +483,7 @@ Fuzz::update(Field *field, Hero *hero)
 		 && field->emptyBlock((posX1+move_x)/32, posY2/32)))
 	    {
 	      moveRel(move_x, 0);
+
 	      if(!falling)
 		{
 		  attach(posX1+move_x, posX2+move_x, posY1, posY2, DOWN);
@@ -467,7 +491,13 @@ Fuzz::update(Field *field, Hero *hero)
 	    }
 	}
       else
-	hero->die();
+	{
+	  hero->die();
+
+	  pauseTimer = 60;
+
+	  pauseAnimation(true);
+	}
     }
 
 
@@ -493,10 +523,14 @@ Fuzz::rollLeft()
 {
   if(rollDirection != LEFT)
     {
-      setAnimation("roll left");
+      if(!stunned)
+	setAnimation("roll left");
+
       rollDirection = LEFT;
-      moveDirection = LEFT;
-      stunned = false;
+
+      // Inverse moveDirection
+      Direction inverse[] = {NONE, RIGHT, LEFT, DOWN, UP};
+      moveDirection = inverse[moveDirection];
     }
 }
 
@@ -505,10 +539,14 @@ Fuzz::rollRight()
 {
   if(rollDirection != RIGHT)
     {
-      setAnimation("roll right");
+      if(!stunned)
+	setAnimation("roll right");
+
       rollDirection = RIGHT;
-      moveDirection = RIGHT;
-      stunned = false;
+
+      // Inverse moveDirection
+      Direction inverse[] = {NONE, RIGHT, LEFT, DOWN, UP};
+      moveDirection = inverse[moveDirection];
     }
 }
 
@@ -562,6 +600,7 @@ Fuzz::die()
   dead = true;
   sfx->playSound(8, false);
   setAnimation("splat");
+  pauseAnimation(false);
   deathTimer = 60;
 }
 

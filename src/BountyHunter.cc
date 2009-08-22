@@ -31,9 +31,6 @@ BountyHunter::update(Field *field, Hero *hero)
   if(collides(hero) && state != HIDDEN)
     hero->die();
 
-  //char *str[] = {"HIDDEN", "FADEIN", "PREFIRE", "POSTFIRE", "FADEOUT"};
-  //printf("[%s] counter: %d\n", str[state], frameCounter);
-
   switch(state)
     {
     case HIDDEN:
@@ -63,9 +60,9 @@ BountyHunter::update(Field *field, Hero *hero)
 
       if(frameCounter == 0)
 	{
-	  // TODO: Fire bullet
 	  fire();
-	  frameCounter = 60;
+	  // Skip postfire
+	  frameCounter = 0;
 	  state = POSTFIRE;
 	  updateAnimation();
 	}
@@ -83,7 +80,7 @@ BountyHunter::update(Field *field, Hero *hero)
     case FADEOUT:
       if(frameCounter == 0)
 	{
-	  frameCounter = rand() % (3*60);
+	  frameCounter = (rand()%3)*60+60; /* 1, 2, or 3 seconds */
 	  state = HIDDEN;
 	  setVisible(false);
 	}
@@ -122,7 +119,7 @@ BountyHunter::randomizeLocation(Field *field, Hero *hero)
   while(!done)
     {
       int x = (rand()%21)*32 + 96 + 4;
-      int y = (rand()%14)*32 + 128 + 4;
+      int y = (rand()%13)*32 + 128 + 4;
       
       if(field->emptyBlock(x/32, y/32))
 	{
@@ -139,7 +136,6 @@ BountyHunter::setFacing(Hero *hero)
 {
   Direction oldFacing = facing;
 
-  //printf("hero: %d, hunter: %d\n", hero->getX() + 7, getX());
   if((hero->getX()+7) < getX())
     facing = LEFT;
   else

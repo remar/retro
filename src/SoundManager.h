@@ -1,7 +1,11 @@
 #ifndef SOUND_MANAGER_H
 #define SOUND_MANAGER_H
 
+#define NO_SDL_MIXER
+
+#ifndef NO_SDL_MIXER
 #include "SDL_mixer.h"
+#endif
 
 class SoundManager
 {
@@ -14,8 +18,11 @@ class SoundManager
   void stopMusic();
 
  private:
+#ifndef NO_SDL_MIXER
   Mix_Chunk **sounds;
   Mix_Music **songs;
+#endif
+
 };
 
 #endif
