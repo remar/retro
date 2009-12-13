@@ -28,6 +28,7 @@ class Drone : public Enemy
   bool dead;
   int deathTimer;
 
+  int pauseTimer;
 };
 
 #endif

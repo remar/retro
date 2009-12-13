@@ -11,7 +11,7 @@ int DEBUG = 0;
 
 Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
 	     ScoreKeeper *scoreKeeper)
-  : GameMode(gfx, sfx, input, scoreKeeper)
+  : GameMode(gfx, sfx, input, scoreKeeper), stageSign(0), startDelay(60)
 {
   gfx->setupTileBackground(32, 32);
 
@@ -93,7 +93,12 @@ Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
   bonusSpawner = new BonusSpawner(gfx, field, &bonuses, &coins,
 				  scoreKeeper->getSkillLevel() >= 4);
   
-  sfx->playMusic(0);
+  sprintf(buf, "stage %d", scoreKeeper->getLevel());
+  stageSign = gfx->print("text", buf);
+  gfx->showSprite(stageSign, true);
+  gfx->moveSpriteAbs(stageSign, (800-16*7)/2, (600-16)/2);
+
+  showAllObjects(false);
 }
 
 Level::~Level()
@@ -103,6 +108,12 @@ Level::~Level()
 
   if(helmet)
     delete helmet;
+
+  if(stageSign)
+    {
+      gfx->showSprite(stageSign, false);
+      gfx->removeSpriteInstance(stageSign);
+    }
 
   clearLevel();
 }
@@ -276,6 +287,18 @@ Level::update()
   if(input->pressed(SDLK_ESCAPE))
     {
       performWipe(MENU);
+      return GAME;
+    }
+
+  if(startDelay)
+    {
+      if(--startDelay == 0)
+	{
+	  gfx->showSprite(stageSign, false);
+	  showAllObjects(true);
+	  sfx->playMusic(0);
+	}
+
       return GAME;
     }
 
@@ -535,6 +558,7 @@ Level::update()
 		{
 		  hud->setValue(HUD::SCORE, scoreKeeper->getScore());
 		  hud->setValue(HUD::TOP, scoreKeeper->getTopScore());
+		  hud->setValue(HUD::LIVES, scoreKeeper->getLives());
 		}
 	    }
 
@@ -859,6 +883,8 @@ Level::deleteAllObjects()
       delete (*it);
       it = bonuses.erase(it);
     }
+
+  gfx->showSprite(stageSign, false);
 }
 
 void

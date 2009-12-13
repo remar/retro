@@ -4,7 +4,7 @@
 
 ScoreKeeper::ScoreKeeper()
   : skillLevel(1), level(1), bonusLevel(1), levelsCompleted(0), score(0),
-    top(0), lives(3)
+    top(0), lives(3), noBonus(false), nextExtraLife(30000)
 {
   resetKills();
 
@@ -132,6 +132,8 @@ ScoreKeeper::howManyKilled(EnemyType type)
 void
 ScoreKeeper::heroKilled()
 {
+  setNoBonus(true);
+
   if(lives)
     lives--;
 }
@@ -157,6 +159,12 @@ ScoreKeeper::addScore(int s)
 void
 ScoreKeeper::setScore(int s)
 {
+  if(score < nextExtraLife && s >= nextExtraLife && nextExtraLife <= 8*30000)
+    {
+      lives++;
+      nextExtraLife += 30000;
+    }
+
   score = s;
 
   if(score > top)
@@ -192,4 +200,14 @@ ScoreKeeper::calculateScore()
     }
 
   score += 100*skillLevel;
+}
+
+void
+ScoreKeeper::reset()
+{
+  setScore(0);
+  setLives(3);
+  resetKills();
+  levelsCompleted = 0;
+  nextExtraLife = 30000;
 }

@@ -34,6 +34,7 @@ void
 Input::setTimeout(int _timeout)
 {
   timeout = _timeout;
+  resetActionKeys();
 }
 
 void
@@ -109,6 +110,64 @@ bool
 Input::held(int key)
 {
   return keys[key].pressed;
+}
+
+int
+Input::getKeyPressed()
+{
+  for(int i = 1;i < SDLK_LAST;i++)
+    {
+      if(pressed(i))
+	{
+	  return i;
+	}
+    }
+
+  return 0;
+}
+
+bool
+Input::defineActionKey(ACTION action, int key)
+{
+  for(int i = 0;i < 4;i++)
+    {
+      if(actionKeys[i] == key && (ACTION)i != action)
+	{
+	  /* Key already in use */
+	  return false;
+	}
+    }
+
+  actionKeys[action] = key;
+
+  return true;
+}
+
+void
+Input::resetActionKeys()
+{
+  actionKeys[0] = 0;
+  actionKeys[1] = 0;
+  actionKeys[2] = 0;
+  actionKeys[3] = 0;
+}
+
+bool
+Input::actionPressed(ACTION action)
+{
+  return pressed(actionKeys[action]);
+}
+
+bool
+Input::actionReleased(ACTION action)
+{
+  return released(actionKeys[action]);
+}
+
+bool
+Input::actionHeld(ACTION action)
+{
+  return held(actionKeys[action]);
 }
 
 bool

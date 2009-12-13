@@ -14,7 +14,8 @@ ScoreScreen::ScoreScreen(remar2d *gfx, SoundManager *sfx, Input *input,
     vipersCounted(0),
     hunterSprite(0),
     hunters(0),
-    huntersCounted(0)
+    huntersCounted(0),
+    noBonus(0)
 {
   gfx->setupTileBackground(32, 32);
 
@@ -109,6 +110,13 @@ ScoreScreen::ScoreScreen(remar2d *gfx, SoundManager *sfx, Input *input,
   scorePerHunter = gfx->print("text", "1000#");
   gfx->showSprite(scorePerHunter, false);
   gfx->moveSpriteAbs(scorePerHunter, 11*32+16, 14*32+8);
+
+  if(scoreKeeper->getNoBonus())
+    {
+      noBonus = gfx->print("text", "no bonus");
+      gfx->showSprite(noBonus, false);
+      gfx->moveSpriteAbs(noBonus, 10*32+16, 9*32+8);
+    }
 }
 
 ScoreScreen::~ScoreScreen()
@@ -139,6 +147,7 @@ ScoreScreen::~ScoreScreen()
   gfx->removeSpriteInstance(droneSprite);
   gfx->removeSpriteInstance(viperSprite);
   gfx->removeSpriteInstance(hunterSprite);
+  if(noBonus) gfx->removeSpriteInstance(noBonus);
 }
 
 void
@@ -276,15 +285,27 @@ ScoreScreen::update()
       switch(subState)
 	{
 	case SHOW:
-	  gfx->showSprite(clock, true);
-	  gfx->showSprite(scorePerTime, true);
-	  
-	  time = new Counter(gfx, 3);
-	  time->setPosition(13*32, 9*32+8);
-	  time->setCounter(scoreKeeper->getTimer());
+	  if(scoreKeeper->getNoBonus())
+	    {
+	      gfx->showSprite(noBonus, true);
+	      scoreKeeper->setTimer(0);
+
+	      // Reset "No Bonus"
+	      scoreKeeper->setNoBonus(false);
+	    }
+	  else
+	    {
+	      gfx->showSprite(clock, true);
+	      gfx->showSprite(scorePerTime, true);
+
+	      time = new Counter(gfx, 3);
+	      time->setPosition(13*32, 9*32+8);
+	      time->setCounter(scoreKeeper->getTimer());
+	    }
 
 	  tickDelayTimer = tickDelayObjects;
 	  subState = TICKDELAY;
+
 	  break;
 	  
 	case TICK:

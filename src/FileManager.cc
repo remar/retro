@@ -44,6 +44,38 @@ FileManager::readTopScore()
   return top;
 }
 
+void
+FileManager::writeKeyConfig(int *config)
+{
+  std::ofstream *file = openFileForWriting("keyconfig");
+
+  if(!file)
+    return;
+
+  *file << config[0] << std::endl
+	<< config[1] << std::endl
+	<< config[2] << std::endl
+	<< config[3] << std::endl;
+
+  delete file;
+}
+
+void
+FileManager::readKeyConfig(int *config)
+{
+  std::ifstream *file = openFileForReading("keyconfig");
+
+  if(file)
+    {
+      *file >> config[0];
+      *file >> config[1];
+      *file >> config[2];
+      *file >> config[3];
+    }
+
+  delete file;
+}
+
 char *
 FileManager::getFullFilename(char *file)
 {

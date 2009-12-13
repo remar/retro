@@ -4,13 +4,14 @@ SpaceViper::SpaceViper(remar2d *gfx, SoundManager *sfx,
 		       ScoreKeeper *scoreKeeper, list<Enemy *> *enemies,
 		       int length)
   : Enemy(gfx, "snake head", sfx, scoreKeeper), enemies(enemies),
-    moveDirection(UP), hitPoints(6), dead(false), moved(0), aimAtHero(false)
+    moveDirection(UP), hitPoints(6), dead(false), moved(0), aimAtHero(false),
+    pauseTimer(0)
 {
   setBoundingBox(19, 19, 6, 6);
 
   for(int i = 0;i < length;i++)
     {
-      SpaceViperBody *b = new SpaceViperBody(gfx, sfx, i%10 == 0);
+      SpaceViperBody *b = new SpaceViperBody(gfx, sfx, i%10 < 2, this);
       body.push_back(b);
       enemies->push_back(b);
     }
@@ -49,6 +50,18 @@ SpaceViper::update(Field *field, Hero *hero)
       return;
     }
 
+  if(pauseTimer)
+    {
+      pauseTimer--;
+
+      if(pauseTimer == 0)
+	{
+	  pauseAnimation(false);
+	}
+
+      return;
+    }
+
   if(getX() == -32)
     {
       /* Randomize location */
@@ -78,8 +91,12 @@ SpaceViper::update(Field *field, Hero *hero)
       return;
     }
 
-  if(collides(hero))
-    hero->die();
+  if(collides(hero) && !hero->isBlinking() && !hero->isDead())
+    {
+      hero->die();
+
+      pause();
+    }
 
   if(moveThisFrame == false)
     {
@@ -272,6 +289,14 @@ SpaceViper::hit()
     }
 
   return true;
+}
+
+void
+SpaceViper::pause()
+{
+  pauseTimer = 60;
+
+  pauseAnimation(true);
 }
 
 void

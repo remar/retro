@@ -5,7 +5,7 @@ BountyHunter::BountyHunter(remar2d *gfx, SoundManager *sfx,
 			   ScoreKeeper *scoreKeeper, list<Enemy *> *enemies,
 			   list<Object *> *objects)
   : Enemy(gfx, "hunter", sfx, scoreKeeper), dead(false), hitPoints(4),
-    enemies(enemies), objects(objects)
+    enemies(enemies), objects(objects), pauseTimer(0)
 {
   setAnimation("left");
   setVisible(false);
@@ -25,11 +25,30 @@ BountyHunter::update(Field *field, Hero *hero)
       return;
     }
 
+  if(pauseTimer)
+    {
+      pauseTimer--;
+
+      if(pauseTimer == 0)
+	{
+	  pauseAnimation(false);
+	}
+
+      return;
+    }
+
   if(hero->isBlinking() && state == HIDDEN)
     return;
 
-  if(collides(hero) && state != HIDDEN)
-    hero->die();
+  if(collides(hero) && state == PREFIRE
+     && !hero->isBlinking() && !hero->isDead())
+    {
+      hero->die();
+
+      pauseTimer = 60;
+
+      pauseAnimation(true);
+    }
 
   switch(state)
     {
@@ -94,13 +113,14 @@ BountyHunter::update(Field *field, Hero *hero)
 bool
 BountyHunter::hit()
 {
-  if(dead || state == HIDDEN)
-    return false;
+  if(state == PREFIRE)
+    {
+      if(--hitPoints == 0)
+	die();
+      return true;
+    }
 
-  if(--hitPoints == 0)
-    die();
-
-  return true;
+  return false;
 }
 
 void

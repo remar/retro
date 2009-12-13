@@ -3,30 +3,36 @@
 
 * Retrobattle
 ** Features
+*** No enemies should enter spikes
+*** Show correct enemy variant in score screen
+*** Create .RemarGames/Retrobattle dir if it doesn't exist
+*** Nicer death animation for Space Viper/Dire Space Viper
+*** make depend
+*** Arrows in menu screen
+*** Polka-tiles in bonus levels
+*** Score above bonus when picking up
+*** Variable location of data files (currently ../ )
+*** Demo recording & playback
+*** If quitting when paused, remove pause helmet
+
+** Features done 
+*** Pause enemy while captain goods death animation begins
+*** Transparency for clock object in Bonus Score Screen
+*** Reset score keeper stats when starting over
+*** 8th square should be visible in bullet reloader
+*** Key binding redefinition
+*** Extra lives
+*** NO BONUS if dead/timeout
+*** Fuzz seems to randomize direction after being frozen (no, it doesn't)
+*** Fuzz should rotate in the air
+*** Show "Stage X" right before stage starts
 *** Pushing fuzz outside of screen should wrap it around (2 sprites?)
     Might be better to make the buffer outside of the screen wider, to
     allow both Captain Good and a Fuzz to fit outside. Will take
     longer to walk around the edge of the screen, but it would
     probably be nicest. This should be much more general (all enemies
     and Captain Good should adhere to this).
-*** Show "Stage X" right before stage starts
-*** NO BONUS if dead/timeout/time ran out
-*** Extra lives
-*** Key binding redefinition
-*** Demo recording & playback
-*** Variable location of data files (currently ../ )
-*** Pause enemy while captain goods death animation begins
-*** Fuzz should rotate in the air
-*** No enemies should enter spikes
-*** Show correct enemy variant in score screen
 *** Correct roll direction animation for fuzz (red and blue)
-*** 8th square should be visible
-*** Create .RemarGames/Retrobattle dir if it doesn't exist
-*** Reset score keeper stats when starting over
-*** Nicer death animation for Space Viper/Dire Space Viper
-*** make depend
-
-** Features done 
 *** Dark Bounty Hunter
 *** Red Fuzz gets stuck for some reason (random direction reason?)
     Maybe happens when direction gets randomized at exactly the same time

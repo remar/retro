@@ -12,6 +12,7 @@ class SpaceViper : public Enemy
   ~SpaceViper();
   virtual void update(Field *field, Hero *hero);
   bool hit();
+  void pause();
 
  private:
   enum Direction {NONE, LEFT, RIGHT, UP, DOWN};
@@ -37,6 +38,8 @@ class SpaceViper : public Enemy
 
   /* Keep track of how long we've moved, randomize direction every 32 pixels */
   int moved;
+
+  int pauseTimer;
 
 protected:
   void updateAnimation();

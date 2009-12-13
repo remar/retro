@@ -1,8 +1,10 @@
 #include "Menu.h"
+#include "FileManager.h"
 
 Menu::Menu(remar2d *gfx, SoundManager *sfx, Input *input,
 	   ScoreKeeper *scoreKeeper)
-  : GameMode(gfx, sfx, input, scoreKeeper), level(1), nextTimer(0)
+  : GameMode(gfx, sfx, input, scoreKeeper), level(1), nextTimer(0),
+    subMode(NORMAL)
 {
   gfx->setupTileBackground(16, 16);
 
@@ -19,7 +21,11 @@ Menu::Menu(remar2d *gfx, SoundManager *sfx, Input *input,
 
   enter_to_start = gfx->print("text", "press enter to start");
   gfx->showSprite(enter_to_start, true);
-  gfx->moveSpriteAbs(enter_to_start, 240, 304);
+  gfx->moveSpriteAbs(enter_to_start, 240, 304-32);
+
+  space_to_set_keys = gfx->print("text", "press space to set keys");
+  gfx->showSprite(space_to_set_keys, true);
+  gfx->moveSpriteAbs(space_to_set_keys, 240-24, 304);
 
   stage = gfx->print("text", "stage");
   gfx->showSprite(stage, true);
@@ -49,6 +55,14 @@ Menu::Menu(remar2d *gfx, SoundManager *sfx, Input *input,
   topScore = gfx->print("text", buf);
   gfx->showSprite(topScore, true);
   gfx->moveSpriteAbs(topScore, 16*18, 16*27+32  - 4);
+
+  char *aStrings[] = {"left", "right", "fire", "jump"};
+  for(int i = 0;i < 4;i++)
+    {
+      actionStrings[i] = gfx->print("text", aStrings[i]);
+      gfx->showSprite(actionStrings[i], false);
+      gfx->moveSpriteAbs(actionStrings[i], 16*3, 16*25 + 32 * i);
+    }
 }
 
 Menu::~Menu()
@@ -69,15 +83,77 @@ Menu::update()
       --nextTimer;
       if(nextTimer == 0)
 	{
-	  scoreKeeper->setScore(0);
-	  scoreKeeper->setLives(3);
-
 	  return GAME;
 	}
     }
 
+  Input::ACTION submodeToAction[] = {(Input::ACTION)0, // undefined,
+				     Input::LEFT,
+				     Input::RIGHT,
+				     Input::FIRE,
+				     Input::JUMP};
+  char *submodeStrings[] = {"NORMAL", "LEFT", "RIGHT", "FIRE", "JUMP"};
+
+  int lockedKeys[] = {SDLK_ESCAPE, // Used for quitting
+		      SDLK_f,      // Fullscreen
+		      SDLK_p,      // Pause
+		      0};
+
+  if(subMode != NORMAL)
+    {
+      if(--blinkDelay == 0)
+	{
+	  blinkDelay = 60;
+	}
+
+      if(blinkDelay <= 30)
+	gfx->showSprite(actionStrings[(int)subMode - 1], false);
+      else
+	gfx->showSprite(actionStrings[(int)subMode - 1], true);
+
+      if(int i = input->getKeyPressed())
+	{
+	  for(int j = 0;lockedKeys[j];j++)
+	    {
+	      if(i == lockedKeys[j])
+		{
+		  printf("Can't use that key, chose another\n");
+		  return MENU;
+		}
+	    }
+
+	  if(!input->defineActionKey(submodeToAction[subMode], i))
+	    {
+	      printf("Key already in use, chose another\n");
+	      return MENU;
+	    }
+
+	  keyConfig[(int)subMode - 1] = i;
+
+	  gfx->showSprite(actionStrings[(int)subMode - 1], true);
+	  subMode = (SUBMODE)((int)subMode + 1);
+
+	  if(subMode > REDEFINE_JUMP)
+	    {
+	      subMode = NORMAL;
+
+	      for(int k = 0;k < 4;k++)
+		{
+		  gfx->showSprite(actionStrings[k], false);
+		}
+
+	      FileManager fileManager;
+	      fileManager.writeKeyConfig(keyConfig);
+	    }
+	}
+
+      return MENU;
+    }
+
   if(input->pressed(SDLK_RETURN))
     {
+      scoreKeeper->reset();
+
       scoreKeeper->setLevel(level);
       scoreKeeper->setSkillLevel(skill);
 
@@ -95,6 +171,22 @@ Menu::update()
   else if(input->pressed(SDLK_DOWN))
     {
       increaseSkillLevel();
+    }
+  else if(input->pressed(SDLK_SPACE))
+    {
+      /* Key redefinition mode */
+      subMode = REDEFINE_LEFT;
+
+      // Swallow first keypress... it returns 12 (SDLK_CLEAR) after
+      // SPACE is pressed
+      input->getKeyPressed();
+
+      input->resetActionKeys();
+
+      for(int i = 0;i < 4;i++)
+	gfx->showSprite(actionStrings[i], true);
+
+      blinkDelay = 60;
     }
   else if(input->pressed(SDLK_ESCAPE))
     return QUIT;

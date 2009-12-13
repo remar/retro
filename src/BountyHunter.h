@@ -23,6 +23,8 @@ class BountyHunter : public Enemy
   bool dead;
   int deathTimer;
 
+  int pauseTimer;
+
  protected:
   virtual void fire();
   State state;

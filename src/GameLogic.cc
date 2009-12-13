@@ -5,6 +5,7 @@
 #include "ScoreScreen.h"
 #include "BonusLevel.h"
 #include "BonusScoreScreen.h"
+#include "FileManager.h"
 
 GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx)
   : input(i), graphics(gfx), sound(sfx),
@@ -82,6 +83,17 @@ GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx)
 
   mode = MENU;
   gameMode = new Menu(graphics, sound, input, scoreKeeper);
+
+  int keyConfig[4] = {SDLK_LEFT, SDLK_RIGHT, SDLK_x, SDLK_z};
+
+  FileManager fileManager;
+
+  fileManager.readKeyConfig(keyConfig);
+
+  input->defineActionKey(Input::LEFT, keyConfig[0]);
+  input->defineActionKey(Input::RIGHT, keyConfig[1]);
+  input->defineActionKey(Input::FIRE, keyConfig[2]);
+  input->defineActionKey(Input::JUMP, keyConfig[3]);
 }
 
 GameLogic::~GameLogic()

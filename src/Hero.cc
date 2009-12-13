@@ -338,7 +338,8 @@ Hero::update(Input *input, Field *field)
   int move_x = 0;
   int move_y = 1; /* Constantly fall.. :-) */
 
-  if(input->pressed(SDLK_LEFT))
+  //if(input->pressed(SDLK_LEFT))
+  if(input->actionPressed(Input::LEFT))
     {
       if(primaryDirection == NONE)
 	primaryDirection = LEFT;
@@ -346,7 +347,7 @@ Hero::update(Input *input, Field *field)
 	secondaryDirection = LEFT;
     }
 
-  if(input->pressed(SDLK_RIGHT))
+  if(input->actionPressed(Input::RIGHT))
     {
       if(primaryDirection == NONE)
 	primaryDirection = RIGHT;
@@ -354,7 +355,7 @@ Hero::update(Input *input, Field *field)
 	secondaryDirection = RIGHT;
     }
 
-  if(input->released(SDLK_LEFT))
+  if(input->actionReleased(Input::LEFT))
     {
       if(secondaryDirection == LEFT)
 	secondaryDirection = NONE;
@@ -367,7 +368,7 @@ Hero::update(Input *input, Field *field)
 	primaryDirection = NONE;
     }
 
-  if(input->released(SDLK_RIGHT))
+  if(input->actionReleased(Input::RIGHT))
     {
       if(secondaryDirection == RIGHT)
 	secondaryDirection = NONE;
@@ -387,9 +388,10 @@ Hero::update(Input *input, Field *field)
   else if(primaryDirection != NONE)
     move_x = x_dir[primaryDirection];
 
-  if(input->pressed(SDLK_x))  jump(true);
-  if(input->released(SDLK_x)) jump(false);
-  if(input->pressed(SDLK_z) && (!bulletHandler || bulletHandler->fire()))
+  if(input->actionPressed(Input::JUMP))  jump(true);
+  if(input->actionReleased(Input::JUMP)) jump(false);
+  if(input->actionPressed(Input::FIRE)
+     && (!bulletHandler || bulletHandler->fire()))
     {
       shoot();
     }
@@ -403,13 +405,13 @@ Hero::update(Input *input, Field *field)
   if(heroY + 24 == field->SPIKES_LEVEL)
     die();
 
-  if(heroX < -31)
+  if(heroX < -24-5)
     {
-      moveAbs(826, heroY);
+      moveAbs(800+16-5, heroY);
     }
-  else if(heroX > 826)
+  else if(heroX > 800+16-5)
     {
-      moveAbs(-31, heroY);
+      moveAbs(-24-5, heroY);
     }
   else
     {

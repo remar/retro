@@ -76,6 +76,8 @@ class ScoreScreen : public GameMode
   Counter *hunters;
   int huntersCounted;
   int scorePerHunter;
+
+  int noBonus;
 };
 
 #endif

@@ -105,7 +105,10 @@ class Level : public GameMode
 
   Helmet *helmet;
 
-  Mode returnMode;  
+  Mode returnMode;
+
+  int stageSign;
+  int startDelay;
 };
 
 #endif

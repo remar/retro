@@ -10,6 +10,8 @@ class FileManager
   FileManager();
   void writeTopScore(int score);
   int readTopScore();
+  void writeKeyConfig(int *config);
+  void readKeyConfig(int *config);
 
  private:
   std::ofstream *openFileForWriting(char *file);

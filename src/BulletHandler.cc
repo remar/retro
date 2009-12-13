@@ -19,7 +19,7 @@ BulletHandler::update()
 	{
 	  refillCounter++;
 
-	  if(refillCounter == 8)
+	  if(refillCounter == 9)
 	    {
 	      ammo++;
 

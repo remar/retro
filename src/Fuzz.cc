@@ -367,10 +367,10 @@ Fuzz::update(Field *field, Hero *hero)
 		     posY1+move_y, posY2+move_y,
 		     attachDir);
 
-	      if(getX() < -25)
-		moveAbs(801, getY());
-	      else if(getX() > 802)
-		moveAbs(-24, getY());
+// 	      if(getX() < -25)
+// 		moveAbs(801, getY());
+// 	      else if(getX() > 802)
+// 		moveAbs(-24, getY());
 	      
 	      break;
 
@@ -429,11 +429,6 @@ Fuzz::update(Field *field, Hero *hero)
 	      attach(posX1+move_x, posX2+move_x,
 		     posY1+move_y, posY2+move_y,
 		     attachDir);
-
-	      if(getX() < -25)
-		moveAbs(801, getY());
-	      else if(getX() > 802)
-		moveAbs(-24, getY());
 
 	      break;
 	    }
@@ -500,6 +495,10 @@ Fuzz::update(Field *field, Hero *hero)
 	}
     }
 
+  if(getX() < -31)
+    moveAbs(800, getY());
+  else if(getX() > 808)
+    moveAbs(-24, getY());
 
   if(!onSpikes
      && last1_x != -1 && last1_y != -1 && last2_x != -1 && last2_y != -1

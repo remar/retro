@@ -17,6 +17,9 @@ class Menu : public GameMode
   Mode update();
 
  private:
+  enum SUBMODE {NORMAL, REDEFINE_LEFT, REDEFINE_RIGHT, REDEFINE_FIRE,
+		REDEFINE_JUMP};
+
   void drawBackground();
   void drawPattern(int *arr, int xOffset ,int yOffset, int width, int height);
   void increaseLevel();
@@ -36,10 +39,19 @@ class Menu : public GameMode
   /* Strings */
   int remar_games_2009;
   int enter_to_start;
+  int space_to_set_keys;
   int stage;
   int skillLevel;
   int score;
   int topScore;
+
+  int actionStrings[4];
+
+  SUBMODE subMode;
+
+  int blinkDelay;
+
+  int keyConfig[4];
 };
 
 #endif

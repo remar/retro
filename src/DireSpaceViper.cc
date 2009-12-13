@@ -21,7 +21,7 @@ DireSpaceViper::DireSpaceViper(remar2d *gfx, SoundManager *sfx,
   // Create new sprite and body parts
   for(int i = 0;i < length;i++)
     {
-      DireSpaceViperBody *b = new DireSpaceViperBody(gfx, sfx, i%10 == 0);
+      DireSpaceViperBody *b = new DireSpaceViperBody(gfx, sfx, i%10 == 0, (SpaceViper *)this);
       body.push_back(b);
       enemies->push_back(b);
     }

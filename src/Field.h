@@ -48,9 +48,9 @@ class Field
   inline bool emptyBlock(int x, int y)
   {
     /* Let checks wrap around */
-    if(x == -1)
+    if(x <= -1)
       x = 24;
-    if(x == 25)
+    if(x >= 25)
       x = 0;
 
     return field[x][y] == EMPTY || field[x][y] == BROKEN;

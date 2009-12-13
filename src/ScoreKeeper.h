@@ -1,6 +1,8 @@
 #ifndef SCORE_KEEPER_H
 #define SCORE_KEEPER_H
 
+#include <stdio.h>
+
 class ScoreKeeper
 {
  public:
@@ -22,8 +24,6 @@ class ScoreKeeper
   bool redFuzzes();
 
   int numberOfEnemy(EnemyType type);
-/*   int numberOfBlueFuzzes(); */
-/*   int numberOfRedFuzzes(); */
 
   void setSkillLevel(int level);
   int  getSkillLevel();
@@ -70,6 +70,12 @@ class ScoreKeeper
   int getCoinsInLevel() { return coinsInLevel; }
   int coinsLeft() { return coinsInLevel - coinsCollected; }
 
+  void setNoBonus(bool bonus) { noBonus = bonus; }
+
+  bool getNoBonus() { return noBonus; }
+
+  void reset();
+
  private:
   int skillLevel;
 
@@ -89,6 +95,10 @@ class ScoreKeeper
 
   int coinsCollected;
   int coinsInLevel;
+
+  bool noBonus;
+
+  int nextExtraLife;
 };
 
 #endif

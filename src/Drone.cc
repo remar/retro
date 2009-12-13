@@ -2,7 +2,7 @@
 
 Drone::Drone(remar2d *gfx, SoundManager *sfx, ScoreKeeper *scoreKeeper)
   : Enemy(gfx, "drone", sfx, scoreKeeper), moved(0), moveThisUpdate(true),
-    hitPoints(2), dead(false), aimAtHero(false)
+    hitPoints(2), dead(false), aimAtHero(false), pauseTimer(0)
 {
   setAnimation("normal");
   setVisible(true);
@@ -52,9 +52,25 @@ Drone::update(Field *field, Hero *hero)
       return;      
     }
 
-  if(collides(hero))
+  if(pauseTimer)
+    {
+      pauseTimer--;
+
+      if(pauseTimer == 0)
+	{
+	  pauseAnimation(false);
+	}
+
+      return;
+    }
+
+  if(collides(hero) && !hero->isBlinking() && !hero->isDead())
     {
       hero->die();
+
+      pauseTimer = 60;
+
+      pauseAnimation(true);
     }
 
   if(!moveThisUpdate)

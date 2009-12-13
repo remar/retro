@@ -1,8 +1,8 @@
 #include "DireSpaceViperBody.h"
 
 DireSpaceViperBody::DireSpaceViperBody(remar2d *gfx, SoundManager *sfx,
-				       bool bright)
-  : SpaceViperBody(gfx, sfx, bright)
+				       bool bright, SpaceViper *head)
+  : SpaceViperBody(gfx, sfx, bright, head)
 {
   // Remove gfx, add new gfx
   gfx->removeSpriteInstance(sprite_instance);
