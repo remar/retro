@@ -1,10 +1,13 @@
 # PLEASE NOTE: 'remar2d' must be checked out as a neighbour to 'retro',
 #              i.e. /home/benny/retro and /home/benny/remar2d
 
-CFLAGS =	`sdl-config --cflags` -g -Wall
+CFLAGS =	`sdl-config --cflags` -g -Wall -I../../remar2d/include
 CPPFLAGS =	$(CFLAGS)
-LIBS =		`sdl-config --libs` -lremar2d
-#LIBS =		`sdl-config --libs` -lSDL_mixer -lremar2d
+
+# Uncomment the first LIBS line and comment out the other LIBS line to
+# compile without SDL_Mixer
+#LIBS =		`sdl-config --libs` ../../remar2d/lib/libremar2d.a
+LIBS =		`sdl-config --libs` -lSDL_mixer ../../remar2d/lib/libremar2d.a
 
 RETRO =		retro.o Input.o GameLogic.o Hero.o Fuzz.o Object.o Level.o \
 		Coin.o Nest.o ScoreKeeper.o Spawner.o Bullet.o SoundManager.o \
@@ -17,7 +20,7 @@ RETRO =		retro.o Input.o GameLogic.o Hero.o Fuzz.o Object.o Level.o \
 		DireSpaceViper.o DireSpaceViperBody.o DarkBountyHunter.o \
 		DarkHunterBullet.o DarkExplosion.o
 
-retro:		$(RETRO) /usr/lib/libremar2d.a
+retro:		$(RETRO) ../../remar2d/lib/libremar2d.a
 		g++ -o $@ $^ $(LIBS)
 
 clean:
