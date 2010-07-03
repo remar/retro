@@ -8,8 +8,8 @@ Compiling
 ---------
 
 1. Get remar2d and retro
-   $ git clone http://remar.se/andreas/remar2d/remar2d.git
-   $ git clone http://remar.se/andreas/retro/retro.git
+   $ git clone git://github.com/remar/remar2d.git
+   $ git clone git://github.com/remar/retro.git
 
 2. Make remar2d
    $ cd remar2d/src
