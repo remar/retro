@@ -44,37 +44,37 @@ GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx)
   graphics->redraw();
   
   /* Read in graphics */
-  char *sprites[] = {"../gfx/good.xml",
-		     "../gfx/fuzz.xml",
-		     "../gfx/pixel.xml",
-		     "../gfx/coin.xml",
-		     "../gfx/flame.xml",
-		     "../gfx/nest.xml",
-		     "../gfx/shot.xml",
-		     "../gfx/hud.xml",
-		     "../gfx/explosion.xml",
-		     "../gfx/smoke.xml",
-		     "../gfx/numbers.xml",
-		     "../gfx/drone.xml",
-		     "../gfx/clock.xml",
-		     "../gfx/ammo.xml",
-		     "../gfx/reload.xml",
-		     "../gfx/snakehead.xml",
-		     "../gfx/snakebody.xml",
-		     "../gfx/timered.xml",
-		     "../gfx/hunter.xml",
-		     "../gfx/hshot.xml",
-		     "../gfx/note.xml",
-		     "../gfx/bonus.xml",
-		     "../gfx/helmet.xml",
-		     "../gfx/redfuzz.xml",
-		     "../gfx/golddrone.xml",
-		     "../gfx/diresnakehead.xml",
-		     "../gfx/diresnakebody.xml",
-		     "../gfx/darkhunter.xml",
-		     "../gfx/dhshot.xml",
-		     "../gfx/darkexplo.xml",
-		     0};
+  const char *sprites[] = {"../gfx/good.xml",
+			   "../gfx/fuzz.xml",
+			   "../gfx/pixel.xml",
+			   "../gfx/coin.xml",
+			   "../gfx/flame.xml",
+			   "../gfx/nest.xml",
+			   "../gfx/shot.xml",
+			   "../gfx/hud.xml",
+			   "../gfx/explosion.xml",
+			   "../gfx/smoke.xml",
+			   "../gfx/numbers.xml",
+			   "../gfx/drone.xml",
+			   "../gfx/clock.xml",
+			   "../gfx/ammo.xml",
+			   "../gfx/reload.xml",
+			   "../gfx/snakehead.xml",
+			   "../gfx/snakebody.xml",
+			   "../gfx/timered.xml",
+			   "../gfx/hunter.xml",
+			   "../gfx/hshot.xml",
+			   "../gfx/note.xml",
+			   "../gfx/bonus.xml",
+			   "../gfx/helmet.xml",
+			   "../gfx/redfuzz.xml",
+			   "../gfx/golddrone.xml",
+			   "../gfx/diresnakehead.xml",
+			   "../gfx/diresnakebody.xml",
+			   "../gfx/darkhunter.xml",
+			   "../gfx/dhshot.xml",
+			   "../gfx/darkexplo.xml",
+			   0};
 
   printf("Loading sprites");
   for(int i = 0;sprites[i];i++)
@@ -84,10 +84,10 @@ GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx)
     }
   printf("\n");
 
-  char *tilesets[] = {"../gfx/background.xml",
-		      "../gfx/backgroundred.xml",
-		      "../gfx/maintiles.xml",
-		      0};
+  const char *tilesets[] = {"../gfx/background.xml",
+			    "../gfx/backgroundred.xml",
+			    "../gfx/maintiles.xml",
+			    0};
 
   printf("Loading tilesets");
   for(int i = 0;tilesets[i];i++)

@@ -35,9 +35,9 @@ class FileManager
   void readKeyConfig(int *config);
 
  private:
-  std::ofstream *openFileForWriting(char *file);
-  std::ifstream *openFileForReading(char *file);
-  char *getFullFilename(char *file);
+  std::ofstream *openFileForWriting(const char *file);
+  std::ifstream *openFileForReading(const char *file);
+  char *getFullFilename(const char *file);
 };
 
 #endif

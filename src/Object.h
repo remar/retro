@@ -32,12 +32,12 @@ using namespace std;
 class Object
 {
  public:
-  Object(remar2d *gfx, char *sprite, SoundManager *sfx);
+  Object(remar2d *gfx, const char *sprite, SoundManager *sfx);
   virtual ~Object();
   void moveAbs(float x, float y);
   void moveRel(float x, float y);
   virtual void setVisible(bool visible);
-  void setAnimation(char *animation);
+  void setAnimation(const char *animation);
   void pauseAnimation(bool on);
   void setBoundingBox(int width, int height, int offset_x, int offset_y);
   int getX();
@@ -56,7 +56,7 @@ class Object
   float pos_x, pos_y;
   SDL_Rect bounding_box;
   bool animationPaused;
-  char *name;
+  const char *name;
 
   /* Countdown to destruction (GRRRRRR) */
   int destroyTimer;

@@ -23,8 +23,11 @@
 
 BonusScoreScreen::BonusScoreScreen(remar2d *gfx, SoundManager *sfx,
 				   Input *input, ScoreKeeper *scoreKeeper)
-  : GameMode(gfx, sfx, input, scoreKeeper), state(TIME), delayTimer(60),
-    subState(SHOW), coinsCounted(0)
+  : GameMode(gfx, sfx, input, scoreKeeper), 
+    state(TIME), 
+    subState(SHOW), 
+    delayTimer(60),
+    coinsCounted(0)
 {
   gfx->setupTileBackground(32, 32);
 
@@ -227,9 +230,6 @@ BonusScoreScreen::update()
 	}
     }
 
-  char *stateChar[] = {"TIME", "COINS", "FUZZ", "DRONES", "VIPERS", "HUNTERS"};
-  char *subStateChar[] = {"SHOW", "TICK", "TICKDELAY"};
-
   switch(state)
     {
     case TIME:
@@ -280,7 +280,9 @@ BonusScoreScreen::update()
 	      sfx->playSound(15);
 	    }
 	  break;
-	  
+
+	default:
+	  break;
 	}
       break;
 
@@ -318,6 +320,9 @@ BonusScoreScreen::update()
 	      sfx->playSound(15);
 	    }
 	  break;
+
+	default:
+	  break;
 	}
       break;
 
@@ -341,6 +346,9 @@ BonusScoreScreen::update()
 	  subState = SHOW;
 	  delayTimer = 0;
 	  break;
+
+	default:
+	  break;
 	}
       break;
 
@@ -361,7 +369,13 @@ BonusScoreScreen::update()
 	  return GAME;
 
 	  break;
+
+	default:
+	  break;
 	}
+      break;
+
+    default:
       break;
     }
 

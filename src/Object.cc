@@ -21,8 +21,8 @@
 
 #include "Object.h"
 
-Object::Object(remar2d *gfx, char *sprite, SoundManager *sfx)
-  : destroyMe(false), destroyTimer(0)
+Object::Object(remar2d *gfx, const char *sprite, SoundManager *sfx)
+  : destroyTimer(0), destroyMe(false)
 {
   this->gfx = gfx;
   this->sfx = sfx;
@@ -62,7 +62,7 @@ Object::setVisible(bool visible)
 }
 
 void
-Object::setAnimation(char *animation)
+Object::setAnimation(const char *animation)
 {
   gfx->setAnimation(sprite_instance, animation); 
 }

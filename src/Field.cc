@@ -22,6 +22,8 @@
 #include "Field.h"
 #include "Explosion.h"
 
+#include <time.h>
+
 Field::Field(remar2d *gfx, SoundManager *sfx,
 	     list<BrokenBlock *> *brokenBlocks,
 	     list<Object *> *objects,
@@ -46,10 +48,10 @@ Field::Field(remar2d *gfx, SoundManager *sfx,
     backgroundBlocks = "background";
 
   sprintf(buf, "../gfx/block%d.xml", skill);
-  blocks = gfx->loadTileSet(buf);
+  blocks = gfx->loadTileSet((const char *)buf);
 
   sprintf(buf, "../gfx/solid%d.xml", skill);
-  solids = gfx->loadTileSet(buf);
+  solids = gfx->loadTileSet((const char *)buf);
 
   dots = gfx->loadTileSet("../gfx/dot.xml");
   spikes = gfx->loadTileSet("../gfx/spikes.xml");

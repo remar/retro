@@ -21,7 +21,7 @@
 
 #include "Enemy.h"
 
-Enemy::Enemy(remar2d *gfx, char *sprite, SoundManager *sfx,
+Enemy::Enemy(remar2d *gfx, const char *sprite, SoundManager *sfx,
 	     ScoreKeeper *scoreKeeper)
   : Object(gfx, sprite, sfx), scoreKeeper(scoreKeeper)
 {

@@ -454,7 +454,7 @@ Hero::showNote(int ammo)
   if(dead)
     return;
 
-  char *ammoString[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8"};
+  const char *ammoString[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8"};
 
   gfx->showSprite(note, true);
   gfx->setAnimation(note, ammoString[ammo]);

@@ -24,4 +24,4 @@ retro:		$(RETRO) ../../remar2d/lib/libremar2d.a
 		g++ -o $@ $^ $(LIBS)
 
 clean:
-		rm -f *.o *~ core* $(PROGS)
+		rm -f *.o *~ core* retro

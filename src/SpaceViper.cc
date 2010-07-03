@@ -25,8 +25,8 @@ SpaceViper::SpaceViper(remar2d *gfx, SoundManager *sfx,
 		       ScoreKeeper *scoreKeeper, list<Enemy *> *enemies,
 		       int length)
   : Enemy(gfx, "snake head", sfx, scoreKeeper), enemies(enemies),
-    moveDirection(UP), hitPoints(6), dead(false), moved(0), aimAtHero(false),
-    pauseTimer(0)
+    moveDirection(UP), hitPoints(6), dead(false), moved(0),
+    pauseTimer(0),  aimAtHero(false)
 {
   setBoundingBox(19, 19, 6, 6);
 
@@ -372,6 +372,9 @@ SpaceViper::getBlockAtDirection(Direction direction, int *blockX, int *blockY)
     case DOWN:
       *blockX = getX() / 32;
       *blockY = getY() / 32 + 1;
+      break;
+
+    default:
       break;
     }
 }

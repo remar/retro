@@ -87,11 +87,11 @@ class Field
   int skill;
 
   /* Names of tilesets */
-  char *backgroundBlocks;
-  char *blocks;
-  char *solids;
-  char *dots;
-  char *spikes;
+  const char *backgroundBlocks;
+  const char *blocks;
+  const char *solids;
+  const char *dots;
+  const char *spikes;
 };
 
 #endif

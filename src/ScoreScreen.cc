@@ -27,6 +27,7 @@ ScoreScreen::ScoreScreen(remar2d *gfx, SoundManager *sfx, Input *input,
     state(TIME),
     subState(SHOW),
     delayTimer(tickDelayObjects),
+    time(0),
     coinsCounted(0),
     fuzzesCounted(0),
     dronesCounted(0),
@@ -36,8 +37,7 @@ ScoreScreen::ScoreScreen(remar2d *gfx, SoundManager *sfx, Input *input,
     hunterSprite(0),
     hunters(0),
     huntersCounted(0),
-    noBonus(0),
-    time(0)
+    noBonus(0)
 {
   gfx->setupTileBackground(32, 32);
 

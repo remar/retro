@@ -30,7 +30,7 @@ SoundManager::SoundManager()
       printf("SDL_mixer says: %s\n", Mix_GetError());
     }
 
-  char *soundFiles[] =
+  const char *soundFiles[] =
     {
       "bomb.wav",  /* 0 */
       "coin.wav",  /* 1 */
@@ -54,7 +54,7 @@ SoundManager::SoundManager()
       0
     };
   
-  char *musicFiles[] =
+  const char *musicFiles[] =
     {
       "test.wav", /* 0 */
       "clear.wav", /* 1 */

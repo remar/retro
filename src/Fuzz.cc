@@ -23,8 +23,8 @@
 
 Fuzz::Fuzz(remar2d *gfx, SoundManager *sfx, ScoreKeeper *scoreKeeper)
   : Enemy(gfx, "fuzz", sfx, scoreKeeper), moveDirection(NONE),
-    rollDirection(NONE), falling(true), stunned(false), fastFuzz(false),
-    FALL_LIMIT(60), dead(false), onSpikes(false), pauseTimer(0)
+    stunned(false), falling(true), fastFuzz(false), dead(false),
+    onSpikes(false), FALL_LIMIT(60), pauseTimer(0), rollDirection(NONE)
 {
   setAnimation("roll left");
   // pauseAnimation(true);
@@ -76,8 +76,6 @@ Fuzz::update(Field *field, Hero *hero)
 
       return;
     }
-
-  char *moveDirChar[5] = {"NONE", "LEFT", "RIGHT", "UP", "DOWN"};
 
   int posX = getX();
   int posY = getY();
@@ -452,6 +450,9 @@ Fuzz::update(Field *field, Hero *hero)
 		     attachDir);
 
 	      break;
+
+	    default:
+	      ;
 	    }
 	}
 
@@ -533,9 +534,6 @@ Fuzz::update(Field *field, Hero *hero)
 	pauseAnimation(true);
       fallDistance = 0;
     }
-
-//   printf("Next move direction(%d): %s\n--------------------------------------\n", onSpikes,
-// 	 moveDirChar[moveDirection]);
 }
 
 void
@@ -668,12 +666,10 @@ Fuzz::attach(int posX1, int posX2, int posY1, int posY2, Direction direction)
       last1_x = (posX2 + 1)/32; last1_y = posY1/32;
       last2_x = (posX2 + 1)/32; last2_y = posY2/32;
       break;
-    }
 
-//   gfx->setTile(last1_x, last1_y,
-// 	       "dots", 1, 0);
-//   gfx->setTile(last2_x, last2_y,
-// 	       "dots", 2, 0);
+    default:
+      break;
+    }
 }
 
 void

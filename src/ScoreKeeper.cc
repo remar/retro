@@ -24,8 +24,15 @@
 #include "FileManager.h"
 
 ScoreKeeper::ScoreKeeper()
-  : skillLevel(1), level(1), bonusLevel(1), levelsCompleted(0), score(0),
-    top(0), lives(3), noBonus(false), nextExtraLife(30000)
+  : skillLevel(1), 
+    level(1), 
+    bonusLevel(1), 
+    levelsCompleted(0), 
+    lives(3), 
+    score(0),
+    top(0), 
+    noBonus(false), 
+    nextExtraLife(30000)
 {
   resetKills();
 

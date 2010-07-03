@@ -22,8 +22,8 @@
 #include "Drone.h"
 
 Drone::Drone(remar2d *gfx, SoundManager *sfx, ScoreKeeper *scoreKeeper)
-  : Enemy(gfx, "drone", sfx, scoreKeeper), moved(0), moveThisUpdate(true),
-    hitPoints(2), dead(false), aimAtHero(false), pauseTimer(0)
+  : Enemy(gfx, "drone", sfx, scoreKeeper), aimAtHero(false), moved(0), 
+    moveThisUpdate(true), hitPoints(2), dead(false), pauseTimer(0)
 {
   setAnimation("normal");
   setVisible(true);
@@ -56,6 +56,9 @@ Drone::getBlockInDirection(Direction dir, int *blockX, int *blockY)
     case DOWN:
       *blockX = getX() / 32;
       *blockY = getY() / 32 + 1;
+      break;
+
+    default:
       break;
     }
 }

@@ -98,7 +98,7 @@ FileManager::readKeyConfig(int *config)
 }
 
 char *
-FileManager::getFullFilename(char *file)
+FileManager::getFullFilename(const char *file)
 {
   char *filename = new char[1024];
 
@@ -115,7 +115,7 @@ FileManager::getFullFilename(char *file)
 }
 
 std::ofstream *
-FileManager::openFileForWriting(char *file)
+FileManager::openFileForWriting(const char *file)
 {
   char *filename = getFullFilename(file);
 
@@ -128,7 +128,7 @@ FileManager::openFileForWriting(char *file)
 }
 
 std::ifstream *
-FileManager::openFileForReading(char *file)
+FileManager::openFileForReading(const char *file)
 {
   char *filename = getFullFilename(file);
 

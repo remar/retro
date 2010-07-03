@@ -38,5 +38,5 @@ GameMode::~GameMode()
 Mode
 GameMode::update()
 {
-
+  return QUIT;
 }

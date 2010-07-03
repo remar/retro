@@ -25,8 +25,8 @@
 BountyHunter::BountyHunter(remar2d *gfx, SoundManager *sfx,
 			   ScoreKeeper *scoreKeeper, list<Enemy *> *enemies,
 			   list<Object *> *objects)
-  : Enemy(gfx, "hunter", sfx, scoreKeeper), dead(false), hitPoints(4),
-    enemies(enemies), objects(objects), pauseTimer(0)
+  : Enemy(gfx, "hunter", sfx, scoreKeeper), hitPoints(4), dead(false),
+    pauseTimer(0), objects(objects), enemies(enemies)
 {
   setAnimation("left");
   setVisible(false);

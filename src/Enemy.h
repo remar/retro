@@ -30,7 +30,7 @@
 class Enemy : public Object
 {
  public:
-  Enemy(remar2d *gfx, char *sprite, SoundManager *sfx,
+  Enemy(remar2d *gfx, const char *sprite, SoundManager *sfx,
 	ScoreKeeper *scoreKeeper);
   ~Enemy();
   virtual void update(Field *field, Hero *hero);

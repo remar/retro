@@ -27,9 +27,10 @@ Bonus::Bonus(remar2d *gfx, bool spawnQuake)
 {
   randomize(spawnQuake);
 
-  char *animations[] = {"small coins", "diamond", "gold bar", "blue pearl",
-			"white ball", "lock", "power gun", "laser gun",
-			"clock", "bomb", "quake"};
+  const char *animations[] = 
+    {"small coins", "diamond", "gold bar", "blue pearl",
+     "white ball", "lock", "power gun", "laser gun",
+     "clock", "bomb", "quake"};
   setAnimation(animations[type]);
   setVisible(true);
 

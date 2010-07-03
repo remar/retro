@@ -77,7 +77,7 @@ Menu::Menu(remar2d *gfx, SoundManager *sfx, Input *input,
   gfx->showSprite(topScore, true);
   gfx->moveSpriteAbs(topScore, 16*18, 16*27+32  - 4);
 
-  char *aStrings[] = {"left", "right", "fire", "jump"};
+  const char *aStrings[] = {"left", "right", "fire", "jump"};
   for(int i = 0;i < 4;i++)
     {
       actionStrings[i] = gfx->print("text", aStrings[i]);
@@ -113,7 +113,6 @@ Menu::update()
 				     Input::RIGHT,
 				     Input::FIRE,
 				     Input::JUMP};
-  char *submodeStrings[] = {"NORMAL", "LEFT", "RIGHT", "FIRE", "JUMP"};
 
   int lockedKeys[] = {SDLK_ESCAPE, // Used for quitting
 		      SDLK_f,      // Fullscreen
