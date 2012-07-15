@@ -137,8 +137,6 @@ Drone::update(Field *field, Hero *hero)
     }
   else if(moved == 32)
     {
-      // printf("CENTER %d, %d\n", getX(), getY());
-
       Direction newDirection;
       bool done = false;
       willDig = false;
@@ -161,7 +159,8 @@ Drone::update(Field *field, Hero *hero)
 
 	      getBlockInDirection(newDirection, &blockX, &blockY);
 
-	      if(field->field[blockX][blockY] != Field::SOLID)
+	      if(blockY < field->SPIKES_LEVEL/32
+		 && field->field[blockX][blockY] != Field::SOLID)
 		{
 		  done = true;
 
@@ -185,6 +184,11 @@ Drone::update(Field *field, Hero *hero)
 	  int blockX, blockY;
 
 	  getBlockInDirection(newDirection, &blockX, &blockY);
+
+	  if(blockY == field->SPIKES_LEVEL/32)
+	    {
+	      continue;
+	    }
 
 	  if(field->emptyBlock(blockX, blockY))
 	    done = true;
