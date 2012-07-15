@@ -22,11 +22,17 @@
 #include "FileManager.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 
+#define CONFIG_DIR ".config/retrobattle"
+#define TOPSCORE "topscore"
+#define KEYCONFIG "keyconfig"
 /*
 
-~/.RemarGames/Retrobattle/topscore
-~/.RemarGames/Retrobattle/keyconfig
+Configuration/score files:
+
+~/$CONFIG_DIR/topscore
+~/$CONFIG_DIR/keyconfig
 
 */
 
@@ -38,7 +44,9 @@ FileManager::FileManager()
 void
 FileManager::writeTopScore(int score)
 {
-  std::ofstream *file = openFileForWriting("topscore");
+  makeConfigDirIfMissing();
+
+  std::ofstream *file = openFileForWriting(TOPSCORE);
 
   if(!file)
     return;
@@ -53,7 +61,7 @@ FileManager::readTopScore()
 {
   int top = 0;
 
-  std::ifstream *file = openFileForReading("topscore");
+  std::ifstream *file = openFileForReading(TOPSCORE);
 
   if(file)
     {
@@ -68,7 +76,9 @@ FileManager::readTopScore()
 void
 FileManager::writeKeyConfig(int *config)
 {
-  std::ofstream *file = openFileForWriting("keyconfig");
+  makeConfigDirIfMissing();
+
+  std::ofstream *file = openFileForWriting(KEYCONFIG);
 
   if(!file)
     return;
@@ -84,7 +94,7 @@ FileManager::writeKeyConfig(int *config)
 void
 FileManager::readKeyConfig(int *config)
 {
-  std::ifstream *file = openFileForReading("keyconfig");
+  std::ifstream *file = openFileForReading(KEYCONFIG);
 
   if(file)
     {
@@ -104,7 +114,7 @@ FileManager::getFullFilename(const char *file)
 
   if(getenv("HOME") != 0)
     {
-      sprintf(filename, "%s/.RemarGames/Retrobattle/%s", getenv("HOME"), file);
+      sprintf(filename, "%s/%s/%s", getenv("HOME"), CONFIG_DIR, file);
     }
   else
     {
@@ -138,4 +148,23 @@ FileManager::openFileForReading(const char *file)
   delete [] filename;
 
   return f;
+}
+
+void
+FileManager::makeConfigDirIfMissing()
+{
+  if(getenv("HOME") != 0)
+    {
+      char *dirname = new char[1024];
+      struct stat st;
+      sprintf(dirname, "%s/%s", getenv("HOME"), CONFIG_DIR);
+      if(stat(dirname, &st) != 0)
+	{
+	  if(mkdir(dirname, 0700) != 0)
+	    {
+	      printf("Failed to create directory \"%s\"!\n", dirname);
+	    }
+	}
+      delete [] dirname;
+    }
 }

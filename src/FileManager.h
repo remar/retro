@@ -38,6 +38,8 @@ class FileManager
   std::ofstream *openFileForWriting(const char *file);
   std::ifstream *openFileForReading(const char *file);
   char *getFullFilename(const char *file);
+  void makeConfigDirIfMissing();
+
 };
 
 #endif
