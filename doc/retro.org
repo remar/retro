@@ -3,8 +3,6 @@
 
 * Retrobattle
 ** Features
-*** No enemies should enter spikes
-*** Show correct enemy variant in score screen
 *** Create .RemarGames/Retrobattle dir if it doesn't exist
 *** Nicer death animation for Space Viper/Dire Space Viper
 *** make depend
@@ -16,6 +14,8 @@
 *** If quitting when paused, remove pause helmet
 
 ** Features done 
+*** Show correct enemy variant in score screen
+*** No enemies should enter spikes
 *** Pause enemy while captain goods death animation begins
 *** Transparency for clock object in Bonus Score Screen
 *** Reset score keeper stats when starting over
