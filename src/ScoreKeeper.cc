@@ -31,7 +31,8 @@ ScoreKeeper::ScoreKeeper()
     lives(3), 
     score(0),
     top(0), 
-    noBonus(false), 
+    timer(0),
+    noBonus(false),
     nextExtraLife(30000)
 {
   resetKills();
