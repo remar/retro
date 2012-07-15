@@ -89,8 +89,6 @@ SpaceViper::update(Field *field, Hero *hero)
       bool done = false;
       while(!done)
 	{
-	  //int x = 14*32 + 96;
-	  //int y = 10*32 + 128;
  	  int x = (rand()%21)*32 + 96;
  	  int y = (rand()%14)*32 + 128;
 
@@ -227,7 +225,8 @@ SpaceViper::update(Field *field, Hero *hero)
 
 		  getBlockAtDirection(moveDirection, &blockX, &blockY);
 
-		  if(field->emptyBlock(blockX, blockY)
+		  if(blockY < field->SPIKES_LEVEL/32
+		     && field->emptyBlock(blockX, blockY)
 		     && !tailAtPosition(blockX, blockY))
 		    {
 		      done = true;
@@ -243,6 +242,11 @@ SpaceViper::update(Field *field, Hero *hero)
 	      moveDirection = (Direction)(random()%4 + 1);
 
 	      getBlockAtDirection(moveDirection, &blockX, &blockY);
+
+	      if(blockY == field->SPIKES_LEVEL/32)
+		{
+		  continue;
+		}
 
 	      if(field->emptyBlock(blockX, blockY)
 		 && !tailAtPosition(blockX, blockY))
