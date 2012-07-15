@@ -308,6 +308,8 @@ SpaceViper::hit()
       dead = true;
       destroyTimer = 60;
 
+      pauseAnimation(true);
+
       list<SpaceViperBody *>::iterator it = body.begin();
       for(;it != body.end();it++)
 	(*it)->splat();

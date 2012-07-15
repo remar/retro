@@ -39,7 +39,17 @@ void
 SpaceViperBody::update(Field *field, Hero *hero)
 {
   Object::update();
-  if(collides(hero) && destroyTimer == 0
+
+  if(destroyTimer > 0 && splatAnimationStart > 0)
+    {
+      splatAnimationStart--;
+      if(splatAnimationStart == 0)
+	{
+	  setAnimation("splat");
+	}
+    }
+
+  if(collides(hero) && destroyTimer == 0 && !destroyMe
      && !hero->isBlinking() && !hero->isDead())
     {
       hero->die();
@@ -58,6 +68,6 @@ SpaceViperBody::hit()
 void
 SpaceViperBody::splat()
 {
-  setAnimation("splat");
+  splatAnimationStart = rand()%15;
   destroyTimer = 60;
 }

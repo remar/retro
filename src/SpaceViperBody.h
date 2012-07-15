@@ -37,6 +37,7 @@ class SpaceViperBody : public Enemy
 
  private:
   SpaceViper *head;
+  int splatAnimationStart;
 };
 
 #endif // SPACE_VIPER_BODY_H
