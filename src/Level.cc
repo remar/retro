@@ -307,6 +307,10 @@ Level::update()
 
   if(input->pressed(SDLK_ESCAPE))
     {
+      if(paused)
+	{
+	  helmet->setVisible(false);
+	}
       performWipe(MENU);
       return GAME;
     }
@@ -814,8 +818,6 @@ Level::pause()
       helmet->moveAbs(helmet_x-1, helmet_y);
       helmet->setVisible(true);
     }
-
-  gfx->pauseAnimations(paused);
 }
 
 void

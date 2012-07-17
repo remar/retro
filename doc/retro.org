@@ -3,16 +3,16 @@
 
 * Retrobattle
 ** Features
-*** make depend
 *** Arrows in menu screen
 *** Polka-tiles in bonus levels
 *** Score above bonus when picking up
 *** Variable location of data files (currently ../ )
 *** Demo recording & playback
+*** Remove text "PRESS SPACE TO SET KEYS" when quitting
+*** make depend
+** Features done 
 *** If quitting when paused, remove pause helmet
 *** Quitting while paused, then restarting -> NO ANIMATIONS! (pause all?)
-*** Remove text "PRESS SPACE TO SET KEYS" when quitting
-** Features done 
 *** Nicer death animation for Space Viper/Dire Space Viper
 *** Put config files in ~/.config/retrobattle/
 *** Create ~/.config/retrobattle dir if it doesn't exist
