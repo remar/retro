@@ -46,6 +46,7 @@ class Menu : public GameMode
   void increaseLevel();
   void decreaseLevel();
   void increaseSkillLevel();
+  void moveArrows();
   
   char *mainTiles;
 
@@ -57,8 +58,12 @@ class Menu : public GameMode
 
   int nextTimer;
 
+  int leftArrow;
+  int rightArrow;
+  int downArrow;
+
   /* Strings */
-  int remar_games_2009;
+  int remar_games_2012;
   int enter_to_start;
   int space_to_set_keys;
   int stage;
@@ -73,6 +78,9 @@ class Menu : public GameMode
   int blinkDelay;
 
   int keyConfig[4];
+
+  int moveArrowsTimer;
+  int arrowOffset;
 };
 
 #endif

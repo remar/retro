@@ -3,14 +3,14 @@
 
 * Retrobattle
 ** Features
-*** Arrows in menu screen
 *** Polka-tiles in bonus levels
 *** Score above bonus when picking up
 *** Variable location of data files (currently ../ )
 *** Demo recording & playback
-*** Remove text "PRESS SPACE TO SET KEYS" when quitting
 *** make depend
 ** Features done 
+*** Remove text "PRESS SPACE TO SET KEYS" when quitting
+*** Arrows in menu screen
 *** If quitting when paused, remove pause helmet
 *** Quitting while paused, then restarting -> NO ANIMATIONS! (pause all?)
 *** Nicer death animation for Space Viper/Dire Space Viper

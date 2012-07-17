@@ -74,6 +74,7 @@ GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx)
 			   "../gfx/darkhunter.xml",
 			   "../gfx/dhshot.xml",
 			   "../gfx/darkexplo.xml",
+			   "../gfx/arrows.xml",
 			   0};
 
   printf("Loading sprites");

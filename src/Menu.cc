@@ -22,10 +22,12 @@
 #include "Menu.h"
 #include "FileManager.h"
 
+#define MOVE_ARROWS_TIMEOUT 30
+
 Menu::Menu(remar2d *gfx, SoundManager *sfx, Input *input,
 	   ScoreKeeper *scoreKeeper)
   : GameMode(gfx, sfx, input, scoreKeeper), level(1), nextTimer(0),
-    subMode(NORMAL)
+    subMode(NORMAL), moveArrowsTimer(MOVE_ARROWS_TIMEOUT), arrowOffset(2)
 {
   gfx->setupTileBackground(16, 16);
 
@@ -36,9 +38,9 @@ Menu::Menu(remar2d *gfx, SoundManager *sfx, Input *input,
 
   drawBackground();
 
-  remar_games_2009 = gfx->print("text", "remar games 2009");
-  gfx->showSprite(remar_games_2009, true);
-  gfx->moveSpriteAbs(remar_games_2009, 144, 208);
+  remar_games_2012 = gfx->print("text", "remar games 2012");
+  gfx->showSprite(remar_games_2012, true);
+  gfx->moveSpriteAbs(remar_games_2012, 144, 208);
 
   enter_to_start = gfx->print("text", "press enter to start");
   gfx->showSprite(enter_to_start, true);
@@ -84,14 +86,33 @@ Menu::Menu(remar2d *gfx, SoundManager *sfx, Input *input,
       gfx->showSprite(actionStrings[i], false);
       gfx->moveSpriteAbs(actionStrings[i], 16*3, 16*25 + 32 * i);
     }
+
+  leftArrow = gfx->createSpriteInstance("arrow");
+  gfx->setAnimation(leftArrow, "left");
+  gfx->moveSpriteAbs(leftArrow, 336 - 14*2, 336 + 1);
+  gfx->showSprite(leftArrow, true);
+
+  rightArrow = gfx->createSpriteInstance("arrow");
+  gfx->setAnimation(rightArrow, "right");
+  gfx->moveSpriteAbs(rightArrow, 336 + 7*16 + 14*2, 336 + 1);
+  gfx->showSprite(rightArrow, true);
+
+  downArrow = gfx->createSpriteInstance("arrow");
+  gfx->setAnimation(downArrow, "down");
+  gfx->moveSpriteAbs(downArrow, 336 + 7*16 + 14*2, 336 + 32);
+  gfx->showSprite(downArrow, true);
 }
 
 Menu::~Menu()
 {
-  gfx->removeSpriteInstance(remar_games_2009);
+  gfx->removeSpriteInstance(remar_games_2012);
   gfx->removeSpriteInstance(enter_to_start);
   gfx->removeSpriteInstance(stage);
+  gfx->removeSpriteInstance(space_to_set_keys);
   gfx->removeSpriteInstance(skillLevel);
+  gfx->removeSpriteInstance(leftArrow);
+  gfx->removeSpriteInstance(rightArrow);
+  gfx->removeSpriteInstance(downArrow);
   delete levelCounter;
   delete skillCounter;
 }
@@ -118,6 +139,8 @@ Menu::update()
 		      SDLK_f,      // Fullscreen
 		      SDLK_p,      // Pause
 		      0};
+
+  moveArrows();
 
   if(subMode != NORMAL)
     {
@@ -212,6 +235,25 @@ Menu::update()
     return QUIT;
 
   return MENU;
+}
+
+void
+Menu::moveArrows()
+{
+  if(subMode == NORMAL)
+    {
+      // Move arrows
+      moveArrowsTimer--;
+      if(moveArrowsTimer <= 0)
+	{
+	  gfx->moveSpriteRel(leftArrow, -arrowOffset, 0);
+	  gfx->moveSpriteRel(rightArrow, arrowOffset, 0);
+	  gfx->moveSpriteRel(downArrow, 0, arrowOffset);
+
+	  moveArrowsTimer = MOVE_ARROWS_TIMEOUT;
+	  arrowOffset = -arrowOffset;
+	}
+    }
 }
 
 void
