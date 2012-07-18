@@ -50,7 +50,7 @@ class Field
 	list<Object *> *objects,
 	bool blocksTakeTwoHits,
 	int skill,
-	bool redBackground);
+	bool bonusLevel);
 
   bool blockHit(int x, int y, bool createExplosion = true);
   void breakBlock(int x, int y, bool createExplosion = true);
@@ -92,6 +92,8 @@ class Field
   const char *solids;
   const char *dots;
   const char *spikes;
+
+  bool bonusLevel;
 };
 
 #endif
