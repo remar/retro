@@ -90,7 +90,7 @@ SpaceViper::update(Field *field, Hero *hero)
       while(!done)
 	{
  	  int x = (rand()%21)*32 + 96;
- 	  int y = (rand()%14)*32 + 128;
+	  int y = (rand()%13)*32 + 128;
 
 	  if(field->emptyBlock(x/32, y/32))
 	    {
