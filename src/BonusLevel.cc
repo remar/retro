@@ -33,7 +33,7 @@ BonusLevel::BonusLevel(remar2d *gfx, SoundManager *sfx, Input *input,
   loadFailed = false;
   hero = 0;
 
-  scoreKeeper->setTimer(60);
+  scoreKeeper->setTimer(80);
   timerTimer = 60;
   timerPaused = true;
 
