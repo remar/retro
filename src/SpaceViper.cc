@@ -153,6 +153,8 @@ SpaceViper::update(Field *field, Hero *hero)
 
 	  if(!field->emptyBlock(blockX, blockY))
 	    surroundingBlocks++;
+	  else if(blockY == 17)
+	    surroundingBlocks++;
 	  if(tailAtPosition(blockX, blockY))
 	    surroundingTail++;	 
 	}
