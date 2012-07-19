@@ -27,6 +27,7 @@
 #include "GoldDrone.h"
 #include "DireSpaceViper.h"
 #include "DarkBountyHunter.h"
+#include "ScoreSign.h"
 
 int DEBUG = 0;
 
@@ -488,24 +489,28 @@ Level::update()
 		case Bonus::SMALL_COINS:
 		  sfx->playSound(17);
 		  scoreKeeper->addScore(200);
+		  objects.push_back(new ScoreSign(gfx, ScoreSign::SCORE_200, (*it)->getX(), (*it)->getY()));
 		  updateHUD = true;
 		  break;
 
 		case Bonus::DIAMOND:
 		  sfx->playSound(17);
 		  scoreKeeper->addScore(250);
+		  objects.push_back(new ScoreSign(gfx, ScoreSign::SCORE_250, (*it)->getX(), (*it)->getY()));
 		  updateHUD = true;
 		  break;
 
 		case Bonus::GOLD_BAR:
 		  sfx->playSound(17);
 		  scoreKeeper->addScore(300);
+		  objects.push_back(new ScoreSign(gfx, ScoreSign::SCORE_300, (*it)->getX(), (*it)->getY()));
 		  updateHUD = true;
 		  break;
 
 		case Bonus::BLUE_PEARL:
 		  sfx->playSound(17);
 		  scoreKeeper->addScore(400);
+		  objects.push_back(new ScoreSign(gfx, ScoreSign::SCORE_400, (*it)->getX(), (*it)->getY()));
 		  updateHUD = true;
 		  break;
 

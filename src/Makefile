@@ -18,7 +18,7 @@ RETRO =		retro.o Input.o GameLogic.o Hero.o Fuzz.o Object.o Level.o \
 		HunterBullet.o DamagingExplosion.o Bonus.o BonusSpawner.o \
 		PowerBullet.o LaserBeam.o Helmet.o RedFuzz.o GoldDrone.o \
 		DireSpaceViper.o DireSpaceViperBody.o DarkBountyHunter.o \
-		DarkHunterBullet.o DarkExplosion.o
+		DarkHunterBullet.o DarkExplosion.o ScoreSign.o
 
 retro:		$(RETRO) ../../remar2d/lib/libremar2d.a
 		g++ -o $@ $^ $(LIBS)

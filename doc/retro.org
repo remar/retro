@@ -3,12 +3,16 @@
 
 * Retrobattle
 ** Features
-*** Polka-tiles in bonus levels
-*** Score above bonus when picking up
 *** Variable location of data files (currently ../ )
+    Make the executable relocatable.
+*** Make Ubuntu/Debian package
+*** Proper clean-up of Space Viper when removed (remar2d bug)
 *** Demo recording & playback
 *** make depend
 ** Features done 
+*** Score above bonus when picking up
+*** Correct initial time in bonus levels
+*** Polka-tiles in bonus levels
 *** Remove text "PRESS SPACE TO SET KEYS" when quitting
 *** Arrows in menu screen
 *** If quitting when paused, remove pause helmet
