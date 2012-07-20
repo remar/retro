@@ -13,7 +13,7 @@ bool sanity_check_datadir(char *datadir)
   char buf[1024];
   struct stat s;
 
-  sprintf(buf, "%s/levels/1.lev", datadir);
+  sprintf(buf, "%s/data/levels/1.lev", datadir);
 
   if(stat(buf, &s) == 0)
     {
@@ -43,17 +43,25 @@ char *setup_datadir(int argc, char *argv[])
 
   if(!sanity_check_datadir(datadir))
     {
-      // Try the default location
-      datadir = strdup("/opt/retrobattle");
+      // Try the alternative location
+      datadir = strdup(alternative ? alternative : "");
 
       if(!sanity_check_datadir(datadir))
 	{
-	  printf("ERROR: Unable to find game data!\n");
-	  printf("       Try providing the path when starting, i.e.:\n");
-	  printf("       # retro <PATH_TO_RETROBATTLE>\n");
-
 	  free(datadir);
-	  datadir = 0;
+
+	  // Try the default location
+	  datadir = strdup("/opt/retrobattle");
+
+	  if(!sanity_check_datadir(datadir))
+	    {
+	      printf("ERROR: Unable to find game data!\n");
+	      printf("       Try providing the path when starting, i.e.:\n");
+	      printf("       # retrobattle <PATH_TO_RETROBATTLE>\n");
+
+	      free(datadir);
+	      datadir = 0;
+	    }
 	}
     }
 

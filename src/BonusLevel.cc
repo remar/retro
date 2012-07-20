@@ -51,7 +51,7 @@ BonusLevel::BonusLevel(remar2d *gfx, SoundManager *sfx, Input *input,
 		    datadir);
 
   char buf[1024];
-  sprintf(buf, "%s/levels/b%d.lev", datadir, scoreKeeper->getBonusLevel());
+  sprintf(buf, "%s/data/levels/b%d.lev", datadir, scoreKeeper->getBonusLevel());
 
   // TODO: Use exceptions instead of this error handling
   bool success = loadLevel(buf);

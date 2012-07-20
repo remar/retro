@@ -47,23 +47,23 @@ Field::Field(remar2d *gfx, SoundManager *sfx,
   if(bonusLevel)
     {
       backgroundBlocks = "red background";
-      sprintf(buf, "%s/gfx/bonusblock_open.xml", datadir);
+      sprintf(buf, "%s/data/gfx/bonusblock_open.xml", datadir);
       blocks = gfx->loadTileSet(buf);
-      sprintf(buf, "%s/gfx/bonusblock_solid.xml", datadir);
+      sprintf(buf, "%s/data/gfx/bonusblock_solid.xml", datadir);
       solids = gfx->loadTileSet(buf);
     }
   else
     {
       backgroundBlocks = "background";
-      sprintf(buf, "%s/gfx/block%d.xml", datadir, skill);
+      sprintf(buf, "%s/data/gfx/block%d.xml", datadir, skill);
       blocks = gfx->loadTileSet((const char *)buf);
-      sprintf(buf, "%s/gfx/solid%d.xml", datadir, skill);
+      sprintf(buf, "%s/data/gfx/solid%d.xml", datadir, skill);
       solids = gfx->loadTileSet((const char *)buf);
     }
 
-  sprintf(buf, "%s/gfx/dot.xml", datadir);
+  sprintf(buf, "%s/data/gfx/dot.xml", datadir);
   dots = gfx->loadTileSet(buf);
-  sprintf(buf, "%s/gfx/spikes.xml", datadir);
+  sprintf(buf, "%s/data/gfx/spikes.xml", datadir);
   spikes = gfx->loadTileSet(buf);
 }
 

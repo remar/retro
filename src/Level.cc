@@ -64,7 +64,7 @@ Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
 		    datadir);
 
   char buf[1024];
-  sprintf(buf, "%s/levels/%d.lev", datadir, scoreKeeper->getLevel());
+  sprintf(buf, "%s/data/levels/%d.lev", datadir, scoreKeeper->getLevel());
 
   // TODO: Use exceptions instead of this error handling
   bool success = loadLevel(buf);

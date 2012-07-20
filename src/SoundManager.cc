@@ -68,7 +68,7 @@ SoundManager::SoundManager(char *datadir)
   for(int i = 0;soundFiles[i];i++)
     {
       char buf[1024];
-      sprintf(buf, "%s/sfx/%s", datadir, soundFiles[i]);
+      sprintf(buf, "%s/data/sfx/%s", datadir, soundFiles[i]);
       printf(".");
       sounds[i] = Mix_LoadWAV(buf);
       if(!sounds[i]) {
@@ -83,7 +83,7 @@ SoundManager::SoundManager(char *datadir)
   for(int i = 0;musicFiles[i];i++)
     {
       char buf[1024];
-      sprintf(buf, "%s/sfx/%s", datadir, musicFiles[i]);
+      sprintf(buf, "%s/data/sfx/%s", datadir, musicFiles[i]);
       printf(".");
       songs[i] = Mix_LoadMUS(buf);
       if(!songs[i]) {

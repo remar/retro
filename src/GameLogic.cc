@@ -204,5 +204,5 @@ GameLogic::quit()
 void
 GameLogic::makeGfxPath(char *buf, char *datadir, const char *file)
 {
-  sprintf(buf, "%s/gfx/%s", datadir, file);
+  sprintf(buf, "%s/data/gfx/%s", datadir, file);
 }
