@@ -21,9 +21,9 @@ RETRO =		retro.o Input.o GameLogic.o Hero.o Fuzz.o Object.o Level.o \
 		DarkHunterBullet.o DarkExplosion.o ScoreSign.o binreloc.o \
 		datadir.o
 
-retro:		$(RETRO) ../../remar2d/lib/libremar2d.a
+retrobattle:	$(RETRO) ../../remar2d/lib/libremar2d.a
 		g++ -o $@ $^ $(LIBS)
 		mv $@ ..
 
 clean:
-		rm -f *.o *~ core* retro
+		rm -f *.o *~ core* ../retrobattle
