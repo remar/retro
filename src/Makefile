@@ -1,7 +1,7 @@
 # PLEASE NOTE: 'remar2d' must be checked out as a neighbour to 'retro',
 #              i.e. /home/benny/retro and /home/benny/remar2d
 
-CFLAGS =	`sdl-config --cflags` -g -Wall -I../../remar2d/include
+CFLAGS =	`sdl-config --cflags` -g -Wall -I../../remar2d/include -DENABLE_BINRELOC
 CPPFLAGS =	$(CFLAGS)
 
 # Uncomment the first LIBS line and comment out the other LIBS line to
@@ -18,7 +18,7 @@ RETRO =		retro.o Input.o GameLogic.o Hero.o Fuzz.o Object.o Level.o \
 		HunterBullet.o DamagingExplosion.o Bonus.o BonusSpawner.o \
 		PowerBullet.o LaserBeam.o Helmet.o RedFuzz.o GoldDrone.o \
 		DireSpaceViper.o DireSpaceViperBody.o DarkBountyHunter.o \
-		DarkHunterBullet.o DarkExplosion.o ScoreSign.o
+		DarkHunterBullet.o DarkExplosion.o ScoreSign.o binreloc.o
 
 retro:		$(RETRO) ../../remar2d/lib/libremar2d.a
 		g++ -o $@ $^ $(LIBS)
