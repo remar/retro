@@ -110,7 +110,7 @@ Drone::update(Field *field, Hero *hero)
       while(!done)
 	{
 	  int x = (rand()%21)*32 + 96 + 4;
-	  int y = (rand()%14)*32 + 128 + 4;
+	  int y = (rand()%13)*32 + 128 + 4;
 
 	  if(field->emptyBlock(x/32, y/32))
 	    {
