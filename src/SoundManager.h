@@ -31,7 +31,7 @@
 class SoundManager
 {
  public:
-  SoundManager();
+  SoundManager(char *datadir);
   ~SoundManager();
   int playSound(int i, bool loop = false);
   void stopSound(int channel);

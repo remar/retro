@@ -22,7 +22,7 @@
 #include "SoundManager.h"
 #include <stdio.h>
 
-SoundManager::SoundManager()
+SoundManager::SoundManager(char *datadir)
 {
 #ifndef NO_SDL_MIXER
   if(Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 1024))
@@ -68,10 +68,12 @@ SoundManager::SoundManager()
   for(int i = 0;soundFiles[i];i++)
     {
       char buf[1024];
-      sprintf(buf, "../sfx/%s", soundFiles[i]);
-      //printf("Loading sound \"%s\"\n", buf);
+      sprintf(buf, "%s/sfx/%s", datadir, soundFiles[i]);
       printf(".");
       sounds[i] = Mix_LoadWAV(buf);
+      if(!sounds[i]) {
+	printf("x");
+      }
     }
   printf("\n");
 
@@ -81,10 +83,12 @@ SoundManager::SoundManager()
   for(int i = 0;musicFiles[i];i++)
     {
       char buf[1024];
-      sprintf(buf, "../sfx/%s", musicFiles[i]);
-      //printf("Loading music \"%s\"\n", buf);
+      sprintf(buf, "%s/sfx/%s", datadir, musicFiles[i]);
       printf(".");
       songs[i] = Mix_LoadMUS(buf);
+      if(!songs[i]) {
+	printf("x");
+      }
     }
   printf("\n");
 

@@ -31,12 +31,14 @@
 class GameLogic
 {
  public:
-  GameLogic(Input *i, remar2d *gfx, SoundManager *sfx);
+  GameLogic(Input *i, remar2d *gfx, SoundManager *sfx, char *datadir);
   ~GameLogic();
   void update();
   bool quit();
 
  private:
+  void makeGfxPath(char *buf, char *datadir, const char *file);
+
   Input *input;
   remar2d *graphics;
   SoundManager *sound;
@@ -59,6 +61,8 @@ class GameLogic
   bool quitGame;
 
   bool fullScreen;
+
+  char *datadir;
 };
 
 #endif

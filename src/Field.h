@@ -50,7 +50,8 @@ class Field
 	list<Object *> *objects,
 	bool blocksTakeTwoHits,
 	int skill,
-	bool bonusLevel);
+	bool bonusLevel,
+	char *datadir);
 
   bool blockHit(int x, int y, bool createExplosion = true);
   void breakBlock(int x, int y, bool createExplosion = true);

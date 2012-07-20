@@ -32,7 +32,7 @@
 int DEBUG = 0;
 
 Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
-	     ScoreKeeper *scoreKeeper)
+	     ScoreKeeper *scoreKeeper, char *datadir)
   : GameMode(gfx, sfx, input, scoreKeeper), stageSign(0), startDelay(60)
 {
   gfx->setupTileBackground(32, 32);
@@ -60,10 +60,11 @@ Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
   field = new Field(gfx, sfx, &brokenBlocks, &objects,
 		    scoreKeeper->blocksTakeTwoHits(),
 		    scoreKeeper->getSkillLevel(),
-		    false /* normal blue background */);
+		    false /* normal blue background */,
+		    datadir);
 
   char buf[1024];
-  sprintf(buf, "../levels/%d.lev", scoreKeeper->getLevel());
+  sprintf(buf, "%s/levels/%d.lev", datadir, scoreKeeper->getLevel());
 
   // TODO: Use exceptions instead of this error handling
   bool success = loadLevel(buf);

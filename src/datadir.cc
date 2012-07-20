@@ -13,7 +13,7 @@ bool sanity_check_datadir(char *datadir)
   char buf[1024];
   struct stat s;
 
-  sprintf(buf, "%s/../levels/1.lev", datadir);
+  sprintf(buf, "%s/levels/1.lev", datadir);
 
   if(stat(buf, &s) == 0)
     {

@@ -47,7 +47,7 @@ class BonusLevel : public GameMode
 {
  public:
   BonusLevel(remar2d *gfx, SoundManager *sfx, Input *input,
-	ScoreKeeper *scoreKeeper);
+	     ScoreKeeper *scoreKeeper, char *datadir);
   ~BonusLevel();
   Mode update();
 

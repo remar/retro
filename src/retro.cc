@@ -43,9 +43,9 @@ int main(int argc, char *argv[])
 
   remar2d *gfx = new remar2d(WIDTH, HEIGHT, BPP, FS, "Retrobattle");
 
-  SoundManager *sfx = new SoundManager();
+  SoundManager *sfx = new SoundManager(datadir);
 
-  GameLogic *gameLogic = new GameLogic(input, gfx, sfx);
+  GameLogic *gameLogic = new GameLogic(input, gfx, sfx, datadir);
 
   while(gameLogic->quit() == false)
     {

@@ -28,15 +28,19 @@
 #include "BonusScoreScreen.h"
 #include "FileManager.h"
 
-GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx)
+GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx, char *datadir)
   : input(i), graphics(gfx), sound(sfx),
     lastFrameTime(SDL_GetTicks() / 1000.0), cyclesLeftOver(0), quitGame(false),
-    fullScreen(false)
+    fullScreen(false), datadir(datadir)
 {
+  char buf[1024];
+
   srand(time(0));
 
   graphics->setupTileBackground(32, 32);
-  graphics->loadFont("../gfx/text.xml");
+
+  makeGfxPath(buf, datadir, "text.xml");
+  graphics->loadFont(buf);
 
   int loading = graphics->print("text", "loading");
   graphics->showSprite(loading, true);
@@ -44,58 +48,60 @@ GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx)
   graphics->redraw();
   
   /* Read in graphics */
-  const char *sprites[] = {"../gfx/good.xml",
-			   "../gfx/fuzz.xml",
-			   "../gfx/pixel.xml",
-			   "../gfx/coin.xml",
-			   "../gfx/flame.xml",
-			   "../gfx/nest.xml",
-			   "../gfx/shot.xml",
-			   "../gfx/hud.xml",
-			   "../gfx/explosion.xml",
-			   "../gfx/smoke.xml",
-			   "../gfx/numbers.xml",
-			   "../gfx/drone.xml",
-			   "../gfx/clock.xml",
-			   "../gfx/ammo.xml",
-			   "../gfx/reload.xml",
-			   "../gfx/snakehead.xml",
-			   "../gfx/snakebody.xml",
-			   "../gfx/timered.xml",
-			   "../gfx/hunter.xml",
-			   "../gfx/hshot.xml",
-			   "../gfx/note.xml",
-			   "../gfx/bonus.xml",
-			   "../gfx/helmet.xml",
-			   "../gfx/redfuzz.xml",
-			   "../gfx/golddrone.xml",
-			   "../gfx/diresnakehead.xml",
-			   "../gfx/diresnakebody.xml",
-			   "../gfx/darkhunter.xml",
-			   "../gfx/dhshot.xml",
-			   "../gfx/darkexplo.xml",
-			   "../gfx/arrows.xml",
-			   "../gfx/pickup_scores.xml",
+  const char *sprites[] = {"good.xml",
+			   "fuzz.xml",
+			   "pixel.xml",
+			   "coin.xml",
+			   "flame.xml",
+			   "nest.xml",
+			   "shot.xml",
+			   "hud.xml",
+			   "explosion.xml",
+			   "smoke.xml",
+			   "numbers.xml",
+			   "drone.xml",
+			   "clock.xml",
+			   "ammo.xml",
+			   "reload.xml",
+			   "snakehead.xml",
+			   "snakebody.xml",
+			   "timered.xml",
+			   "hunter.xml",
+			   "hshot.xml",
+			   "note.xml",
+			   "bonus.xml",
+			   "helmet.xml",
+			   "redfuzz.xml",
+			   "golddrone.xml",
+			   "diresnakehead.xml",
+			   "diresnakebody.xml",
+			   "darkhunter.xml",
+			   "dhshot.xml",
+			   "darkexplo.xml",
+			   "arrows.xml",
+			   "pickup_scores.xml",
 			   0};
 
   printf("Loading sprites");
   for(int i = 0;sprites[i];i++)
     {
+      makeGfxPath(buf, datadir, sprites[i]);
       printf(".");
-      graphics->loadSprite(sprites[i]);
+      graphics->loadSprite(buf);
     }
   printf("\n");
 
-  const char *tilesets[] = {"../gfx/background.xml",
-			    "../gfx/backgroundred.xml",
-			    "../gfx/maintiles.xml",
+  const char *tilesets[] = {"background.xml",
+			    "backgroundred.xml",
+			    "maintiles.xml",
 			    0};
 
   printf("Loading tilesets");
   for(int i = 0;tilesets[i];i++)
     {
+      makeGfxPath(buf, datadir, tilesets[i]);
       printf(".");
-      graphics->loadTileSet(tilesets[i]);
+      graphics->loadTileSet(buf);
     }
   printf("\n");
 
@@ -161,11 +167,11 @@ GameLogic::update()
 	      break;
 
 	    case GAME:
-	      gameMode = new Level(graphics, sound, input, scoreKeeper);
+	      gameMode = new Level(graphics, sound, input, scoreKeeper, datadir);
 	      break;
 
 	    case BONUS:
-	      gameMode = new BonusLevel(graphics, sound, input, scoreKeeper);
+	      gameMode = new BonusLevel(graphics, sound, input, scoreKeeper, datadir);
 	      break;
 
 	    case SCORE:
@@ -193,4 +199,10 @@ GameLogic::quit()
 {
   /* Should the application quit? */
   return quitGame;
+}
+
+void
+GameLogic::makeGfxPath(char *buf, char *datadir, const char *file)
+{
+  sprintf(buf, "%s/gfx/%s", datadir, file);
 }

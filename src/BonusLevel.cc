@@ -24,7 +24,7 @@
 #include <iostream>
 
 BonusLevel::BonusLevel(remar2d *gfx, SoundManager *sfx, Input *input,
-		       ScoreKeeper *scoreKeeper)
+		       ScoreKeeper *scoreKeeper, char *datadir)
   : GameMode(gfx, sfx, input, scoreKeeper)
 {
   paused = false;
@@ -47,10 +47,11 @@ BonusLevel::BonusLevel(remar2d *gfx, SoundManager *sfx, Input *input,
 
   field = new Field(gfx, sfx, &brokenBlocks, &objects,
 		    scoreKeeper->blocksTakeTwoHits(),
-		    scoreKeeper->getSkillLevel(), true);
+		    scoreKeeper->getSkillLevel(), true,
+		    datadir);
 
   char buf[1024];
-  sprintf(buf, "../levels/b%d.lev", scoreKeeper->getBonusLevel());
+  sprintf(buf, "%s/levels/b%d.lev", datadir, scoreKeeper->getBonusLevel());
 
   // TODO: Use exceptions instead of this error handling
   bool success = loadLevel(buf);

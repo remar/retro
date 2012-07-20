@@ -57,7 +57,7 @@ class Level : public GameMode
 {
  public:
   Level(remar2d *gfx, SoundManager *sfx, Input *input,
-	ScoreKeeper *scoreKeeper);
+	ScoreKeeper *scoreKeeper, char *datadir);
   ~Level();
   Mode update();
 

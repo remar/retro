@@ -23,6 +23,7 @@ RETRO =		retro.o Input.o GameLogic.o Hero.o Fuzz.o Object.o Level.o \
 
 retro:		$(RETRO) ../../remar2d/lib/libremar2d.a
 		g++ -o $@ $^ $(LIBS)
+		mv $@ ..
 
 clean:
 		rm -f *.o *~ core* retro
