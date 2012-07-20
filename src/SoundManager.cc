@@ -62,10 +62,7 @@ SoundManager::SoundManager()
       0
     };
 
-  int files = 0;
-  for(;soundFiles[files];files++);
-
-  sounds = new Mix_Chunk*[files];
+  sounds = new Mix_Chunk*[sizeof(soundFiles)/sizeof(char *) - 1];
 
   printf("Loading sounds");
   for(int i = 0;soundFiles[i];i++)
@@ -78,10 +75,7 @@ SoundManager::SoundManager()
     }
   printf("\n");
 
-  files = 0;
-  for(;musicFiles[files];files++);
-
-  songs = new Mix_Music*[files];
+  songs = new Mix_Music*[sizeof(musicFiles)/sizeof(char *) - 1];
 
   printf("Loading music");
   for(int i = 0;musicFiles[i];i++)
