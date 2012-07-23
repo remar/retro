@@ -51,6 +51,7 @@ class Fuzz : public Enemy // Object
  private:
   void attach(int posX1, int posX2, int posY1, int posY2, Direction direction);
   void attachNone();
+  void startRolling();
 
   Direction moveDirection;
   Direction lastAttachDirection;

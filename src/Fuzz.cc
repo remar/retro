@@ -195,18 +195,7 @@ Fuzz::update(Field *field, Hero *hero)
 		}
 	      else
 		{
-		  if(rollDirection == LEFT)
-		    {
-		      setMoveDir(LEFT);
-		      rollLeft();
-		      setAnimation("roll left");
-		    }
-		  else
-		    {
-		      setMoveDir(RIGHT);
-		      rollRight();
-		      setAnimation("roll right");
-		    }
+		  startRolling();
 		  pauseAnimation(false);
 		}
 	      
@@ -467,11 +456,7 @@ Fuzz::update(Field *field, Hero *hero)
 	}
       else if(stunTimer == 0)
 	{
-	  //rollRandom();
-	  if(rollDirection == LEFT)
-	    setAnimation("roll left");
-	  else
-	    setAnimation("roll right");
+	  startRolling();
 
 	  stunned = false;
 	  sfx->playSound(10, false);
@@ -684,4 +669,21 @@ void
 Fuzz::isFast()
 {
   fastFuzz = true;
+}
+
+void
+Fuzz::startRolling()
+{
+  if(rollDirection == LEFT)
+    {
+      setMoveDir(LEFT);
+      rollLeft();
+      setAnimation("roll left");
+    }
+  else
+    {
+      setMoveDir(RIGHT);
+      rollRight();
+      setAnimation("roll right");
+    }
 }

@@ -3,12 +3,11 @@
 
 * Retrobattle
 ** Features
+*** Request Ubuntu/Debian packaging
+** Features done 
+*** Fuzz being shot before rolling first time never starts to roll
 *** Variable location of data files (currently ../ )
     Make the executable relocatable.
-*** Make Ubuntu/Debian package
-*** Demo recording & playback
-*** make depend
-** Features done 
 *** Space Viper going into spikes dead-end freezes game!
 *** Proper clean-up of Space Viper when removed (remar2d bug)
 *** Score above bonus when picking up
