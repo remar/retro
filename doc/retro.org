@@ -3,7 +3,6 @@
 
 * Retrobattle
 ** Features
-*** Request Ubuntu/Debian packaging
 ** Features done 
 *** Update webpage
 *** Make source and binary packaging scripts
