@@ -1,0 +1,27 @@
+_______________________________________________________________________________
+
+                              R E T R O B A T T L E
+
+include(`binversion')_______________________________________________________________________________
+
+include(`introduction')
+
+ . Dependencies
+
+   Retrobattle depends on SDL 1.2 and SDL_mixer 1.2.
+
+
+include(`license')
+   The source code for Retrobattle is available at github.com:
+   https://github.com/remar/retro
+   https://github.com/remar/remar2d
+
+
+include(`contacting')
+
+ . Revisions
+
+   This binary release of Retrobattle is based on the following
+   revisions in the two projects retro and remar2d:
+
+include(`revisions')

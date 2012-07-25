@@ -3,10 +3,10 @@
 
 * Retrobattle
 ** Features
-*** Make source and binary packaging scripts
 *** Update webpage
 *** Request Ubuntu/Debian packaging
 ** Features done 
+*** Make source and binary packaging scripts
 *** Fuzz being shot before rolling first time never starts to roll
 *** Variable location of data files (currently ../ )
     Make the executable relocatable.
