@@ -3,6 +3,8 @@
 
 * Retrobattle
 ** Features
+*** Make source and binary packaging scripts
+*** Update webpage
 *** Request Ubuntu/Debian packaging
 ** Features done 
 *** Fuzz being shot before rolling first time never starts to roll

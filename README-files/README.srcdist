@@ -1,0 +1,33 @@
+_______________________________________________________________________________
+
+                              R E T R O B A T T L E
+
+include(`srcversion')_______________________________________________________________________________
+
+include(`introduction')
+
+include(`license')
+
+ . Compilation
+
+   To compile Retrobattle you need the SDL and SDL_mixer development
+   packages. When these prerequisites are met, simply go into the src
+   directory and type 'make'. Like this:
+
+   $ cd src/
+   $ make
+
+   Hopefully you'll get an executable called retrobattle in the root
+   directory of the Retrobattle package (i.e. retrobattle-src-*/retrobattle).
+
+
+ . Installation
+
+   Run 'make install' to install Retrobattle in /opt/retrobattle. If
+   you want to place Retrobattle somewhere else, you can specify the
+   RETROINSTALLDIR environment variable, like this:
+
+   $ sudo RETROINSTALLDIR=/usr/local/games make install
+
+
+include(`contacting')
