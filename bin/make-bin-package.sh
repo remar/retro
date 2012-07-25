@@ -40,7 +40,7 @@ rm retro/README-files/binversion
 rm retro/README-files/revisions
 
 # Copy files
-cp -r retro/retrobattle retro/COPYING retro/data $RETRO/.
+cp -r retro/retrobattle retro/COPYING retro/data retro/doc/manual.txt $RETRO/.
 
 # Create archive files
 tar cjvf $RETRO.tar.bz2 $RETRO

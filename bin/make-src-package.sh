@@ -47,7 +47,7 @@ rm retro/README-files/srcversion
 mv $RETRO/src/Makefile.srcdist $RETRO/src/Makefile
 
 # Copy files
-cp -r retro/COPYING retro/data $RETRO/.
+cp -r retro/COPYING retro/data retro/doc/manual.txt $RETRO/.
 
 # Create archive files
 tar cjvf $RETRO.tar.bz2 $RETRO
