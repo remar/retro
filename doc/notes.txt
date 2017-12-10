@@ -1,8 +1,0 @@
-NOTES
--------------------------------------------------------------------------------
-
-Ladda ner Game Maker för att kunna läsa koden... huga!
-Leta reda på en STL-referns som man kan ha offline...
-Tillåt bakgrundsbilder i remar2d (större än tiles, och placerade
-  hur-som-helst...). HUD bör vara en sån bakgrundsbild...
-Ladda ner en git-manual
