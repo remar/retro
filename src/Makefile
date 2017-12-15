@@ -2,7 +2,7 @@
 #              i.e. /home/benny/retro and /home/benny/remar2d
 
 CFLAGS =	`sdl-config --cflags` -g -Wall -I../../remar2d/include -DENABLE_BINRELOC
-CPPFLAGS =	$(CFLAGS)
+CPPFLAGS =	$(CFLAGS) -std=c++11
 
 # Uncomment the first LIBS line and comment out the other LIBS line to
 # compile without SDL_Mixer

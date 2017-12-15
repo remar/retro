@@ -52,8 +52,8 @@ class GameLogic
   /* Fixed interval time-based animation */
   static const int maximumFrameRate = 60;
   static const int minimumFrameRate = 15;
-  static const float updateInterval = 1.0 / maximumFrameRate;
-  static const float maxCyclesPerFrame = maximumFrameRate / minimumFrameRate;
+  static constexpr float updateInterval = 1.0 / maximumFrameRate;
+  static constexpr float maxCyclesPerFrame = maximumFrameRate / minimumFrameRate;
 
   float lastFrameTime;
   float cyclesLeftOver;
