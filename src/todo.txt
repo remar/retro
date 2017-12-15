@@ -1,0 +1,8 @@
+Conversion of Retrobattle to Cats++
+===================================
+
+o Make conversion program for sprite definitions
+o Make conversion program for tileset definitions
+o Update Cats functional spec as features are neede
+o Use Cats++ instead of remar2d
+o Make sure sprite names are only one word
