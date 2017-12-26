@@ -24,7 +24,7 @@
 
 SpaceViperBody::SpaceViperBody(remar2d *gfx, SoundManager *sfx, bool bright,
 			       SpaceViper *head)
-  : Enemy(gfx, "snake body", sfx, 0), head(head)
+  : Enemy(gfx, "snake_body", sfx, 0), head(head)
 {
   if(bright)
     setAnimation("light green");

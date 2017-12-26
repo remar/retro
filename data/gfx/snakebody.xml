@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<sprite version="1" name="snake body">
+<sprite version="1" name="snake_body">
 
   <animation name="dark green" loop="false">
    <image path="snakebody.bmp" size_x="14" size_y="14" key="000000"

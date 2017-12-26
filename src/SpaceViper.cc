@@ -24,7 +24,7 @@
 SpaceViper::SpaceViper(remar2d *gfx, SoundManager *sfx,
 		       ScoreKeeper *scoreKeeper, list<Enemy *> *enemies,
 		       int length)
-  : Enemy(gfx, "snake head", sfx, scoreKeeper), enemies(enemies),
+  : Enemy(gfx, "snake_head", sfx, scoreKeeper), enemies(enemies),
     moveDirection(UP), hitPoints(6), dead(false), moved(0),
     pauseTimer(0),  aimAtHero(false)
 {
@@ -38,7 +38,7 @@ SpaceViper::SpaceViper(remar2d *gfx, SoundManager *sfx,
     }
 
   gfx->removeSpriteInstance(sprite_instance);
-  sprite_instance = gfx->createSpriteInstance("snake head");
+  sprite_instance = gfx->createSpriteInstance("snake_head");
 
   setVisible(true);
   updateAnimation();

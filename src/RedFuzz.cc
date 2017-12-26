@@ -26,7 +26,7 @@ RedFuzz::RedFuzz(remar2d *gfx, SoundManager *sfx, ScoreKeeper *scoreKeeper)
 {
   // Replace Blue fuzz sprite with Red fuzz sprite
   gfx->removeSpriteInstance(sprite_instance);
-  sprite_instance = gfx->createSpriteInstance("red fuzz");
+  sprite_instance = gfx->createSpriteInstance("red_fuzz");
 
   setAnimation("roll left");
   pauseAnimation(true);
