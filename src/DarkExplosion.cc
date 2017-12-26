@@ -22,7 +22,7 @@
 #include "DarkExplosion.h"
 
 DarkExplosion::DarkExplosion(remar2d *gfx, SoundManager *sfx, int x, int y)
-  : Enemy(gfx, "dark explosion", sfx, 0), firstUpdate(true)
+  : Enemy(gfx, "dark_explosion", sfx, 0), firstUpdate(true)
 {
   moveAbs(x, y);
   setAnimation("normal");

@@ -26,7 +26,7 @@ GoldDrone::GoldDrone(remar2d *gfx, SoundManager *sfx, ScoreKeeper *scoreKeeper)
 {
   // Change sprite to Gold Drone sprite
   gfx->removeSpriteInstance(sprite_instance);
-  sprite_instance = gfx->createSpriteInstance("gold drone");
+  sprite_instance = gfx->createSpriteInstance("gold_drone");
 
   setAnimation("normal");
   setVisible(true);

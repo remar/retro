@@ -47,7 +47,7 @@ DireSpaceViper::DireSpaceViper(remar2d *gfx, SoundManager *sfx,
       enemies->push_back(b);
     }
 
-  sprite_instance = gfx->createSpriteInstance("dire snake head");
+  sprite_instance = gfx->createSpriteInstance("dire_snake_head");
   setVisible(true);
   updateAnimation();
 

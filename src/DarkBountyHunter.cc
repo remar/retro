@@ -29,7 +29,7 @@ DarkBountyHunter::DarkBountyHunter(remar2d *gfx, SoundManager *sfx,
   : BountyHunter(gfx, sfx, scoreKeeper, enemies, objects)
 {
   gfx->removeSpriteInstance(sprite_instance);
-  sprite_instance = gfx->createSpriteInstance("dark hunter");
+  sprite_instance = gfx->createSpriteInstance("dark_hunter");
 
   setAnimation("left");
   setVisible(false);

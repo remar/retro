@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<sprite version="1" name="score sign">
+<sprite version="1" name="score_sign">
 
   <animation name="200" loop="false">
    <image path="pickup_scores.bmp" size_x="22" size_y="9" key="000000"

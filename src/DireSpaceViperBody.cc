@@ -27,7 +27,7 @@ DireSpaceViperBody::DireSpaceViperBody(remar2d *gfx, SoundManager *sfx,
 {
   // Remove gfx, add new gfx
   gfx->removeSpriteInstance(sprite_instance);
-  sprite_instance = gfx->createSpriteInstance("dire snake body");
+  sprite_instance = gfx->createSpriteInstance("dire_snake_body");
 
   if(bright)
     setAnimation("light purple");

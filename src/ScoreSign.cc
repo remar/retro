@@ -22,7 +22,7 @@
 #include "ScoreSign.h"
 
 ScoreSign::ScoreSign(remar2d *gfx, ScoreSign::ScoreSignAmount amount, int x, int y)
-  : Object(gfx, "score sign", 0)
+  : Object(gfx, "score_sign", 0)
 {
   destroyTimer = 60;
 
