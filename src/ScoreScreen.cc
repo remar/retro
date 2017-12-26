@@ -90,7 +90,7 @@ ScoreScreen::ScoreScreen(remar2d *gfx, SoundManager *sfx, Input *input,
   gfx->moveSpriteAbs(scorePerCoin, 11*32+16, 10*32+8);
 
 
-  const char *fuzz = scoreKeeper->getSkillLevel() > 4 ? "red fuzz" : "fuzz";
+  const char *fuzz = scoreKeeper->getSkillLevel() > 4 ? "red_fuzz" : "fuzz";
 
   fuzzSprite = gfx->createSpriteInstance(fuzz);
   gfx->setAnimation(fuzzSprite, "roll left");
@@ -102,7 +102,7 @@ ScoreScreen::ScoreScreen(remar2d *gfx, SoundManager *sfx, Input *input,
   gfx->showSprite(scorePerFuzz, false);
   gfx->moveSpriteAbs(scorePerFuzz, 11*32+16, 11*32+8);
 
-  const char *drone = scoreKeeper->getSkillLevel() > 5 ? "gold drone" : "drone";
+  const char *drone = scoreKeeper->getSkillLevel() > 5 ? "gold_drone" : "drone";
 
   droneSprite = gfx->createSpriteInstance(drone);
   gfx->setAnimation(droneSprite, "normal");
@@ -114,7 +114,7 @@ ScoreScreen::ScoreScreen(remar2d *gfx, SoundManager *sfx, Input *input,
   gfx->showSprite(scorePerDrone, false);
   gfx->moveSpriteAbs(scorePerDrone, 11*32+16, 12*32+8);
 
-  const char *viper = scoreKeeper->getSkillLevel() > 6 ? "dire snake head" : "snake head";
+  const char *viper = scoreKeeper->getSkillLevel() > 6 ? "dire_snake_head" : "snake_head";
 
   viperSprite = gfx->createSpriteInstance(viper);
   gfx->setAnimation(viperSprite, "right");
@@ -126,7 +126,7 @@ ScoreScreen::ScoreScreen(remar2d *gfx, SoundManager *sfx, Input *input,
   gfx->showSprite(scorePerViper, false);
   gfx->moveSpriteAbs(scorePerViper, 11*32+16, 13*32+8);
 
-  const char *hunter = scoreKeeper->getSkillLevel() > 7 ? "dark hunter" : "hunter";
+  const char *hunter = scoreKeeper->getSkillLevel() > 7 ? "dark_hunter" : "hunter";
 
   hunterSprite = gfx->createSpriteInstance(hunter);
   gfx->setAnimation(hunterSprite, "right");
