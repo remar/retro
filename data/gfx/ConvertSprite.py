@@ -1,37 +1,23 @@
 from xml.etree import ElementTree
 
 def read_file(xmlfile):
-    """Read a XML sprite definition
-
-    :xmlfile: TODO
-    :returns: TODO
-
-    """
     tree = ElementTree.parse('good.xml')
-    root = tree.getroot()
-
-    if root.tag != "sprite":
-        raise TypeError("Not a sprite definition")
-
-    return root
+    return tree.getroot()
 
 def handle_animation(animation):
-    """Handle one animation
-
-    :animation: TODO
-    :returns: TODO
-
-    """
-
     print(animation.attrib)
+    anim = animation.attrib.copy()
     for child in animation:
         if child.tag == "image":
             print("Handle image:", child)
         elif child.tag == "frame":
             print("Handle frame:", child)
+    return anim
 
 if __name__ == "__main__":
     root = read_file("good.xml")
+    animations = []
     for animation in root:
-        handle_animation(animation)
+        animations.append(handle_animation(animation))
+    print(animations)
 
