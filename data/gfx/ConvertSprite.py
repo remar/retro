@@ -2,10 +2,14 @@ import json, sys
 from xml.etree import ElementTree
 
 def read_file(xmlfile):
+    print("Reading " + xmlfile + "... ", end='')
     tree = ElementTree.parse(xmlfile)
     return tree.getroot()
 
 def read_sprite(sprite):
+    if sprite.tag != "sprite":
+        # This is not a sprite definition!
+        return {'name':''}
     spr = {}
     animations = []
     for animation in sprite:
@@ -87,8 +91,14 @@ def frame_to_json(frame):
         return [int(frame['x']), int(frame['dur'])]
 
 def write_sprite(sprite_def):
+    if sprite_def['name'] == '':
+        # No sprite definition
+        print("Not a sprite definition")
+        return
     sprite_json = sprite_to_json(sprite_def)
-    with open(sprite_def['name'] + ".json", "w") as f:
+    outname = sprite_def['name'] + ".json"
+    print("Writing " + outname)
+    with open(outname, "w") as f:
         f.write(sprite_json)
 
 if __name__ == "__main__":
