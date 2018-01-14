@@ -1,0 +1,14 @@
+{
+  "animations": {
+    "normal": {
+      "frames": [[0, 1000]],
+      "looping": false,
+      "image": {
+        "path": "timered.bmp",
+        "width": 84,
+        "height": 40
+      },
+      "origin": [0, 0]
+    }
+  }
+}

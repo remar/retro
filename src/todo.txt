@@ -1,12 +1,16 @@
 Conversion of Retrobattle to Cats++
 ===================================
 
-o Make conversion program for sprite definitions
-o Make conversion program for tileset definitions
+o Convert images to png with alpha channel
+o Modify snake/diresnake head images that are going left/right
 o Update Cats functional spec and implement as features are needed
 o Use Cats++ instead of remar2d
+
 
 Done
 ====
 
-. Remove spaces from sprite definition names
+o Convert tileset definitions to json format
+o Convert sprite definitions to json format
+o Make conversion program for sprite definitions
+o Remove spaces from sprite definition names

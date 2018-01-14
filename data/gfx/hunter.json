@@ -1,0 +1,44 @@
+{
+  "animations": {
+    "blink left": {
+      "image": {
+        "width": 24,
+        "path": "hunter.bmp",
+        "height": 24
+      },
+      "frames": [[0, 100], [-1, 100]],
+      "looping": true,
+      "origin": [0, 0]
+    },
+    "blink right": {
+      "image": {
+        "width": 24,
+        "path": "hunter.bmp",
+        "height": 24
+      },
+      "frames": [[1, 100], [-1, 100]],
+      "looping": true,
+      "origin": [0, 0]
+    },
+    "right": {
+      "image": {
+        "width": 24,
+        "path": "hunter.bmp",
+        "height": 24
+      },
+      "frames": [[1, 1000]],
+      "looping": false,
+      "origin": [0, 0]
+    },
+    "left": {
+      "image": {
+        "width": 24,
+        "path": "hunter.bmp",
+        "height": 24
+      },
+      "frames": [[0, 1000]],
+      "looping": false,
+      "origin": [0, 0]
+    }
+  }
+}

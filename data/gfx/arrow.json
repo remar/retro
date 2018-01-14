@@ -1,0 +1,34 @@
+{
+  "animations": {
+    "right": {
+      "image": {
+        "path": "arrows.bmp",
+        "width": 14,
+        "height": 14
+      },
+      "looping": false,
+      "origin": [0, 0],
+      "frames": [[1, 1000]]
+    },
+    "left": {
+      "image": {
+        "path": "arrows.bmp",
+        "width": 14,
+        "height": 14
+      },
+      "looping": false,
+      "origin": [0, 0],
+      "frames": [[0, 1000]]
+    },
+    "down": {
+      "image": {
+        "path": "arrows.bmp",
+        "width": 14,
+        "height": 14
+      },
+      "looping": false,
+      "origin": [0, 0],
+      "frames": [[2, 1000]]
+    }
+  }
+}

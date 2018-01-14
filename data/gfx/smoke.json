@@ -1,0 +1,14 @@
+{
+  "animations": {
+    "normal": {
+      "image": {
+        "width": 28,
+        "path": "smoke.bmp",
+        "height": 28
+      },
+      "origin": [-2, -2],
+      "frames": [[0, 150], [1, 150], [2, 150], [3, 150], [-1, 1000]],
+      "looping": false
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "animations": {
+    "crash": {
+      "looping": false,
+      "frames": [[0, 100], [1, 100], [2, 100], [3, 100], [-1, 1000]],
+      "origin": [4, 4],
+      "image": {
+        "path": "crash.bmp",
+        "width": 32,
+        "height": 32
+      }
+    },
+    "normal": {
+      "looping": true,
+      "frames": [[0, 250], [1, 250], [2, 250], [3, 250]],
+      "origin": [0, 0],
+      "image": {
+        "path": "drone.bmp",
+        "width": 24,
+        "height": 24
+      }
+    }
+  }
+}

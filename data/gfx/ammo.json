@@ -1,0 +1,24 @@
+{
+  "animations": {
+    "hide": {
+      "looping": false,
+      "frames": [[0, 1000]],
+      "image": {
+        "width": 12,
+        "height": 12,
+        "path": "blackcover.bmp"
+      },
+      "origin": [1, 1]
+    },
+    "show": {
+      "looping": false,
+      "frames": [[0, 1000]],
+      "image": {
+        "width": 10,
+        "height": 10,
+        "path": "ammo.bmp"
+      },
+      "origin": [0, 0]
+    }
+  }
+}

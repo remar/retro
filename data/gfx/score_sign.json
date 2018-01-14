@@ -1,0 +1,44 @@
+{
+  "animations": {
+    "250": {
+      "frames": [[1, 1000]],
+      "origin": [0, 0],
+      "image": {
+        "height": 9,
+        "path": "pickup_scores.bmp",
+        "width": 22
+      },
+      "looping": false
+    },
+    "400": {
+      "frames": [[3, 1000]],
+      "origin": [0, 0],
+      "image": {
+        "height": 9,
+        "path": "pickup_scores.bmp",
+        "width": 22
+      },
+      "looping": false
+    },
+    "300": {
+      "frames": [[2, 1000]],
+      "origin": [0, 0],
+      "image": {
+        "height": 9,
+        "path": "pickup_scores.bmp",
+        "width": 22
+      },
+      "looping": false
+    },
+    "200": {
+      "frames": [[0, 1000]],
+      "origin": [0, 0],
+      "image": {
+        "height": 9,
+        "path": "pickup_scores.bmp",
+        "width": 22
+      },
+      "looping": false
+    }
+  }
+}

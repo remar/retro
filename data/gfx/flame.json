@@ -1,0 +1,24 @@
+{
+  "animations": {
+    "left": {
+      "looping": true,
+      "image": {
+        "width": 7,
+        "path": "flame.bmp",
+        "height": 8
+      },
+      "origin": [0, 0],
+      "frames": [[0, 30], [2, 30]]
+    },
+    "right": {
+      "looping": true,
+      "image": {
+        "width": 7,
+        "path": "flame.bmp",
+        "height": 8
+      },
+      "origin": [0, 0],
+      "frames": [[1, 30], [2, 30]]
+    }
+  }
+}

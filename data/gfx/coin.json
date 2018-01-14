@@ -1,0 +1,24 @@
+{
+  "animations": {
+    "pling": {
+      "frames": [[0, 150], [1, 150], [2, 150], [3, 150], [4, 150]],
+      "origin": [3, 3],
+      "looping": false,
+      "image": {
+        "path": "pling.bmp",
+        "width": 22,
+        "height": 30
+      }
+    },
+    "blink": {
+      "frames": [[0, 250], [1, 250]],
+      "origin": [0, 0],
+      "looping": true,
+      "image": {
+        "path": "coin.bmp",
+        "width": 16,
+        "height": 24
+      }
+    }
+  }
+}

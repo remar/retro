@@ -1,0 +1,24 @@
+{
+  "animations": {
+    "normal": {
+      "origin": [0, 0],
+      "looping": true,
+      "image": {
+        "path": "golddrone.bmp",
+        "width": 24,
+        "height": 24
+      },
+      "frames": [[0, 250], [1, 250], [2, 250], [3, 250]]
+    },
+    "crash": {
+      "origin": [4, 4],
+      "looping": false,
+      "image": {
+        "path": "crash.bmp",
+        "width": 32,
+        "height": 32
+      },
+      "frames": [[0, 100], [1, 100], [2, 100], [3, 100], [-1, 1000]]
+    }
+  }
+}

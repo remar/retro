@@ -1,0 +1,14 @@
+{
+  "animations": {
+    "normal": {
+      "origin": [0, 0],
+      "looping": true,
+      "image": {
+        "height": 32,
+        "path": "darkexplo.bmp",
+        "width": 32
+      },
+      "frames": [[0, 17], [1, 17], [-1, 17]]
+    }
+  }
+}

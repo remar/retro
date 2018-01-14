@@ -1,0 +1,34 @@
+{
+  "animations": {
+    "blink": {
+      "looping": true,
+      "frames": [[0, 150], [1, 150], [2, 150], [3, 150]],
+      "image": {
+        "width": 26,
+        "height": 26,
+        "path": "nestblinking.bmp"
+      },
+      "origin": [0, 0]
+    },
+    "normal": {
+      "looping": true,
+      "frames": [[0, 100], [1, 100], [2, 100], [3, 100]],
+      "image": {
+        "width": 26,
+        "height": 26,
+        "path": "nest.bmp"
+      },
+      "origin": [0, 0]
+    },
+    "locked": {
+      "looping": false,
+      "frames": [[0, 1]],
+      "image": {
+        "width": 26,
+        "height": 26,
+        "path": "lockednest.bmp"
+      },
+      "origin": [0, 0]
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "animations": {
+    "left": {
+      "image": {
+        "path": "diresnake_left.bmp",
+        "height": 24,
+        "width": 24
+      },
+      "origin": [-4, -4],
+      "frames": [[0, 250], [0, 250], [0, 250], [0, 250]],
+      "looping": true
+    },
+    "down": {
+      "image": {
+        "path": "diresnake_down.bmp",
+        "height": 24,
+        "width": 24
+      },
+      "origin": [-4, -4],
+      "frames": [[0, 250], [1, 250], [2, 250], [3, 250]],
+      "looping": true
+    },
+    "up": {
+      "image": {
+        "path": "diresnake_up.bmp",
+        "height": 24,
+        "width": 24
+      },
+      "origin": [-4, -4],
+      "frames": [[0, 250], [1, 250], [2, 250], [3, 250]],
+      "looping": true
+    },
+    "right": {
+      "image": {
+        "path": "diresnake_right.bmp",
+        "height": 24,
+        "width": 24
+      },
+      "origin": [-4, -4],
+      "frames": [[0, 250], [0, 250], [0, 250], [0, 250]],
+      "looping": true
+    }
+  }
+}

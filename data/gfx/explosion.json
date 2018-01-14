@@ -1,0 +1,14 @@
+{
+  "animations": {
+    "normal": {
+      "frames": [[0, 100], [-1, 100], [0, 100], [-1, 100], [0, 100], [-1, 100], [0, 100], [-1, 100]],
+      "looping": false,
+      "origin": [0, 0],
+      "image": {
+        "path": "explo.bmp",
+        "height": 24,
+        "width": 24
+      }
+    }
+  }
+}

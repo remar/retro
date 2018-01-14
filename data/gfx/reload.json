@@ -1,0 +1,24 @@
+{
+  "animations": {
+    "show": {
+      "origin": [0, 0],
+      "frames": [[0, 1000]],
+      "image": {
+        "width": 12,
+        "path": "reload.bmp",
+        "height": 12
+      },
+      "looping": false
+    },
+    "hide": {
+      "origin": [0, 0],
+      "frames": [[0, 1000]],
+      "image": {
+        "width": 12,
+        "path": "blackcover.bmp",
+        "height": 12
+      },
+      "looping": false
+    }
+  }
+}

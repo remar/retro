@@ -1,0 +1,94 @@
+{
+  "animations": {
+    "0": {
+      "image": {
+        "path": "note.bmp",
+        "width": 6,
+        "height": 11
+      },
+      "frames": [[0, 1000]],
+      "origin": [0, 0],
+      "looping": false
+    },
+    "4": {
+      "image": {
+        "path": "note.bmp",
+        "width": 6,
+        "height": 11
+      },
+      "frames": [[4, 1000]],
+      "origin": [0, 0],
+      "looping": false
+    },
+    "6": {
+      "image": {
+        "path": "note.bmp",
+        "width": 6,
+        "height": 11
+      },
+      "frames": [[6, 1000]],
+      "origin": [0, 0],
+      "looping": false
+    },
+    "2": {
+      "image": {
+        "path": "note.bmp",
+        "width": 6,
+        "height": 11
+      },
+      "frames": [[2, 1000]],
+      "origin": [0, 0],
+      "looping": false
+    },
+    "3": {
+      "image": {
+        "path": "note.bmp",
+        "width": 6,
+        "height": 11
+      },
+      "frames": [[3, 1000]],
+      "origin": [0, 0],
+      "looping": false
+    },
+    "7": {
+      "image": {
+        "path": "note.bmp",
+        "width": 6,
+        "height": 11
+      },
+      "frames": [[7, 1000]],
+      "origin": [0, 0],
+      "looping": false
+    },
+    "5": {
+      "image": {
+        "path": "note.bmp",
+        "width": 6,
+        "height": 11
+      },
+      "frames": [[5, 1000]],
+      "origin": [0, 0],
+      "looping": false
+    },
+    "1": {
+      "image": {
+        "path": "note.bmp",
+        "width": 6,
+        "height": 11
+      },
+      "frames": [[1, 1000]],
+      "origin": [0, 0],
+      "looping": false
+    },
+    "8": {
+      "image": {
+        "path": "note.bmp",
+        "width": 6,
+        "height": 11
+      },
+      "frames": [[8, 1000]],
+      "origin": [0, 0],
+      "looping": false
+    }
+  }
+}

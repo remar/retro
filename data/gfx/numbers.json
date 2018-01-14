@@ -1,0 +1,104 @@
+{
+  "animations": {
+    "9": {
+      "frames": [[9, 1000]],
+      "origin": [0, 0],
+      "image": {
+        "width": 16,
+        "height": 16,
+        "path": "numbers.bmp"
+      },
+      "looping": false
+    },
+    "3": {
+      "frames": [[3, 1000]],
+      "origin": [0, 0],
+      "image": {
+        "width": 16,
+        "height": 16,
+        "path": "numbers.bmp"
+      },
+      "looping": false
+    },
+    "1": {
+      "frames": [[1, 1000]],
+      "origin": [0, 0],
+      "image": {
+        "width": 16,
+        "height": 16,
+        "path": "numbers.bmp"
+      },
+      "looping": false
+    },
+    "4": {
+      "frames": [[4, 1000]],
+      "origin": [0, 0],
+      "image": {
+        "width": 16,
+        "height": 16,
+        "path": "numbers.bmp"
+      },
+      "looping": false
+    },
+    "2": {
+      "frames": [[2, 1000]],
+      "origin": [0, 0],
+      "image": {
+        "width": 16,
+        "height": 16,
+        "path": "numbers.bmp"
+      },
+      "looping": false
+    },
+    "7": {
+      "frames": [[7, 1000]],
+      "origin": [0, 0],
+      "image": {
+        "width": 16,
+        "height": 16,
+        "path": "numbers.bmp"
+      },
+      "looping": false
+    },
+    "8": {
+      "frames": [[8, 1000]],
+      "origin": [0, 0],
+      "image": {
+        "width": 16,
+        "height": 16,
+        "path": "numbers.bmp"
+      },
+      "looping": false
+    },
+    "5": {
+      "frames": [[5, 1000]],
+      "origin": [0, 0],
+      "image": {
+        "width": 16,
+        "height": 16,
+        "path": "numbers.bmp"
+      },
+      "looping": false
+    },
+    "6": {
+      "frames": [[6, 1000]],
+      "origin": [0, 0],
+      "image": {
+        "width": 16,
+        "height": 16,
+        "path": "numbers.bmp"
+      },
+      "looping": false
+    },
+    "0": {
+      "frames": [[0, 1000]],
+      "origin": [0, 0],
+      "image": {
+        "width": 16,
+        "height": 16,
+        "path": "numbers.bmp"
+      },
+      "looping": false
+    }
+  }
+}

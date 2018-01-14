@@ -1,0 +1,14 @@
+{
+  "animations": {
+    "normal": {
+      "looping": false,
+      "origin": [0, 0],
+      "frames": [[10, 1000]],
+      "image": {
+        "height": 20,
+        "path": "bonuses.bmp",
+        "width": 20
+      }
+    }
+  }
+}

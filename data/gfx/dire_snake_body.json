@@ -1,0 +1,34 @@
+{
+  "animations": {
+    "dark purple": {
+      "image": {
+        "width": 14,
+        "height": 14,
+        "path": "diresnake_body.bmp"
+      },
+      "looping": false,
+      "frames": [[0, 1000]],
+      "origin": [-9, -9]
+    },
+    "light purple": {
+      "image": {
+        "width": 14,
+        "height": 14,
+        "path": "diresnake_body.bmp"
+      },
+      "looping": false,
+      "frames": [[1, 1000]],
+      "origin": [-9, -9]
+    },
+    "splat": {
+      "image": {
+        "width": 14,
+        "height": 14,
+        "path": "diresnake_splat.bmp"
+      },
+      "looping": false,
+      "frames": [[0, 200], [1, 200], [2, 200], [3, 200], [4, 200], [5, 200], [6, 200], [-1, 1000]],
+      "origin": [-9, -9]
+    }
+  }
+}

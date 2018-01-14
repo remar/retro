@@ -1,0 +1,104 @@
+{
+  "animations": {
+    "stand left": {
+      "image": {
+        "width": 16,
+        "path": "goodleft.bmp",
+        "height": 24
+      },
+      "frames": [[0, 1]],
+      "looping": false,
+      "origin": [0, 0]
+    },
+    "blink left": {
+      "image": {
+        "width": 16,
+        "path": "goodleft.bmp",
+        "height": 24
+      },
+      "frames": [[0, 150], [-1, 150]],
+      "looping": true,
+      "origin": [0, 0]
+    },
+    "stand right": {
+      "image": {
+        "width": 16,
+        "path": "goodright.bmp",
+        "height": 24
+      },
+      "frames": [[0, 1]],
+      "looping": false,
+      "origin": [0, 0]
+    },
+    "run right": {
+      "image": {
+        "width": 16,
+        "path": "goodright.bmp",
+        "height": 24
+      },
+      "frames": [[1, 50], [2, 50], [3, 50], [0, 50]],
+      "looping": true,
+      "origin": [0, 0]
+    },
+    "fly left": {
+      "image": {
+        "width": 16,
+        "path": "goodleft.bmp",
+        "height": 24
+      },
+      "frames": [[2, 1]],
+      "looping": false,
+      "origin": [0, 0]
+    },
+    "death left": {
+      "image": {
+        "width": 16,
+        "path": "deathleft.bmp",
+        "height": 24
+      },
+      "frames": [[0, 1000], [1, 80], [2, 80], [3, 80], [4, 80], [5, 80], [6, 80], [7, 80], [8, 80], [9, 80], [10, 80], [11, 80], [12, 80], [13, 80], [14, 80], [-1, 1000]],
+      "looping": false,
+      "origin": [0, 0]
+    },
+    "death right": {
+      "image": {
+        "width": 16,
+        "path": "deathright.bmp",
+        "height": 24
+      },
+      "frames": [[0, 1000], [1, 80], [2, 80], [3, 80], [4, 80], [5, 80], [6, 80], [7, 80], [8, 80], [9, 80], [10, 80], [11, 80], [12, 80], [13, 80], [14, 80], [-1, 1000]],
+      "looping": false,
+      "origin": [0, 0]
+    },
+    "blink right": {
+      "image": {
+        "width": 16,
+        "path": "goodright.bmp",
+        "height": 24
+      },
+      "frames": [[0, 150], [-1, 150]],
+      "looping": true,
+      "origin": [0, 0]
+    },
+    "fly right": {
+      "image": {
+        "width": 16,
+        "path": "goodright.bmp",
+        "height": 24
+      },
+      "frames": [[2, 1]],
+      "looping": false,
+      "origin": [0, 0]
+    },
+    "run left": {
+      "image": {
+        "width": 16,
+        "path": "goodleft.bmp",
+        "height": 24
+      },
+      "frames": [[1, 50], [2, 50], [3, 50], [0, 50]],
+      "looping": true,
+      "origin": [0, 0]
+    }
+  }
+}

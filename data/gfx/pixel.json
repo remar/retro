@@ -1,0 +1,14 @@
+{
+  "animations": {
+    "pixel": {
+      "frames": [[0, 1]],
+      "looping": false,
+      "origin": [0, 0],
+      "image": {
+        "width": 1,
+        "height": 1,
+        "path": "pixel.bmp"
+      }
+    }
+  }
+}

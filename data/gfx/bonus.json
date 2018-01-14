@@ -1,0 +1,114 @@
+{
+  "animations": {
+    "gold bar": {
+      "image": {
+        "height": 20,
+        "path": "bonuses.bmp",
+        "width": 20
+      },
+      "looping": false,
+      "frames": [[2, 1000]],
+      "origin": [0, 0]
+    },
+    "laser gun": {
+      "image": {
+        "height": 20,
+        "path": "bonuses.bmp",
+        "width": 20
+      },
+      "looping": false,
+      "frames": [[7, 1000]],
+      "origin": [0, 0]
+    },
+    "bomb": {
+      "image": {
+        "height": 20,
+        "path": "bonuses.bmp",
+        "width": 20
+      },
+      "looping": false,
+      "frames": [[9, 1000]],
+      "origin": [0, 0]
+    },
+    "quake": {
+      "image": {
+        "height": 20,
+        "path": "bonuses.bmp",
+        "width": 20
+      },
+      "looping": false,
+      "frames": [[11, 1000]],
+      "origin": [0, 0]
+    },
+    "blue pearl": {
+      "image": {
+        "height": 20,
+        "path": "bonuses.bmp",
+        "width": 20
+      },
+      "looping": false,
+      "frames": [[3, 1000]],
+      "origin": [0, 0]
+    },
+    "lock": {
+      "image": {
+        "height": 20,
+        "path": "bonuses.bmp",
+        "width": 20
+      },
+      "looping": false,
+      "frames": [[5, 1000]],
+      "origin": [0, 0]
+    },
+    "clock": {
+      "image": {
+        "height": 20,
+        "path": "bonuses.bmp",
+        "width": 20
+      },
+      "looping": false,
+      "frames": [[8, 1000]],
+      "origin": [0, 0]
+    },
+    "diamond": {
+      "image": {
+        "height": 20,
+        "path": "bonuses.bmp",
+        "width": 20
+      },
+      "looping": false,
+      "frames": [[1, 1000]],
+      "origin": [0, 0]
+    },
+    "white ball": {
+      "image": {
+        "height": 20,
+        "path": "bonuses.bmp",
+        "width": 20
+      },
+      "looping": false,
+      "frames": [[4, 1000]],
+      "origin": [0, 0]
+    },
+    "power gun": {
+      "image": {
+        "height": 20,
+        "path": "bonuses.bmp",
+        "width": 20
+      },
+      "looping": false,
+      "frames": [[6, 1000]],
+      "origin": [0, 0]
+    },
+    "small coins": {
+      "image": {
+        "height": 20,
+        "path": "bonuses.bmp",
+        "width": 20
+      },
+      "looping": false,
+      "frames": [[0, 1000]],
+      "origin": [0, 0]
+    }
+  }
+}

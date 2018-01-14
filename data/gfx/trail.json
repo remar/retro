@@ -1,0 +1,14 @@
+{
+  "animations": {
+    "normal": {
+      "origin": [0, 0],
+      "looping": false,
+      "frames": [[0, 150], [1, 150], [2, 150], [3, 150], [-1, 150]],
+      "image": {
+        "path": "trail.bmp",
+        "height": 6,
+        "width": 6
+      }
+    }
+  }
+}

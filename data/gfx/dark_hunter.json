@@ -1,0 +1,44 @@
+{
+  "animations": {
+    "blink left": {
+      "frames": [[0, 100], [-1, 100]],
+      "image": {
+        "width": 24,
+        "path": "darkhunter.bmp",
+        "height": 24
+      },
+      "looping": true,
+      "origin": [0, 0]
+    },
+    "blink right": {
+      "frames": [[1, 100], [-1, 100]],
+      "image": {
+        "width": 24,
+        "path": "darkhunter.bmp",
+        "height": 24
+      },
+      "looping": true,
+      "origin": [0, 0]
+    },
+    "right": {
+      "frames": [[1, 1000]],
+      "image": {
+        "width": 24,
+        "path": "darkhunter.bmp",
+        "height": 24
+      },
+      "looping": false,
+      "origin": [0, 0]
+    },
+    "left": {
+      "frames": [[0, 1000]],
+      "image": {
+        "width": 24,
+        "path": "darkhunter.bmp",
+        "height": 24
+      },
+      "looping": false,
+      "origin": [0, 0]
+    }
+  }
+}

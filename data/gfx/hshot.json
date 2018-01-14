@@ -1,0 +1,14 @@
+{
+  "animations": {
+    "normal": {
+      "looping": true,
+      "origin": [0, 0],
+      "image": {
+        "path": "hshot.bmp",
+        "width": 6,
+        "height": 6
+      },
+      "frames": [[0, 150], [1, 150]]
+    }
+  }
+}

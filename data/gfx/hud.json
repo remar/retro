@@ -1,0 +1,14 @@
+{
+  "animations": {
+    "normal": {
+      "frames": [[0, 1000]],
+      "image": {
+        "width": 740,
+        "path": "hud.bmp",
+        "height": 70
+      },
+      "looping": true,
+      "origin": [0, 0]
+    }
+  }
+}
