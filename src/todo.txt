@@ -1,7 +1,7 @@
 Conversion of Retrobattle to Cats++
 ===================================
 
-o Read input
+o Display title screen
 o Convert images to png with alpha channel
 o Modify snake/diresnake head images that are going left/right
 o Update Cats functional spec and implement as features are needed
@@ -11,6 +11,7 @@ o Use Cats++ instead of remar2d
 Done
 ====
 
+o Read input
 o Create 800x600 Cats window
 o Convert tileset definitions to json format
 o Convert sprite definitions to json format

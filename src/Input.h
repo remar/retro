@@ -22,7 +22,8 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include "SDL.h"
+#include <SDL2/SDL.h>
+#include <map>
 
 typedef struct
 {
@@ -34,7 +35,7 @@ typedef struct
 class Input
 {
  private:
-  key_type keys[SDLK_LAST];
+  std::map<int,key_type> keys;
   int timeout;
   bool quitEvent;
   int actionKeys[4];

@@ -21,7 +21,7 @@
 
 #include "Cats.h"
 
-// #include "Input.h"
+#include "Input.h"
 // #include "GameLogic.h"
 // #include "SoundManager.h"
 #include "datadir.h"
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 
   SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 
-  //  Input *input = new Input();
+  Input *input = new Input();
 
   Cats::Init(WIDTH, HEIGHT);
   Cats::SetWindowTitle("Retrobattle");
@@ -53,9 +53,9 @@ int main(int argc, char *argv[])
 
   //GameLogic *gameLogic = new GameLogic(input, gfx, sfx, datadir);
 
-  while(/*gameLogic->quit() == false*/ false)
+  while(/*gameLogic->quit() == false*/ !input->pressed(SDLK_ESCAPE))
     {
-      //      input->getInput();
+      input->getInput();
 
       // gameLogic->update();
 
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
   //delete gameLogic;
   //delete sfx;
   //delete gfx;
-  //delete input;
+  delete input;
   free(datadir);
 
   //#ifndef NO_SDL_MIXER
