@@ -22,7 +22,7 @@
 #include "Cats.h"
 
 #include "Input.h"
-// #include "GameLogic.h"
+#include "GameLogic.h"
 // #include "SoundManager.h"
 #include "datadir.h"
 
@@ -51,23 +51,21 @@ int main(int argc, char *argv[])
 
   // SoundManager *sfx = new SoundManager(datadir);
 
-  //GameLogic *gameLogic = new GameLogic(input, gfx, sfx, datadir);
+  GameLogic *gameLogic = new GameLogic(input, /*sfx*/0, datadir);
 
-  while(/*gameLogic->quit() == false*/ !input->pressed(SDLK_ESCAPE))
+  while(gameLogic->quit() == false)
     {
       input->getInput();
 
-      // gameLogic->update();
+      gameLogic->update();
 
-      // gfx->redraw();
       Cats::Redraw(0.16666f);
 
       SDL_Delay(5);
     }
 
-  //delete gameLogic;
+  delete gameLogic;
   //delete sfx;
-  //delete gfx;
   delete input;
   free(datadir);
 

@@ -19,17 +19,18 @@
  *    Original authors contact info: andreas.remar@gmail.com
  */
 
+#include "Cats.h"
 #include "Menu.h"
 #include "FileManager.h"
 
 #define MOVE_ARROWS_TIMEOUT 30
 
-Menu::Menu(remar2d *gfx, SoundManager *sfx, Input *input,
+Menu::Menu(SoundManager *sfx, Input *input,
 	   ScoreKeeper *scoreKeeper)
-  : GameMode(gfx, sfx, input, scoreKeeper), level(1), nextTimer(0),
+  : GameMode(sfx, input, scoreKeeper), level(1), nextTimer(0),
     subMode(NORMAL), moveArrowsTimer(MOVE_ARROWS_TIMEOUT), arrowOffset(2)
 {
-  gfx->setupTileBackground(16, 16);
+  Cats::SetupTileLayer(50, 38, 16, 16);
 
   scoreKeeper->setBonusLevel(1);
 
@@ -38,81 +39,78 @@ Menu::Menu(remar2d *gfx, SoundManager *sfx, Input *input,
 
   drawBackground();
 
-  remar_games_2012 = gfx->print("text", "remar games 2012");
-  gfx->showSprite(remar_games_2012, true);
-  gfx->moveSpriteAbs(remar_games_2012, 144, 208);
+  // remar_games_2012 = gfx->print("text", "remar games 2012");
+  // gfx->showSprite(remar_games_2012, true);
+  // gfx->moveSpriteAbs(remar_games_2012, 144, 208);
 
-  enter_to_start = gfx->print("text", "press enter to start");
-  gfx->showSprite(enter_to_start, true);
-  gfx->moveSpriteAbs(enter_to_start, 240, 304-32);
+  // enter_to_start = gfx->print("text", "press enter to start");
+  // gfx->showSprite(enter_to_start, true);
+  // gfx->moveSpriteAbs(enter_to_start, 240, 304-32);
 
-  space_to_set_keys = gfx->print("text", "press space to set keys");
-  gfx->showSprite(space_to_set_keys, true);
-  gfx->moveSpriteAbs(space_to_set_keys, 240-24, 304);
+  // space_to_set_keys = gfx->print("text", "press space to set keys");
+  // gfx->showSprite(space_to_set_keys, true);
+  // gfx->moveSpriteAbs(space_to_set_keys, 240-24, 304);
 
-  stage = gfx->print("text", "stage");
-  gfx->showSprite(stage, true);
-  gfx->moveSpriteAbs(stage, 336, 336);
+  // stage = gfx->print("text", "stage");
+  // gfx->showSprite(stage, true);
+  // gfx->moveSpriteAbs(stage, 336, 336);
 
-  levelCounter = new Counter(gfx, 2);
+  levelCounter = new Counter(2);
   levelCounter->setPosition(432, 336);
   levelCounter->setCounter(level);
 
-  skillLevel = gfx->print("text", "skill");
-  gfx->showSprite(skillLevel, true);
-  gfx->moveSpriteAbs(skillLevel, 336, 336+32);
+  // skillLevel = gfx->print("text", "skill");
+  // gfx->showSprite(skillLevel, true);
+  // gfx->moveSpriteAbs(skillLevel, 336, 336+32);
 
-  skillCounter = new Counter(gfx, 1);
+  skillCounter = new Counter(1);
   skillCounter->setPosition(432+16, 336+32);
   skillCounter->setCounter(skill);
 
   char buf[32];
-  sprintf(buf, "score %8.8d", scoreKeeper->getScore());
+  // sprintf(buf, "score %8.8d", scoreKeeper->getScore());
 
-  score = gfx->print("text", buf);
-  gfx->showSprite(score, true);
-  gfx->moveSpriteAbs(score, 16*18, 16*27 + 4);
+  // score = gfx->print("text", buf);
+  // gfx->showSprite(score, true);
+  // gfx->moveSpriteAbs(score, 16*18, 16*27 + 4);
 
   sprintf(buf, " top  %8.8d", scoreKeeper->getTopScore());
 
-  topScore = gfx->print("text", buf);
-  gfx->showSprite(topScore, true);
-  gfx->moveSpriteAbs(topScore, 16*18, 16*27+32  - 4);
+  // topScore = gfx->print("text", buf);
+  // gfx->showSprite(topScore, true);
+  // gfx->moveSpriteAbs(topScore, 16*18, 16*27+32  - 4);
 
   const char *aStrings[] = {"left", "right", "fire", "jump"};
   for(int i = 0;i < 4;i++)
     {
-      actionStrings[i] = gfx->print("text", aStrings[i]);
-      gfx->showSprite(actionStrings[i], false);
-      gfx->moveSpriteAbs(actionStrings[i], 16*3, 16*25 + 32 * i);
+      // actionStrings[i] = gfx->print("text", aStrings[i]);
+      // gfx->showSprite(actionStrings[i], false);
+      // gfx->moveSpriteAbs(actionStrings[i], 16*3, 16*25 + 32 * i);
     }
 
-  leftArrow = gfx->createSpriteInstance("arrow");
-  gfx->setAnimation(leftArrow, "left");
-  gfx->moveSpriteAbs(leftArrow, 336 - 14*2, 336 + 1);
-  gfx->showSprite(leftArrow, true);
+  leftArrow = Cats::CreateSpriteInstance("arrow");
+  Cats::SetAnimation(leftArrow, "left");
+  Cats::SetSpritePosition(leftArrow, 336 - 14*2, 336 + 1);
 
-  rightArrow = gfx->createSpriteInstance("arrow");
-  gfx->setAnimation(rightArrow, "right");
-  gfx->moveSpriteAbs(rightArrow, 336 + 7*16 + 14*2, 336 + 1);
-  gfx->showSprite(rightArrow, true);
+  rightArrow = Cats::CreateSpriteInstance("arrow");
+  Cats::SetAnimation(rightArrow, "right");
+  Cats::SetSpritePosition(rightArrow, 336 + 7*16 + 14*2, 336 + 1);
 
-  downArrow = gfx->createSpriteInstance("arrow");
-  gfx->setAnimation(downArrow, "down");
-  gfx->moveSpriteAbs(downArrow, 336 + 7*16 + 14*2, 336 + 32);
-  gfx->showSprite(downArrow, true);
+  downArrow = Cats::CreateSpriteInstance("arrow");
+  Cats::SetAnimation(downArrow, "down");
+  Cats::SetSpritePosition(downArrow, 336 + 7*16 + 14*2, 336 + 32);
 }
 
 Menu::~Menu()
 {
-  gfx->removeSpriteInstance(remar_games_2012);
-  gfx->removeSpriteInstance(enter_to_start);
-  gfx->removeSpriteInstance(stage);
-  gfx->removeSpriteInstance(space_to_set_keys);
-  gfx->removeSpriteInstance(skillLevel);
-  gfx->removeSpriteInstance(leftArrow);
-  gfx->removeSpriteInstance(rightArrow);
-  gfx->removeSpriteInstance(downArrow);
+  // gfx->removeSpriteInstance(remar_games_2012);
+  // gfx->removeSpriteInstance(enter_to_start);
+  // gfx->removeSpriteInstance(stage);
+  // gfx->removeSpriteInstance(space_to_set_keys);
+  // gfx->removeSpriteInstance(skillLevel);
+  Cats::RemoveSpriteInstance(leftArrow);
+  Cats::RemoveSpriteInstance(rightArrow);
+  Cats::RemoveSpriteInstance(downArrow);
   delete levelCounter;
   delete skillCounter;
 }
@@ -149,10 +147,10 @@ Menu::update()
 	  blinkDelay = 60;
 	}
 
-      if(blinkDelay <= 30)
-	gfx->showSprite(actionStrings[(int)subMode - 1], false);
-      else
-	gfx->showSprite(actionStrings[(int)subMode - 1], true);
+      // if(blinkDelay <= 30)
+      // 	gfx->showSprite(actionStrings[(int)subMode - 1], false);
+      // else
+      // 	gfx->showSprite(actionStrings[(int)subMode - 1], true);
 
       if(int i = input->getKeyPressed())
 	{
@@ -173,17 +171,17 @@ Menu::update()
 
 	  keyConfig[(int)subMode - 1] = i;
 
-	  gfx->showSprite(actionStrings[(int)subMode - 1], true);
+	  // gfx->showSprite(actionStrings[(int)subMode - 1], true);
 	  subMode = (SUBMODE)((int)subMode + 1);
 
 	  if(subMode > REDEFINE_JUMP)
 	    {
 	      subMode = NORMAL;
 
-	      for(int k = 0;k < 4;k++)
-		{
-		  gfx->showSprite(actionStrings[k], false);
-		}
+	      // for(int k = 0;k < 4;k++)
+	      // 	{
+	      // 	  gfx->showSprite(actionStrings[k], false);
+	      // 	}
 
 	      FileManager fileManager;
 	      fileManager.writeKeyConfig(keyConfig);
@@ -226,8 +224,8 @@ Menu::update()
 
       input->resetActionKeys();
 
-      for(int i = 0;i < 4;i++)
-	gfx->showSprite(actionStrings[i], true);
+      // for(int i = 0;i < 4;i++)
+      // 	gfx->showSprite(actionStrings[i], true);
 
       blinkDelay = 60;
     }
@@ -246,9 +244,9 @@ Menu::moveArrows()
       moveArrowsTimer--;
       if(moveArrowsTimer <= 0)
 	{
-	  gfx->moveSpriteRel(leftArrow, -arrowOffset, 0);
-	  gfx->moveSpriteRel(rightArrow, arrowOffset, 0);
-	  gfx->moveSpriteRel(downArrow, 0, arrowOffset);
+	  Cats::MoveSprite(leftArrow, -arrowOffset, 0);
+	  Cats::MoveSprite(rightArrow, arrowOffset, 0);
+	  Cats::MoveSprite(downArrow, 0, arrowOffset);
 
 	  moveArrowsTimer = MOVE_ARROWS_TIMEOUT;
 	  arrowOffset = -arrowOffset;
@@ -298,8 +296,8 @@ Menu::drawPattern(int *arr, int xOffset ,int yOffset, int width, int height)
     for(int x = 0;x < width;x++)
       {
 	i = y * width + x;
-	gfx->setTile(x + xOffset, y + yOffset, "maintiles",
-		     arr[i]%6, arr[i]/6);
+	Cats::SetTile(x + xOffset, y + yOffset, "maintiles",
+		      arr[i]%6, arr[i]/6);
       }
 }
 

@@ -9,12 +9,13 @@ CPPFLAGS =	$(CFLAGS) -std=c++11
 #LIBS =		`sdl-config --libs` ../../remar2d/lib/libremar2d.a
 LIBS =		`sdl2-config --libs` -lSDL_mixer ../../cats/cats-cpp/src/libcats.a -lSDL2_image
 
-RETRO =		retro.o binreloc.o datadir.o Input.o
-#		GameLogic.o Hero.o Fuzz.o Object.o Level.o \
-#		Coin.o Nest.o ScoreKeeper.o Spawner.o Bullet.o SoundManager.o \
+RETRO =		retro.o binreloc.o datadir.o Input.o GameLogic.o Menu.o Counter.o \
+		ScoreKeeper.o FileManager.o GameMode.o SoundManager.o
+#		Hero.o Fuzz.o Object.o Level.o \
+#		Coin.o Nest.o Spawner.o Bullet.o \
 #		BrokenBlock.o Explosion.o Smoke.o Enemy.o Counter.o Drone.o \
-#		Field.o Collectible.o HUD.o Menu.o ScoreScreen.o GameMode.o \
-#		FileManager.o BulletHandler.o BonusLevel.o BonusScoreScreen.o \
+#		Field.o Collectible.o HUD.o Menu.o ScoreScreen.o \
+#		BulletHandler.o BonusLevel.o BonusScoreScreen.o \
 #		SpaceViper.o SpaceViperBody.o BountyHunter.o \
 #		HunterBullet.o DamagingExplosion.o Bonus.o BonusSpawner.o \
 #		PowerBullet.o LaserBeam.o Helmet.o RedFuzz.o GoldDrone.o \

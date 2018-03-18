@@ -22,7 +22,6 @@
 #ifndef GAMELOGIC_H
 #define GAMELOGIC_H
 
-#include <remar2d.h>
 #include "SoundManager.h"
 #include "Input.h"
 #include "ScoreKeeper.h"
@@ -31,7 +30,7 @@
 class GameLogic
 {
  public:
-  GameLogic(Input *i, remar2d *gfx, SoundManager *sfx, char *datadir);
+  GameLogic(Input *i, SoundManager *sfx, char *datadir);
   ~GameLogic();
   void update();
   bool quit();
@@ -40,7 +39,6 @@ class GameLogic
   void makeGfxPath(char *buf, char *datadir, const char *file);
 
   Input *input;
-  remar2d *graphics;
   SoundManager *sound;
 
   ScoreKeeper *scoreKeeper;

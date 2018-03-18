@@ -19,17 +19,18 @@
  *    Original authors contact info: andreas.remar@gmail.com
  */
 
+#include "Cats.h"
 #include "GameLogic.h"
 #include <stdlib.h>
-#include "Level.h"
+//#include "Level.h"
 #include "Menu.h"
-#include "ScoreScreen.h"
-#include "BonusLevel.h"
-#include "BonusScoreScreen.h"
+//#include "ScoreScreen.h"
+//#include "BonusLevel.h"
+//#include "BonusScoreScreen.h"
 #include "FileManager.h"
 
-GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx, char *datadir)
-  : input(i), graphics(gfx), sound(sfx),
+GameLogic::GameLogic(Input *i, SoundManager *sfx, char *datadir)
+  : input(i), sound(sfx),
     lastFrameTime(SDL_GetTicks() / 1000.0), cyclesLeftOver(0), quitGame(false),
     fullScreen(false), datadir(datadir)
 {
@@ -37,49 +38,49 @@ GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx, char *datadir)
 
   srand(time(0));
 
-  graphics->setupTileBackground(32, 32);
+  Cats::SetupTileLayer(25, 19, 32, 32);
 
   makeGfxPath(buf, datadir, "text.xml");
-  graphics->loadFont(buf);
+  // graphics->loadFont(buf);
 
-  int loading = graphics->print("text", "loading");
-  graphics->showSprite(loading, true);
-  graphics->moveSpriteAbs(loading, 0, 0);
-  graphics->redraw();
+  // int loading = graphics->print("text", "loading");
+  // graphics->showSprite(loading, true);
+  // graphics->moveSpriteAbs(loading, 0, 0);
+  // graphics->redraw();
   
   /* Read in graphics */
-  const char *sprites[] = {"good.xml",
-			   "fuzz.xml",
-			   "pixel.xml",
-			   "coin.xml",
-			   "flame.xml",
-			   "nest.xml",
-			   "shot.xml",
-			   "hud.xml",
-			   "explosion.xml",
-			   "smoke.xml",
-			   "numbers.xml",
-			   "drone.xml",
-			   "clock.xml",
-			   "ammo.xml",
-			   "reload.xml",
-			   "snakehead.xml",
-			   "snakebody.xml",
-			   "timered.xml",
-			   "hunter.xml",
-			   "hshot.xml",
-			   "note.xml",
-			   "bonus.xml",
-			   "helmet.xml",
-			   "redfuzz.xml",
-			   "golddrone.xml",
-			   "diresnakehead.xml",
-			   "diresnakebody.xml",
-			   "darkhunter.xml",
-			   "dhshot.xml",
-			   "darkexplo.xml",
-			   "arrows.xml",
-			   "pickup_scores.xml",
+  const char *sprites[] = {"good.json",
+			   "fuzz.json",
+			   "pixel.json",
+			   "coin.json",
+			   "flame.json",
+			   "nest.json",
+			   "shot.json",
+			   "hud.json",
+			   "explosion.json",
+			   "smoke.json",
+			   "numbers.json",
+			   "drone.json",
+			   "clock.json",
+			   "ammo.json",
+			   "reload.json",
+			   "snake_head.json",
+			   "snake_body.json",
+			   "timered.json",
+			   "hunter.json",
+			   "hshot.json",
+			   "note.json",
+			   "bonus.json",
+			   "helmet.json",
+			   "red_fuzz.json",
+			   "gold_drone.json",
+			   "dire_snake_head.json",
+			   "dire_snake_body.json",
+			   "dark_hunter.json",
+			   "dhshot.json",
+			   "dark_explosion.json",
+			   "arrow.json",
+			   "score_sign.json",
 			   0};
 
   printf("Loading sprites");
@@ -87,13 +88,13 @@ GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx, char *datadir)
     {
       makeGfxPath(buf, datadir, sprites[i]);
       printf(".");
-      graphics->loadSprite(buf);
+      Cats::LoadSprite(buf);
     }
   printf("\n");
 
-  const char *tilesets[] = {"background.xml",
-			    "backgroundred.xml",
-			    "maintiles.xml",
+  const char *tilesets[] = {"background.json",
+			    "backgroundred.json",
+			    "maintiles.json",
 			    0};
 
   printf("Loading tilesets");
@@ -101,17 +102,17 @@ GameLogic::GameLogic(Input *i, remar2d *gfx, SoundManager *sfx, char *datadir)
     {
       makeGfxPath(buf, datadir, tilesets[i]);
       printf(".");
-      graphics->loadTileSet(buf);
+      Cats::LoadTileset(buf);
     }
   printf("\n");
 
   scoreKeeper = new ScoreKeeper();
 
-  graphics->showSprite(loading, false);
-  graphics->removeSpriteInstance(loading);
+  // graphics->showSprite(loading, false);
+  // graphics->removeSpriteInstance(loading);
 
   mode = MENU;
-  gameMode = new Menu(graphics, sound, input, scoreKeeper);
+  gameMode = new Menu(sound, input, scoreKeeper);
 
   int keyConfig[4] = {SDLK_LEFT, SDLK_RIGHT, SDLK_x, SDLK_z};
 
@@ -144,7 +145,7 @@ GameLogic::update()
   if(input->pressed(SDLK_f))
     {
       fullScreen = !fullScreen;
-      graphics->setFullScreen(fullScreen);
+      Cats::SetFullscreen(fullScreen);
     }
 
   for(;updateIterations > updateInterval; updateIterations -= updateInterval)
@@ -163,25 +164,25 @@ GameLogic::update()
 	  switch(mode)
 	    {
 	    case MENU:	
-	      gameMode = new Menu(graphics, sound, input, scoreKeeper);
+	      gameMode = new Menu(sound, input, scoreKeeper);
 	      break;
 
-	    case GAME:
-	      gameMode = new Level(graphics, sound, input, scoreKeeper, datadir);
-	      break;
+	    // case GAME:
+	    //   gameMode = new Level(graphics, sound, input, scoreKeeper, datadir);
+	    //   break;
 
-	    case BONUS:
-	      gameMode = new BonusLevel(graphics, sound, input, scoreKeeper, datadir);
-	      break;
+	    // case BONUS:
+	    //   gameMode = new BonusLevel(graphics, sound, input, scoreKeeper, datadir);
+	    //   break;
 
-	    case SCORE:
-	      gameMode = new ScoreScreen(graphics, sound, input, scoreKeeper);
-	      break;
+	    // case SCORE:
+	    //   gameMode = new ScoreScreen(graphics, sound, input, scoreKeeper);
+	    //   break;
 
-	    case BONUSSCORE:
-	      gameMode = new BonusScoreScreen(graphics, sound, input,
-					      scoreKeeper);
-	      break;
+	    // case BONUSSCORE:
+	    //   gameMode = new BonusScoreScreen(graphics, sound, input,
+	    // 				      scoreKeeper);
+	    //   break;
 
 	    case QUIT:
 	      quitGame = true;

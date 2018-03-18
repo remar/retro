@@ -22,7 +22,6 @@
 #ifndef MENU_H
 #define MENU_H
 
-#include <remar2d.h>
 #include "SoundManager.h"
 #include "Input.h"
 #include "ScoreKeeper.h"
@@ -32,7 +31,7 @@
 class Menu : public GameMode
 {
  public:
-  Menu(remar2d *gfx, SoundManager *sfx, Input *input,
+  Menu(SoundManager *sfx, Input *input,
        ScoreKeeper *scoreKeeper);
   ~Menu();
   Mode update();

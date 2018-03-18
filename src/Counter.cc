@@ -20,19 +20,19 @@
  */
 
 #include "Counter.h"
+#include "Cats.h"
 
-Counter::Counter(remar2d *gfx, int length)
+Counter::Counter(int length)
 {
-  this->gfx = gfx;
   this->length = length;
 
   sprite_instances = new int[length];
 
   for(int i = 0;i < length;i++)
     {
-      sprite_instances[i] = gfx->createSpriteInstance("numbers");
-      gfx->setAnimation(sprite_instances[i], "0");
-      gfx->showSprite(sprite_instances[i], true);
+      sprite_instances[i] = Cats::CreateSpriteInstance("numbers");
+      Cats::SetAnimation(sprite_instances[i], "0");
+      Cats::ShowSprite(sprite_instances[i], true);
     }
 
   setPosition(0, 0);
@@ -42,8 +42,8 @@ Counter::~Counter()
 {
   for(int i = 0;i < length;i++)
     {
-      gfx->showSprite(sprite_instances[i], false);
-      gfx->removeSpriteInstance(sprite_instances[i]);
+      Cats::ShowSprite(sprite_instances[i], false);
+      Cats::RemoveSpriteInstance(sprite_instances[i]);
     }
 
   delete [] sprite_instances;
@@ -54,7 +54,7 @@ Counter::setPosition(int x, int y)
 {
   for(int i = 0;i < length;i++)
     {
-      gfx->moveSpriteAbs(sprite_instances[i], x+i*16, y);
+      Cats::SetSpritePosition(sprite_instances[i], x+i*16, y);
     }
 }
 
@@ -84,7 +84,7 @@ Counter::setCounter(int v)
   for(int i = length-1, j=0;i >= 0;i--,j++)
     {
       int num = temp / exp10(i);
-      gfx->setAnimation(sprite_instances[j], nums[num]);
+      Cats::SetAnimation(sprite_instances[j], nums[num]);
       temp %= exp10(i);
     }
 }
