@@ -19,6 +19,8 @@
  *    Original authors contact info: andreas.remar@gmail.com
  */
 
+#include "Cats.h"
+
 // #include "Input.h"
 // #include "GameLogic.h"
 // #include "SoundManager.h"
@@ -43,7 +45,9 @@ int main(int argc, char *argv[])
 
   //  Input *input = new Input();
 
-  // remar2d *gfx = new remar2d(WIDTH, HEIGHT, BPP, FS, "Retrobattle");
+  Cats::Init(WIDTH, HEIGHT);
+  Cats::SetWindowTitle("Retrobattle");
+  Cats::ShowPointer(false);
 
   // SoundManager *sfx = new SoundManager(datadir);
 
@@ -56,6 +60,7 @@ int main(int argc, char *argv[])
       // gameLogic->update();
 
       // gfx->redraw();
+      Cats::Redraw(0.16666f);
 
       SDL_Delay(5);
     }

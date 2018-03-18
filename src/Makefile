@@ -1,13 +1,13 @@
 # PLEASE NOTE: 'remar2d' must be checked out as a neighbour to 'retro',
 #              i.e. /home/benny/retro and /home/benny/remar2d
 
-CFLAGS =	`sdl2-config --cflags` -g -Wall -DENABLE_BINRELOC #-I../../remar2d/include
+CFLAGS =	`sdl2-config --cflags` -g -Wall -DENABLE_BINRELOC -I../../cats/cats-cpp/src
 CPPFLAGS =	$(CFLAGS) -std=c++11
 
 # Uncomment the first LIBS line and comment out the other LIBS line to
 # compile without SDL_Mixer
 #LIBS =		`sdl-config --libs` ../../remar2d/lib/libremar2d.a
-LIBS =		`sdl2-config --libs` -lSDL_mixer #../../remar2d/lib/libremar2d.a
+LIBS =		`sdl2-config --libs` -lSDL_mixer ../../cats/cats-cpp/src/libcats.a -lSDL2_image
 
 RETRO =		retro.o binreloc.o datadir.o
 #		Input.o GameLogic.o Hero.o Fuzz.o Object.o Level.o \
