@@ -19,11 +19,13 @@
  *    Original authors contact info: andreas.remar@gmail.com
  */
 
-#include <remar2d.h>
-#include "Input.h"
-#include "GameLogic.h"
-#include "SoundManager.h"
+// #include "Input.h"
+// #include "GameLogic.h"
+// #include "SoundManager.h"
 #include "datadir.h"
+
+#include <stdlib.h>
+#include <SDL2/SDL.h>
 
 const int WIDTH = 800;
 const int HEIGHT = 600;
@@ -39,34 +41,34 @@ int main(int argc, char *argv[])
 
   SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 
-  Input *input = new Input();
+  //  Input *input = new Input();
 
-  remar2d *gfx = new remar2d(WIDTH, HEIGHT, BPP, FS, "Retrobattle");
+  // remar2d *gfx = new remar2d(WIDTH, HEIGHT, BPP, FS, "Retrobattle");
 
-  SoundManager *sfx = new SoundManager(datadir);
+  // SoundManager *sfx = new SoundManager(datadir);
 
-  GameLogic *gameLogic = new GameLogic(input, gfx, sfx, datadir);
+  //GameLogic *gameLogic = new GameLogic(input, gfx, sfx, datadir);
 
-  while(gameLogic->quit() == false)
+  while(/*gameLogic->quit() == false*/ false)
     {
-      input->getInput();
+      //      input->getInput();
 
-      gameLogic->update();
+      // gameLogic->update();
 
-      gfx->redraw();
+      // gfx->redraw();
 
       SDL_Delay(5);
     }
 
-  delete gameLogic;
-  delete sfx;
-  delete gfx;
-  delete input;
+  //delete gameLogic;
+  //delete sfx;
+  //delete gfx;
+  //delete input;
   free(datadir);
 
-#ifndef NO_SDL_MIXER
-  Mix_CloseAudio();
-#endif
+  //#ifndef NO_SDL_MIXER
+  //  Mix_CloseAudio();
+  //#endif
 
   SDL_Quit();
 }
