@@ -49,10 +49,12 @@ Input::getInput()
       switch(event.type)
 	{
 	case SDL_KEYDOWN:
-	  key.pressed = 1;
-	  key.checked = 0;
-	  key.timeout = 0;
-	  keys[event.key.keysym.sym] = key;
+	  if(event.key.repeat == 0) {
+	    key.pressed = 1;
+	    key.checked = 0;
+	    key.timeout = 0;
+	    keys[event.key.keysym.sym] = key;
+	  }
 	  break;
 
 	case SDL_KEYUP:
