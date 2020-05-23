@@ -23,7 +23,7 @@
 
 #include "Input.h"
 #include "GameLogic.h"
-// #include "SoundManager.h"
+#include "SoundManager.h"
 #include "datadir.h"
 
 #include <stdlib.h>
@@ -49,9 +49,9 @@ int main(int argc, char *argv[])
   Cats::SetWindowTitle("Retrobattle");
   Cats::ShowPointer(false);
 
-  // SoundManager *sfx = new SoundManager(datadir);
+  SoundManager *sfx = new SoundManager(datadir);
 
-  GameLogic *gameLogic = new GameLogic(input, /*sfx*/0, datadir);
+  GameLogic *gameLogic = new GameLogic(input, sfx, datadir);
 
   while(gameLogic->quit() == false)
     {
@@ -65,13 +65,13 @@ int main(int argc, char *argv[])
     }
 
   delete gameLogic;
-  //delete sfx;
+  delete sfx;
   delete input;
   free(datadir);
 
-  //#ifndef NO_SDL_MIXER
-  //  Mix_CloseAudio();
-  //#endif
+  #ifndef NO_SDL_MIXER
+  Mix_CloseAudio();
+  #endif
 
   SDL_Quit();
 }
