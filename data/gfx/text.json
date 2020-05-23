@@ -1,0 +1,9 @@
+{
+    "image": {
+	"path": "text.bmp",
+	"width": 16,
+	"height": 16
+    },
+    "characters": "abcdefghijklmnopqrstuvwxyz"
+}
+

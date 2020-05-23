@@ -40,14 +40,12 @@ GameLogic::GameLogic(Input *i, SoundManager *sfx, char *datadir)
 
   Cats::SetupTileLayer(25, 19, 32, 32);
 
-  makeGfxPath(buf, datadir, "text.xml");
-  // graphics->loadFont(buf);
+  makeGfxPath(buf, datadir, "text.json");
+  Cats::LoadFont(buf);
 
-  // int loading = graphics->print("text", "loading");
-  // graphics->showSprite(loading, true);
-  // graphics->moveSpriteAbs(loading, 0, 0);
-  // graphics->redraw();
-  
+  int loading = Cats::CreateText("text", "loading");
+  Cats::Redraw(0);
+
   /* Read in graphics */
   const char *sprites[] = {"good.json",
 			   "fuzz.json",
@@ -108,8 +106,7 @@ GameLogic::GameLogic(Input *i, SoundManager *sfx, char *datadir)
 
   scoreKeeper = new ScoreKeeper();
 
-  // graphics->showSprite(loading, false);
-  // graphics->removeSpriteInstance(loading);
+  Cats::RemoveText(loading);
 
   mode = MENU;
   gameMode = new Menu(sound, input, scoreKeeper);
