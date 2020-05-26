@@ -22,22 +22,23 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
-#include <remar2d.h>
+#include "GameMode.h"
+#include "Field.h"
+#include "BrokenBlock.h"
+#include "Object.h"
+
+/*
 #include "SoundManager.h"
 #include "Input.h"
-#include "Object.h"
 #include "Hero.h"
 #include "Fuzz.h"
 #include "Coin.h"
 #include "Nest.h"
 #include "ScoreKeeper.h"
 #include "Spawner.h"
-#include "Field.h"
 #include <map>
 #include <string>
 #include <list>
-#include "GameMode.h"
-#include "BrokenBlock.h"
 #include "Explosion.h"
 #include "Smoke.h"
 #include "Enemy.h"
@@ -52,11 +53,12 @@
 #include "Bonus.h"
 #include "BonusSpawner.h"
 #include "Helmet.h"
+*/
 
 class Level : public GameMode
 {
  public:
-  Level(remar2d *gfx, SoundManager *sfx, Input *input,
+  Level(SoundManager *sfx, Input *input,
 	ScoreKeeper *scoreKeeper, char *datadir);
   ~Level();
   Mode update();
@@ -73,17 +75,17 @@ class Level : public GameMode
   void setupHUD();
   void performWipe(Mode modeToReturn);
   void powerBulletHit(int blockX, int blockY);
-  void fireLaserBeam(int x, int y, Bullet::Direction direction);
+  // void fireLaserBeam(int x, int y, Bullet::Direction direction);
 
-  Spawner *spawner;
-  BonusSpawner *bonusSpawner;
+  // Spawner *spawner;
+  // BonusSpawner *bonusSpawner;
 
   Field *field;
 
   bool paused;
 
   /* Da player. */
-  Hero *hero;
+  // Hero *hero;
 
   /* Bullets flying through the air! (KERPOWW!!) */
 
@@ -92,12 +94,12 @@ class Level : public GameMode
 
   list<BrokenBlock *> brokenBlocks;
   list<Object *> objects;
-  list<Enemy *> enemies;
-  list<Collectible *> collectibles;
-  list<Coin *> coins;
-  list<Bullet *> bullets;
-  list<DamagingExplosion *> damagingExplosions;
-  list<Bonus *> bonuses;
+  // list<Enemy *> enemies;
+  // list<Collectible *> collectibles;
+  // list<Coin *> coins;
+  // list<Bullet *> bullets;
+  // list<DamagingExplosion *> damagingExplosions;
+  // list<Bonus *> bonuses;
 
   bool doWipe;
   int wipeTimer;
@@ -120,11 +122,11 @@ class Level : public GameMode
   int timerTimer;
   bool timerPaused;
 
-  HUD *hud;
+  // HUD *hud;
 
-  BulletHandler *bulletHandler;
+  // BulletHandler *bulletHandler;
 
-  Helmet *helmet;
+  // Helmet *helmet;
 
   Mode returnMode;
 

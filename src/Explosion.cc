@@ -21,8 +21,8 @@
 
 #include "Explosion.h"
 
-Explosion::Explosion(remar2d *gfx, SoundManager *sfx, int x, int y)
-  : Object(gfx, "explosion", sfx)
+Explosion::Explosion(SoundManager *sfx, int x, int y)
+  : Object("explosion", sfx)
 {
   deathTimer = 60;
   setAnimation("normal");

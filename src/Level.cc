@@ -19,29 +19,31 @@
  *    Original authors contact info: andreas.remar@gmail.com
  */
 
+#include "Cats.h"
 #include "Level.h"
 #include <fstream>
 #include <iostream>
-#include "PowerBullet.h"
-#include "LaserBeam.h"
-#include "GoldDrone.h"
-#include "DireSpaceViper.h"
-#include "DarkBountyHunter.h"
-#include "ScoreSign.h"
+// #include "PowerBullet.h"
+// #include "LaserBeam.h"
+// #include "GoldDrone.h"
+// #include "DireSpaceViper.h"
+// #include "DarkBountyHunter.h"
+// #include "ScoreSign.h"
 
 int DEBUG = 0;
 
-Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
+Level::Level(SoundManager *sfx, Input *input,
 	     ScoreKeeper *scoreKeeper, char *datadir)
-  : GameMode(gfx, sfx, input, scoreKeeper), stageSign(0), startDelay(60)
+  : GameMode(sfx, input, scoreKeeper), stageSign(0), startDelay(60)
 {
-  gfx->setupTileBackground(32, 32);
+  // gfx->setupTileBackground(32, 32);
+  Cats::SetupTileLayer(25, 19, 32, 32);
 
   paused = false;
   win = false;
   debugOutputTimer = 60;
   loadFailed = false;
-  hero = 0;
+  // hero = 0;
 
   scoreKeeper->setTimer(200);
   timerTimer = 60;
@@ -51,17 +53,17 @@ Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
   wipeTimer = 70;
   wipeCounter = 0;
 
-  hud = new HUD(gfx, scoreKeeper);
-  bulletHandler = new BulletHandler(hud);
-  helmet = new Helmet(gfx, sfx);
+  // hud = new HUD(gfx, scoreKeeper);
+  // bulletHandler = new BulletHandler(hud);
+  // helmet = new Helmet(gfx, sfx);
   
   scoreKeeper->resetKills();
 
-  field = new Field(gfx, sfx, &brokenBlocks, &objects,
-		    scoreKeeper->blocksTakeTwoHits(),
-		    scoreKeeper->getSkillLevel(),
-		    false /* normal blue background */,
-		    datadir);
+  field = new Field(sfx, &brokenBlocks, &objects,
+  		    scoreKeeper->blocksTakeTwoHits(),
+  		    scoreKeeper->getSkillLevel(),
+  		    false /* normal blue background */,
+  		    datadir);
 
   char buf[1024];
   sprintf(buf, "%s/data/levels/%d.lev", datadir, scoreKeeper->getLevel());
@@ -75,67 +77,69 @@ Level::Level(remar2d *gfx, SoundManager *sfx, Input *input,
       loadFailed = true;
     }
 
-  bulletHandler->setHero(hero);
+  // bulletHandler->setHero(hero);
 
-  spawner = new Spawner(&objects,
-			scoreKeeper->redFuzzes(),
-			scoreKeeper->numberOfEnemy(ScoreKeeper::Fuzz));
+  // spawner = new Spawner(&objects,
+  // 			scoreKeeper->redFuzzes(),
+  // 			scoreKeeper->numberOfEnemy(ScoreKeeper::Fuzz));
 
-  for(int i = 0;i < scoreKeeper->numberOfEnemy(ScoreKeeper::Drone);i++)
-    enemies.push_back(new Drone(gfx, sfx, scoreKeeper));
+  // for(int i = 0;i < scoreKeeper->numberOfEnemy(ScoreKeeper::Drone);i++)
+  //   enemies.push_back(new Drone(gfx, sfx, scoreKeeper));
 
-  for(int i = 0;i < scoreKeeper->numberOfEnemy(ScoreKeeper::GoldDrone);i++)
-    enemies.push_back(new GoldDrone(gfx, sfx, scoreKeeper));
+  // for(int i = 0;i < scoreKeeper->numberOfEnemy(ScoreKeeper::GoldDrone);i++)
+  //   enemies.push_back(new GoldDrone(gfx, sfx, scoreKeeper));
 
-  if(int length = scoreKeeper->numberOfEnemy(ScoreKeeper::SpaceViper))
-    {
-      SpaceViper *v = new SpaceViper(gfx, sfx, scoreKeeper, &enemies,
-				     length*8);
-      enemies.push_front(v);
-    }
+  // if(int length = scoreKeeper->numberOfEnemy(ScoreKeeper::SpaceViper))
+  //   {
+  //     SpaceViper *v = new SpaceViper(gfx, sfx, scoreKeeper, &enemies,
+  // 				     length*8);
+  //     enemies.push_front(v);
+  //   }
 
-  if(int length = scoreKeeper->numberOfEnemy(ScoreKeeper::DireSpaceViper))
-    {
-      DireSpaceViper *v = new DireSpaceViper(gfx, sfx, scoreKeeper, &enemies,
-					     length*8);
-      enemies.push_front(v);
-    }
+  // if(int length = scoreKeeper->numberOfEnemy(ScoreKeeper::DireSpaceViper))
+  //   {
+  //     DireSpaceViper *v = new DireSpaceViper(gfx, sfx, scoreKeeper, &enemies,
+  // 					     length*8);
+  //     enemies.push_front(v);
+  //   }
 
-  if(scoreKeeper->numberOfEnemy(ScoreKeeper::BountyHunter))
-    {
-      enemies.push_back(new BountyHunter(gfx, sfx, scoreKeeper, &enemies,
-					 &objects));
-    }
+  // if(scoreKeeper->numberOfEnemy(ScoreKeeper::BountyHunter))
+  //   {
+  //     enemies.push_back(new BountyHunter(gfx, sfx, scoreKeeper, &enemies,
+  // 					 &objects));
+  //   }
 
-  if(scoreKeeper->numberOfEnemy(ScoreKeeper::DarkBountyHunter))
-    {
-      enemies.push_back(new DarkBountyHunter(gfx, sfx, scoreKeeper, &enemies,
-					     &objects));
-    }
+  // if(scoreKeeper->numberOfEnemy(ScoreKeeper::DarkBountyHunter))
+  //   {
+  //     enemies.push_back(new DarkBountyHunter(gfx, sfx, scoreKeeper, &enemies,
+  // 					     &objects));
+  //   }
 
-  bonusSpawner = new BonusSpawner(gfx, field, &bonuses, &coins,
-				  scoreKeeper->getSkillLevel() >= 4);
+  // bonusSpawner = new BonusSpawner(gfx, field, &bonuses, &coins,
+  // 				  scoreKeeper->getSkillLevel() >= 4);
   
   sprintf(buf, "stage %d", scoreKeeper->getLevel());
-  stageSign = gfx->print("text", buf);
-  gfx->showSprite(stageSign, true);
-  gfx->moveSpriteAbs(stageSign, (800-16*7)/2, (600-16)/2);
+  stageSign = Cats::CreateText("text", buf); // gfx->print("text", buf);
+  Cats::SetTextPosition(stageSign, (800-16*7)/2, (600-16)/2);
+  // gfx->showSprite(stageSign, true);
+  // gfx->moveSpriteAbs(stageSign, (800-16*7)/2, (600-16)/2);
 
   showAllObjects(false);
 }
 
 Level::~Level()
 {
-  if(hud)
-    delete hud;
+  // if(hud)
+  //   delete hud;
 
-  if(helmet)
-    delete helmet;
+  // if(helmet)
+  //   delete helmet;
 
   if(stageSign)
     {
-      gfx->showSprite(stageSign, false);
-      gfx->removeSpriteInstance(stageSign);
+      Cats::RemoveText(stageSign);
+      // gfx->showSprite(stageSign, false);
+      // gfx->removeSpriteInstance(stageSign);
     }
 
   clearLevel();
@@ -186,25 +190,25 @@ Level::loadLevel(char *lev)
 	      heroStartY = y*32 + 3*32 + 8;
 	      break;
 
-	    case 4:
-	      {
-		Nest *nest = new Nest(gfx, sfx, scoreKeeper, &enemies);
-		nest->setVisible(true);
-		nest->moveAbs(x*32+3, y*32+3*32+3);
-		objects.push_back(nest);
-	      }
-	      break;
+	    // case 4:
+	    //   {
+	    // 	Nest *nest = new Nest(gfx, sfx, scoreKeeper, &enemies);
+	    // 	nest->setVisible(true);
+	    // 	nest->moveAbs(x*32+3, y*32+3*32+3);
+	    // 	objects.push_back(nest);
+	    //   }
+	    //   break;
 
-	    case 5:
-	      {
-		  Coin *coin = new Coin(gfx, sfx);
-		  coin->setVisible(true);
-		  coin->moveAbs(x*32+8, (y+3)*32 + 4);
-		  coins.push_back(coin);
+	    // case 5:
+	    //   {
+	    // 	  Coin *coin = new Coin(gfx, sfx);
+	    // 	  coin->setVisible(true);
+	    // 	  coin->moveAbs(x*32+8, (y+3)*32 + 4);
+	    // 	  coins.push_back(coin);
 
-		  scoreKeeper->addCoin();
-	      }
-	      break;
+	    // 	  scoreKeeper->addCoin();
+	    //   }
+	    //   break;
 	    }
 	}
       
@@ -215,9 +219,9 @@ Level::loadLevel(char *lev)
 	}
     }
 
-  hero = new Hero(gfx, sfx, &bullets, bulletHandler, hud);
-  hero->setVisible(true);
-  hero->moveAbs(heroStartX, heroStartY);
+  // hero = new Hero(gfx, sfx, &bullets, bulletHandler, hud);
+  // hero->setVisible(true);
+  // hero->moveAbs(heroStartX, heroStartY);
 
   field->redrawAll();
 
@@ -246,38 +250,38 @@ Level::clearLevel()
   deleteAllObjects();
 }
 
-bool
-Level::respawn(int x, int y)
-{
-  Object block(gfx, "shot", sfx);
-  block.setAnimation("normal");
-  block.setBoundingBox(32, 32, 0, 0);
-  block.moveAbs(x*32, y*32);
+// bool
+// Level::respawn(int x, int y)
+// {
+//   Object block(gfx, "shot", sfx);
+//   block.setAnimation("normal");
+//   block.setBoundingBox(32, 32, 0, 0);
+//   block.moveAbs(x*32, y*32);
 
-  /* Check for collision against Captain Good, enemies, and shots */
-  if(block.collides(hero))
-    return false;
+//   /* Check for collision against Captain Good, enemies, and shots */
+//   if(block.collides(hero))
+//     return false;
 
-  for(list<Enemy *>::iterator it = enemies.begin();it != enemies.end();it++)
-    {
-      if(block.collides((*it)))
-	return false;
-    }
+//   for(list<Enemy *>::iterator it = enemies.begin();it != enemies.end();it++)
+//     {
+//       if(block.collides((*it)))
+// 	return false;
+//     }
 
-  for(list<Bullet *>::iterator it = bullets.begin();it != bullets.end();it++)
-    {
-      if(block.collides(*it))
-	return false;
-    }
+//   for(list<Bullet *>::iterator it = bullets.begin();it != bullets.end();it++)
+//     {
+//       if(block.collides(*it))
+// 	return false;
+//     }
 
-  field->field[x][y] = Field::BREAKABLE;
-  field->drawBlockAndSurrounding(x, y);
+//   field->field[x][y] = Field::BREAKABLE;
+//   field->drawBlockAndSurrounding(x, y);
 
-  objects.push_back(new Smoke(gfx, sfx, x*32, y*32));
-  sfx->playSound(12);
+//   objects.push_back(new Smoke(gfx, sfx, x*32, y*32));
+//   sfx->playSound(12);
 
-  return true;
-}
+//   return true;
+// }
 
 Mode
 Level::update()
@@ -298,7 +302,8 @@ Level::update()
  	{
 	  for(int x = 0;x < 25;x++)
 	    {
-	      gfx->setTile(x, wipeCounter, 0, 0, 0);
+	      // Cats::SetTile(x, wipeCounter, "tileset?", 0, 0);
+	      // gfx->setTile(x, wipeCounter, 0, 0, 0);
 	    }
 
 	  wipeCounter++;
@@ -311,7 +316,7 @@ Level::update()
     {
       if(paused)
 	{
-	  helmet->setVisible(false);
+	  // helmet->setVisible(false);
 	}
       performWipe(MENU);
       return GAME;
@@ -321,7 +326,8 @@ Level::update()
     {
       if(--startDelay == 0)
 	{
-	  gfx->showSprite(stageSign, false);
+	  Cats::ShowText(stageSign, false);
+	  // gfx->showSprite(stageSign, false);
 	  showAllObjects(true);
 	  sfx->playMusic(0);
 	}
@@ -361,15 +367,15 @@ Level::update()
     return GAME;
 
 
-  if(hero->isDead())
-    {
-      timerPaused = true;
-    }
+  // if(hero->isDead())
+  //   {
+  //     timerPaused = true;
+  //   }
 
-  if(timerPaused && !hero->isBlinking() && !hero->isDead())
-    {
-      timerPaused = false;
-    }
+  // if(timerPaused && !hero->isBlinking() && !hero->isDead())
+  //   {
+  //     timerPaused = false;
+  //   }
 
   if(!timerPaused && --timerTimer == 0)
     {
@@ -379,11 +385,11 @@ Level::update()
 	{
 	  scoreKeeper->decTimer();
 	
-	  hud->setValue(HUD::TIME, scoreKeeper->getTimer());
+	  // hud->setValue(HUD::TIME, scoreKeeper->getTimer());
 
 	  if(scoreKeeper->getTimer() == 0)
 	    {
-	      hero->die();
+	      // hero->die();
 	      scoreKeeper->setTimer(100);
 	      timerPaused = true;
 	    }
@@ -416,15 +422,15 @@ Level::update()
 	  int x = (*it)->getX();
 	  int y = (*it)->getY();
 
-	  if(respawn(x, y))
-	    {
-	      delete (*it);
-	      it = brokenBlocks.erase(it);
-	    }
-	  else
-	    {
-	      (*it)->resetRespawnTimer(2*60);
-	    }
+	  // if(respawn(x, y))
+	  //   {
+	  //     delete (*it);
+	  //     it = brokenBlocks.erase(it);
+	  //   }
+	  // else
+	  //   {
+	  //     (*it)->resetRespawnTimer(2*60);
+	  //   }
 	}
     }
 
@@ -441,351 +447,351 @@ Level::update()
       objIt++;
     }
 
-  bulletHandler->update();
+  // bulletHandler->update();
 
   // DONE: Move movement code for Captain Good to Hero class
-  hero->update(input, field);
-  if(hero->destroy())
-    {
-      scoreKeeper->heroKilled();
-      hud->setValue(HUD::LIVES, scoreKeeper->getLives());
-      hud->setValue(HUD::TIME, scoreKeeper->getTimer());
+  // hero->update(input, field);
+  // if(hero->destroy())
+  //   {
+  //     scoreKeeper->heroKilled();
+  //     hud->setValue(HUD::LIVES, scoreKeeper->getLives());
+  //     hud->setValue(HUD::TIME, scoreKeeper->getTimer());
 
-      timerPaused = true;
+  //     timerPaused = true;
 
-      if(scoreKeeper->getLives() <= 0)
-	{
-	  /* GAME OVER */
-	  performWipe(SCORE);
-	  return GAME;
-	}
+  //     if(scoreKeeper->getLives() <= 0)
+  // 	{
+  // 	  /* GAME OVER */
+  // 	  performWipe(SCORE);
+  // 	  return GAME;
+  // 	}
 
-      hero->reset();
-      hero->moveAbs(heroStartX, heroStartY);
-      bulletHandler->reset();
-    }
+  //     hero->reset();
+  //     hero->moveAbs(heroStartX, heroStartY);
+  //     bulletHandler->reset();
+  //   }
 
-  spawner->update();
-  bonusSpawner->update(hero);
+  // spawner->update();
+  // bonusSpawner->update(hero);
 
-  for(list<Bonus *>::iterator it = bonuses.begin();it != bonuses.end();)
-    {
-      (*it)->update();
-      if((*it)->destroy())
-	{
-	  delete (*it);
-	  it = bonuses.erase(it);
-	}
-      else
-	{
-	  if((*it)->collides(hero) && !(*it)->getCollected())
-	    {
-	      (*it)->setCollected();
+  // for(list<Bonus *>::iterator it = bonuses.begin();it != bonuses.end();)
+  //   {
+  //     (*it)->update();
+  //     if((*it)->destroy())
+  // 	{
+  // 	  delete (*it);
+  // 	  it = bonuses.erase(it);
+  // 	}
+  //     else
+  // 	{
+  // 	  if((*it)->collides(hero) && !(*it)->getCollected())
+  // 	    {
+  // 	      (*it)->setCollected();
 
-	      Bonus::BonusType type = (*it)->getType();
-	      bool updateHUD = false;
+  // 	      Bonus::BonusType type = (*it)->getType();
+  // 	      bool updateHUD = false;
 
-	      switch(type)
-		{
-		case Bonus::SMALL_COINS:
-		  sfx->playSound(17);
-		  scoreKeeper->addScore(200);
-		  objects.push_back(new ScoreSign(gfx, ScoreSign::SCORE_200, (*it)->getX(), (*it)->getY()));
-		  updateHUD = true;
-		  break;
+  // 	      switch(type)
+  // 		{
+  // 		case Bonus::SMALL_COINS:
+  // 		  sfx->playSound(17);
+  // 		  scoreKeeper->addScore(200);
+  // 		  objects.push_back(new ScoreSign(gfx, ScoreSign::SCORE_200, (*it)->getX(), (*it)->getY()));
+  // 		  updateHUD = true;
+  // 		  break;
 
-		case Bonus::DIAMOND:
-		  sfx->playSound(17);
-		  scoreKeeper->addScore(250);
-		  objects.push_back(new ScoreSign(gfx, ScoreSign::SCORE_250, (*it)->getX(), (*it)->getY()));
-		  updateHUD = true;
-		  break;
+  // 		case Bonus::DIAMOND:
+  // 		  sfx->playSound(17);
+  // 		  scoreKeeper->addScore(250);
+  // 		  objects.push_back(new ScoreSign(gfx, ScoreSign::SCORE_250, (*it)->getX(), (*it)->getY()));
+  // 		  updateHUD = true;
+  // 		  break;
 
-		case Bonus::GOLD_BAR:
-		  sfx->playSound(17);
-		  scoreKeeper->addScore(300);
-		  objects.push_back(new ScoreSign(gfx, ScoreSign::SCORE_300, (*it)->getX(), (*it)->getY()));
-		  updateHUD = true;
-		  break;
+  // 		case Bonus::GOLD_BAR:
+  // 		  sfx->playSound(17);
+  // 		  scoreKeeper->addScore(300);
+  // 		  objects.push_back(new ScoreSign(gfx, ScoreSign::SCORE_300, (*it)->getX(), (*it)->getY()));
+  // 		  updateHUD = true;
+  // 		  break;
 
-		case Bonus::BLUE_PEARL:
-		  sfx->playSound(17);
-		  scoreKeeper->addScore(400);
-		  objects.push_back(new ScoreSign(gfx, ScoreSign::SCORE_400, (*it)->getX(), (*it)->getY()));
-		  updateHUD = true;
-		  break;
+  // 		case Bonus::BLUE_PEARL:
+  // 		  sfx->playSound(17);
+  // 		  scoreKeeper->addScore(400);
+  // 		  objects.push_back(new ScoreSign(gfx, ScoreSign::SCORE_400, (*it)->getX(), (*it)->getY()));
+  // 		  updateHUD = true;
+  // 		  break;
 
-		case Bonus::WHITE_BALL:
-		  sfx->playSound(17);
-		  bulletHandler->reset();
-		  break;
+  // 		case Bonus::WHITE_BALL:
+  // 		  sfx->playSound(17);
+  // 		  bulletHandler->reset();
+  // 		  break;
 
-		case Bonus::LOCK:
-		  sfx->playSound(17);
-		  spawner->lockNests();
-		  break;
+  // 		case Bonus::LOCK:
+  // 		  sfx->playSound(17);
+  // 		  spawner->lockNests();
+  // 		  break;
 
-		case Bonus::POWER_GUN:
-		  // inform Hero object that next shot is a power shot
-		  hero->powerShot();
-		  bulletHandler->addOne();
+  // 		case Bonus::POWER_GUN:
+  // 		  // inform Hero object that next shot is a power shot
+  // 		  hero->powerShot();
+  // 		  bulletHandler->addOne();
 
-		  sfx->playSound(17);
-		  break;
+  // 		  sfx->playSound(17);
+  // 		  break;
 
-		case Bonus::LASER_GUN:
-		  // inform Hero object that next shot is a laser shot
-		  hero->laserShot();
-		  bulletHandler->addOne();
+  // 		case Bonus::LASER_GUN:
+  // 		  // inform Hero object that next shot is a laser shot
+  // 		  hero->laserShot();
+  // 		  bulletHandler->addOne();
 
-		  sfx->playSound(17);
-		  break;
+  // 		  sfx->playSound(17);
+  // 		  break;
 
-		case Bonus::CLOCK:
-		  {
-		  int newtime = scoreKeeper->getTimer() + 50;
-		  scoreKeeper->setTimer((newtime > 200 ? 200 : newtime));
-		  hud->setValue(HUD::TIME, scoreKeeper->getTimer());
-		  sfx->playSound(17);
-		  }
-		  break;
+  // 		case Bonus::CLOCK:
+  // 		  {
+  // 		  int newtime = scoreKeeper->getTimer() + 50;
+  // 		  scoreKeeper->setTimer((newtime > 200 ? 200 : newtime));
+  // 		  hud->setValue(HUD::TIME, scoreKeeper->getTimer());
+  // 		  sfx->playSound(17);
+  // 		  }
+  // 		  break;
 
-		case Bonus::BOMB:
-		  for(list<Enemy *>::iterator nmy = enemies.begin();nmy != enemies.end();nmy++)
-		    {
-		      if(Fuzz *f = dynamic_cast<Fuzz *>(*nmy))
-			{
-			  f->stun();
-			}
-		      else
-			{
-			  (*nmy)->hit();
-			  (*nmy)->hit();
-			}
-		    }
+  // 		case Bonus::BOMB:
+  // 		  for(list<Enemy *>::iterator nmy = enemies.begin();nmy != enemies.end();nmy++)
+  // 		    {
+  // 		      if(Fuzz *f = dynamic_cast<Fuzz *>(*nmy))
+  // 			{
+  // 			  f->stun();
+  // 			}
+  // 		      else
+  // 			{
+  // 			  (*nmy)->hit();
+  // 			  (*nmy)->hit();
+  // 			}
+  // 		    }
 
-		  spawner->cancelSpawningNests();
-		  sfx->playSound(0);
+  // 		  spawner->cancelSpawningNests();
+  // 		  sfx->playSound(0);
 
-		  break;
+  // 		  break;
 
-		case Bonus::QUAKE:
-		  // damage all undamaged blocks in the Field
-		  for(int y = 0;y < 19;y++)
-		    for(int x = 0;x < 25;x++)
-		      {
-			if(field->field[x][y] == Field::BREAKABLE)
-			  {
-			    field->field[x][y] = Field::DAMAGED;
-			    field->drawBlockAndSurrounding(x, y);
-			  }
-		      }
-		  sfx->playSound(18);
+  // 		case Bonus::QUAKE:
+  // 		  // damage all undamaged blocks in the Field
+  // 		  for(int y = 0;y < 19;y++)
+  // 		    for(int x = 0;x < 25;x++)
+  // 		      {
+  // 			if(field->field[x][y] == Field::BREAKABLE)
+  // 			  {
+  // 			    field->field[x][y] = Field::DAMAGED;
+  // 			    field->drawBlockAndSurrounding(x, y);
+  // 			  }
+  // 		      }
+  // 		  sfx->playSound(18);
 
-		  break;
-		}
+  // 		  break;
+  // 		}
 
-	      if(updateHUD)
-		{
-		  hud->setValue(HUD::SCORE, scoreKeeper->getScore());
-		  hud->setValue(HUD::TOP, scoreKeeper->getTopScore());
-		  hud->setValue(HUD::LIVES, scoreKeeper->getLives());
-		}
-	    }
+  // 	      if(updateHUD)
+  // 		{
+  // 		  hud->setValue(HUD::SCORE, scoreKeeper->getScore());
+  // 		  hud->setValue(HUD::TOP, scoreKeeper->getTopScore());
+  // 		  hud->setValue(HUD::LIVES, scoreKeeper->getLives());
+  // 		}
+  // 	    }
 
-	  it++;
-	}
-    }
+  // 	  it++;
+  // 	}
+  //   }
 
-  for(list<Coin *>::iterator it = coins.begin();it != coins.end();)
-    {
-      (*it)->update();
-      if((*it)->destroy())
-	{
-	  delete (*it);
-	  it = coins.erase(it);
+  // for(list<Coin *>::iterator it = coins.begin();it != coins.end();)
+  //   {
+  //     (*it)->update();
+  //     if((*it)->destroy())
+  // 	{
+  // 	  delete (*it);
+  // 	  it = coins.erase(it);
 
-	  continue;
-	}
+  // 	  continue;
+  // 	}
 
-      if((*it)->collides(hero) && (*it)->collect())
-	{
-	  scoreKeeper->collectCoin();
+  //     if((*it)->collides(hero) && (*it)->collect())
+  // 	{
+  // 	  scoreKeeper->collectCoin();
 
-	  if(scoreKeeper->coinsLeft() == 0)
-	    {
-	      win = true;
-	      winTimer = 3*60; /* Blink background for 3 seconds */
+  // 	  if(scoreKeeper->coinsLeft() == 0)
+  // 	    {
+  // 	      win = true;
+  // 	      winTimer = 3*60; /* Blink background for 3 seconds */
 	      
-	      sfx->playMusic(1, false);
-	      deleteAllObjects();
+  // 	      sfx->playMusic(1, false);
+  // 	      deleteAllObjects();
 	      
-	      return GAME;
-	    }
-	}
+  // 	      return GAME;
+  // 	    }
+  // 	}
 
-      it++;
-    }
+  //     it++;
+  //   }
 
-  for(list<Bullet *>::iterator b = bullets.begin();b != bullets.end();)
-    {
-      /* check collision between bullet and various stuff... */
-      int x = (*b)->getX(), y = (*b)->getY();
-      int blockX, blockY;
+  // for(list<Bullet *>::iterator b = bullets.begin();b != bullets.end();)
+  //   {
+  //     /* check collision between bullet and various stuff... */
+  //     int x = (*b)->getX(), y = (*b)->getY();
+  //     int blockX, blockY;
 
-      if(LaserBeam *lb = dynamic_cast<LaserBeam *>(*b))
-	{
-	  fireLaserBeam(lb->getX()/32, lb->getY()/32, lb->getDirection());
+  //     if(LaserBeam *lb = dynamic_cast<LaserBeam *>(*b))
+  // 	{
+  // 	  fireLaserBeam(lb->getX()/32, lb->getY()/32, lb->getDirection());
 
-	  b = bullets.erase(b);
-	  continue;
-	}
+  // 	  b = bullets.erase(b);
+  // 	  continue;
+  // 	}
 
-      if(x < -5 || x > 799)
-	{
-	  delete (*b);
-	  b = bullets.erase(b);
-	  continue;
-	}
-      else if(field->objectCollidesWithBackground((*b), &blockX, &blockY))
-	{
-	  if(dynamic_cast<PowerBullet *>(*b))
-	    {
-	      powerBulletHit(blockX, blockY);
-	    }
-	  else
-	    {
-	      if(!field->blockHit(blockX, blockY))
-		{
-		  objects.push_back(new Explosion(gfx, sfx, x-9, y-9));
-		}
-	    }
+  //     if(x < -5 || x > 799)
+  // 	{
+  // 	  delete (*b);
+  // 	  b = bullets.erase(b);
+  // 	  continue;
+  // 	}
+  //     else if(field->objectCollidesWithBackground((*b), &blockX, &blockY))
+  // 	{
+  // 	  if(dynamic_cast<PowerBullet *>(*b))
+  // 	    {
+  // 	      powerBulletHit(blockX, blockY);
+  // 	    }
+  // 	  else
+  // 	    {
+  // 	      if(!field->blockHit(blockX, blockY))
+  // 		{
+  // 		  objects.push_back(new Explosion(gfx, sfx, x-9, y-9));
+  // 		}
+  // 	    }
 
-	  sfx->playSound(3, false);
+  // 	  sfx->playSound(3, false);
 
-	  delete (*b);
-	  b = bullets.erase(b);
+  // 	  delete (*b);
+  // 	  b = bullets.erase(b);
 
-	  continue;
-	}
+  // 	  continue;
+  // 	}
 
-      bool bulletRemoved = false;
-      bool removeBullet = false;
+  //     bool bulletRemoved = false;
+  //     bool removeBullet = false;
 
-      for(list<Enemy *>::iterator it = enemies.begin();it != enemies.end();
-	  it++)
-	{
-	  if((*b)->collides(*it))
-	    {
-	      if((*it)->hit())
-		{
-		  if(dynamic_cast<PowerBullet *>(*b))
-		    {
-		      powerBulletHit((*b)->getX()/32, (*b)->getY()/32);
-		    }
-		  else if(!removeBullet)
-		    {
-		      objects.push_back(new Explosion(gfx, sfx, x-9, y-9));
-		      sfx->playSound(3, false);
-		    }
+  //     for(list<Enemy *>::iterator it = enemies.begin();it != enemies.end();
+  // 	  it++)
+  // 	{
+  // 	  if((*b)->collides(*it))
+  // 	    {
+  // 	      if((*it)->hit())
+  // 		{
+  // 		  if(dynamic_cast<PowerBullet *>(*b))
+  // 		    {
+  // 		      powerBulletHit((*b)->getX()/32, (*b)->getY()/32);
+  // 		    }
+  // 		  else if(!removeBullet)
+  // 		    {
+  // 		      objects.push_back(new Explosion(gfx, sfx, x-9, y-9));
+  // 		      sfx->playSound(3, false);
+  // 		    }
 
-		  removeBullet = true;
+  // 		  removeBullet = true;
 
-		  break;
-		}
-	    }
-	}
+  // 		  break;
+  // 		}
+  // 	    }
+  // 	}
 
-      if(removeBullet)
-	{
-	  delete (*b);
-	  b = bullets.erase(b);
-	  bulletRemoved = true;
-	}
+  //     if(removeBullet)
+  // 	{
+  // 	  delete (*b);
+  // 	  b = bullets.erase(b);
+  // 	  bulletRemoved = true;
+  // 	}
 
-      if(!bulletRemoved)
-	(*b)->update();
+  //     if(!bulletRemoved)
+  // 	(*b)->update();
 
-      b++;
-    }
+  //     b++;
+  //   }
 
 
-  for(list<DamagingExplosion *>::iterator it = damagingExplosions.begin();
-      it != damagingExplosions.end();)
-    {
-      (*it)->update();
+  // for(list<DamagingExplosion *>::iterator it = damagingExplosions.begin();
+  //     it != damagingExplosions.end();)
+  //   {
+  //     (*it)->update();
 
-      if((*it)->destroy())
-	{
-	  delete (*it);
-	  it = damagingExplosions.erase(it);
-	}
-      else
-	{
-	  if((*it)->checkCollision())
-	    {
-	      // Check for collision with blocks
-	      int blockX, blockY;
-	      if(field->objectCollidesWithBackground((*it), &blockX, &blockY))
-		{
-		  field->blockHit(blockX, blockY);
-		}
-	      else
-		{
-		  // Check for collision against enemies
-		  for(list<Enemy *>::iterator nmy = enemies.begin();
-		      nmy != enemies.end(); nmy++)
-		    {
-		      if((*nmy)->collides(*it))
-			{
-			  // Two HP damage
-			  (*nmy)->hit();
-			  (*nmy)->hit();
-			}
-		    }
-		}
-	    }
+  //     if((*it)->destroy())
+  // 	{
+  // 	  delete (*it);
+  // 	  it = damagingExplosions.erase(it);
+  // 	}
+  //     else
+  // 	{
+  // 	  if((*it)->checkCollision())
+  // 	    {
+  // 	      // Check for collision with blocks
+  // 	      int blockX, blockY;
+  // 	      if(field->objectCollidesWithBackground((*it), &blockX, &blockY))
+  // 		{
+  // 		  field->blockHit(blockX, blockY);
+  // 		}
+  // 	      else
+  // 		{
+  // 		  // Check for collision against enemies
+  // 		  for(list<Enemy *>::iterator nmy = enemies.begin();
+  // 		      nmy != enemies.end(); nmy++)
+  // 		    {
+  // 		      if((*nmy)->collides(*it))
+  // 			{
+  // 			  // Two HP damage
+  // 			  (*nmy)->hit();
+  // 			  (*nmy)->hit();
+  // 			}
+  // 		    }
+  // 		}
+  // 	    }
 
-	  it++;
-	}
-    }
+  // 	  it++;
+  // 	}
+  //   }
 
-  for(list<Enemy *>::iterator it = enemies.begin();it != enemies.end();)
-    {
-      (*it)->update(field, hero);
-      if((*it)->destroy())
-	{
-	  if(dynamic_cast<Fuzz *>(*it))
-	    {
-	      /* If this is a Fuzz, make sure that Spawner respawns a
-		 Fuzz later on */
-	      spawner->addFuzz();
-	    }
-	  else if(dynamic_cast<BountyHunter *>(*it))
-	    {
-	      /* If this is a Bounty Hunter, create 3x3 explosions
-		 that damages other enemies */
-	      int hunter_x = (*it)->getX();
-	      int hunter_y = (*it)->getY();
+  // for(list<Enemy *>::iterator it = enemies.begin();it != enemies.end();)
+  //   {
+  //     (*it)->update(field, hero);
+  //     if((*it)->destroy())
+  // 	{
+  // 	  if(dynamic_cast<Fuzz *>(*it))
+  // 	    {
+  // 	      /* If this is a Fuzz, make sure that Spawner respawns a
+  // 		 Fuzz later on */
+  // 	      spawner->addFuzz();
+  // 	    }
+  // 	  else if(dynamic_cast<BountyHunter *>(*it))
+  // 	    {
+  // 	      /* If this is a Bounty Hunter, create 3x3 explosions
+  // 		 that damages other enemies */
+  // 	      int hunter_x = (*it)->getX();
+  // 	      int hunter_y = (*it)->getY();
 
-	      for(int y = -1;y < 2;y++)
-		for(int x = -1;x < 2;x++)
-		  {
-		    damagingExplosions
-		      .push_back(new DamagingExplosion(gfx, sfx, 
-						       hunter_x+x*32,
-						       hunter_y+y*32));
-		  }
-	    }
+  // 	      for(int y = -1;y < 2;y++)
+  // 		for(int x = -1;x < 2;x++)
+  // 		  {
+  // 		    damagingExplosions
+  // 		      .push_back(new DamagingExplosion(gfx, sfx, 
+  // 						       hunter_x+x*32,
+  // 						       hunter_y+y*32));
+  // 		  }
+  // 	    }
 
-	  delete (*it);
-	  it = enemies.erase(it);
-	}
-      else
-	{
-	  it++;
-	}
-    }
+  // 	  delete (*it);
+  // 	  it = enemies.erase(it);
+  // 	}
+  //     else
+  // 	{
+  // 	  it++;
+  // 	}
+  //   }
 
   return GAME;
 }
@@ -805,7 +811,7 @@ Level::pause()
       showAllObjects(true);
       sfx->playSound(13);
 
-      helmet->setVisible(false);
+      // helmet->setVisible(false);
     }
   else
     {
@@ -813,16 +819,16 @@ Level::pause()
       showAllObjects(false);
       sfx->playSound(13);
 
-      int helmet_x = hero->getX();
-      int helmet_y = hero->getY();
+      // int helmet_x = 400; // hero->getX();
+      // int helmet_y = 300; //hero->getY();
 
-      if(helmet_x < 1)
-	helmet_x = 1;
-      else if(helmet_x > 800-20)
-	helmet_x = 800-20;
+      // if(helmet_x < 1)
+      // 	helmet_x = 1;
+      // else if(helmet_x > 800-20)
+      // 	helmet_x = 800-20;
 
-      helmet->moveAbs(helmet_x-1, helmet_y);
-      helmet->setVisible(true);
+      // helmet->moveAbs(helmet_x-1, helmet_y);
+      // helmet->setVisible(true);
     }
 }
 
@@ -830,10 +836,10 @@ void
 Level::showAllObjects(bool show)
 {
   /* Show/hide all enemies */
-  for(list<Enemy *>::iterator it = enemies.begin();it != enemies.end();it++)
-    {
-      (*it)->setVisible(show);
-    }
+  // for(list<Enemy *>::iterator it = enemies.begin();it != enemies.end();it++)
+  //   {
+  //     (*it)->setVisible(show);
+  //   }
 
   /* Show/hide other objects */
   for(list<Object *>::iterator it = objects.begin();it != objects.end();it++)
@@ -841,39 +847,39 @@ Level::showAllObjects(bool show)
       (*it)->setVisible(show);
     }
 
-  for(list<Coin *>::iterator it = coins.begin();it != coins.end();it++)
-    {
-      (*it)->setVisible(show);
-    }
+  // for(list<Coin *>::iterator it = coins.begin();it != coins.end();it++)
+  //   {
+  //     (*it)->setVisible(show);
+  //   }
 
-  hero->setVisible(show);
+  // hero->setVisible(show);
 
-  for(list<Bullet *>::iterator it = bullets.begin();it != bullets.end();it++)
-    {
-      (*it)->setVisible(show);
-    }
+  // for(list<Bullet *>::iterator it = bullets.begin();it != bullets.end();it++)
+  //   {
+  //     (*it)->setVisible(show);
+  //   }
 
-  for(list<DamagingExplosion *>::iterator it = damagingExplosions.begin();
-      it != damagingExplosions.end();it++)
-    {
-      (*it)->setVisible(show);
-    }
+  // for(list<DamagingExplosion *>::iterator it = damagingExplosions.begin();
+  //     it != damagingExplosions.end();it++)
+  //   {
+  //     (*it)->setVisible(show);
+  //   }
 
-  for(list<Bonus *>::iterator it = bonuses.begin();it != bonuses.end();it++)
-    {
-      (*it)->setVisible(show);
-    }
+  // for(list<Bonus *>::iterator it = bonuses.begin();it != bonuses.end();it++)
+  //   {
+  //     (*it)->setVisible(show);
+  //   }
 }
 
 void
 Level::deleteAllObjects()
 {
   /* Remove all enemies */
-  for(list<Enemy *>::iterator it = enemies.begin();it != enemies.end();)
-    {
-      delete (*it);
-      it = enemies.erase(it);
-    }
+  // for(list<Enemy *>::iterator it = enemies.begin();it != enemies.end();)
+  //   {
+  //     delete (*it);
+  //     it = enemies.erase(it);
+  //   }
 
   /* Remove other objects */
   for(list<Object *>::iterator it = objects.begin();it != objects.end();)
@@ -882,38 +888,38 @@ Level::deleteAllObjects()
       it = objects.erase(it);
     }
 
-  for(list<Coin *>::iterator it = coins.begin();it != coins.end();)
-    {
-      delete (*it);
-      it = coins.erase(it);
-    }
+  // for(list<Coin *>::iterator it = coins.begin();it != coins.end();)
+  //   {
+  //     delete (*it);
+  //     it = coins.erase(it);
+  //   }
 
-  if(hero)
-    {
-      delete hero;
-      hero = 0;
-    }
+  // if(hero)
+  //   {
+  //     delete hero;
+  //     hero = 0;
+  //   }
 
-  for(list<Bullet *>::iterator it = bullets.begin();it != bullets.end();)
-    {
-      delete (*it);
-      it = bullets.erase(it);
-    }
+  // for(list<Bullet *>::iterator it = bullets.begin();it != bullets.end();)
+  //   {
+  //     delete (*it);
+  //     it = bullets.erase(it);
+  //   }
 
-  for(list<DamagingExplosion *>::iterator it = damagingExplosions.begin();
-      it != damagingExplosions.end();)
-    {
-      delete (*it);
-      it = damagingExplosions.erase(it);
-    }
+  // for(list<DamagingExplosion *>::iterator it = damagingExplosions.begin();
+  //     it != damagingExplosions.end();)
+  //   {
+  //     delete (*it);
+  //     it = damagingExplosions.erase(it);
+  //   }
 
-  for(list<Bonus *>::iterator it = bonuses.begin();it != bonuses.end();)
-    {
-      delete (*it);
-      it = bonuses.erase(it);
-    }
+  // for(list<Bonus *>::iterator it = bonuses.begin();it != bonuses.end();)
+  //   {
+  //     delete (*it);
+  //     it = bonuses.erase(it);
+  //   }
 
-  gfx->showSprite(stageSign, false);
+  // Cats::ShowText(stageSign, false);
 }
 
 void
@@ -923,8 +929,8 @@ Level::performWipe(Mode modeToReturn)
 
   deleteAllObjects();
   
-  delete hud;
-  hud = 0;
+  // delete hud;
+  // hud = 0;
 
   returnMode = modeToReturn;
   doWipe = true;
@@ -941,39 +947,39 @@ Level::powerBulletHit(int blockX, int blockY)
   //   x x x
   //     x
   
-  int x_off[] = {0, -1, 0, 1, -2, -1, 0, 1, 2, -1, 0, 1, 0};
-  int y_off[] = {-2, -1, -1, -1, 0, 0, 0, 0, 0, 1, 1, 1, 2};
+  // int x_off[] = {0, -1, 0, 1, -2, -1, 0, 1, 2, -1, 0, 1, 0};
+  // int y_off[] = {-2, -1, -1, -1, 0, 0, 0, 0, 0, 1, 1, 1, 2};
   
   for(int i = 0;i < 13;i++)
     {
-      damagingExplosions
-	.push_back(new DamagingExplosion(gfx, sfx, 
-					 (blockX+x_off[i])*32+4,
-					 (blockY+y_off[i])*32+4));
+      // damagingExplosions
+      // 	.push_back(new DamagingExplosion(gfx, sfx, 
+      // 					 (blockX+x_off[i])*32+4,
+      // 					 (blockY+y_off[i])*32+4));
     }
 }
 
-void
-Level::fireLaserBeam(int x, int y, Bullet::Direction direction)
-{
-  int endX, increment;
+// void
+// Level::fireLaserBeam(int x, int y, Bullet::Direction direction)
+// {
+//   int endX, increment;
   
-  if(direction == Bullet::LEFT)
-    {
-      endX = -1;
-      increment = -1;
-    }
-  else
-    {
-      endX = 25;
-      increment = 1;
-    }
+//   if(direction == Bullet::LEFT)
+//     {
+//       endX = -1;
+//       increment = -1;
+//     }
+//   else
+//     {
+//       endX = 25;
+//       increment = 1;
+//     }
   
-  for(int i = x;i != endX;i += increment)
-    {
-      damagingExplosions.push_back(new DamagingExplosion(gfx, sfx,
-							 i*32+4,
-							 y*32+4));
+//   for(int i = x;i != endX;i += increment)
+//     {
+//       damagingExplosions.push_back(new DamagingExplosion(gfx, sfx,
+// 							 i*32+4,
+// 							 y*32+4));
       
-    }
-}
+//     }
+// }

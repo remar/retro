@@ -23,7 +23,6 @@
 #define OBJECT_H
 
 #include "SDL.h"
-#include <remar2d.h>
 #include "SoundManager.h"
 
 using namespace std;
@@ -32,7 +31,7 @@ using namespace std;
 class Object
 {
  public:
-  Object(remar2d *gfx, const char *sprite, SoundManager *sfx);
+  Object(const char *sprite, SoundManager *sfx);
   virtual ~Object();
   void moveAbs(float x, float y);
   void moveRel(float x, float y);
@@ -50,7 +49,6 @@ class Object
   virtual void update();
 
  protected:
-  remar2d *gfx;
   SoundManager *sfx;
   int sprite_instance;
   float pos_x, pos_y;

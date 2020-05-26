@@ -10,11 +10,12 @@ CPPFLAGS =	$(CFLAGS) -std=c++11
 LIBS =		`sdl2-config --libs` ../../cats-cpp/src/libcats.a -lSDL2_image -lSDL2_mixer
 
 RETRO =		retro.o binreloc.o datadir.o Input.o GameLogic.o Menu.o Counter.o \
-		ScoreKeeper.o FileManager.o GameMode.o SoundManager.o
-#		Hero.o Fuzz.o Object.o Level.o \
+		ScoreKeeper.o FileManager.o GameMode.o SoundManager.o Level.o \
+		Field.o Object.o BrokenBlock.o Explosion.o
+#		Hero.o Fuzz.o \
 #		Coin.o Nest.o Spawner.o Bullet.o \
-#		BrokenBlock.o Explosion.o Smoke.o Enemy.o Counter.o Drone.o \
-#		Field.o Collectible.o HUD.o Menu.o ScoreScreen.o \
+#		Smoke.o Enemy.o Counter.o Drone.o \
+#		Collectible.o HUD.o Menu.o ScoreScreen.o \
 #		BulletHandler.o BonusLevel.o BonusScoreScreen.o \
 #		SpaceViper.o SpaceViperBody.o BountyHunter.o \
 #		HunterBullet.o DamagingExplosion.o Bonus.o BonusSpawner.o \

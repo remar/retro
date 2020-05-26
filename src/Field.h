@@ -22,7 +22,6 @@
 #ifndef FIELD_H
 #define FIELD_H
 
-#include <remar2d.h>
 #include <list>
 #include "SoundManager.h"
 #include "BrokenBlock.h"
@@ -45,9 +44,9 @@ class Field
 
   int SPIKES_LEVEL;
 
-  Field(remar2d *gfx, SoundManager *sfx,
-	list<BrokenBlock *> *brokenBlocks,
-	list<Object *> *objects,
+  Field(SoundManager *sfx,
+	std::list<BrokenBlock *> *brokenBlocks,
+	std::list<Object *> *objects,
 	bool blocksTakeTwoHits,
 	int skill,
 	bool bonusLevel,
@@ -79,8 +78,6 @@ class Field
   }
 
  private:
-
-  remar2d *gfx;
   SoundManager *sfx;
   list<BrokenBlock *> *brokenBlocks;
   list<Object *> *objects;

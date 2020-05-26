@@ -22,7 +22,7 @@
 #include "Cats.h"
 #include "GameLogic.h"
 #include <stdlib.h>
-//#include "Level.h"
+#include "Level.h"
 #include "Menu.h"
 //#include "ScoreScreen.h"
 //#include "BonusLevel.h"
@@ -164,9 +164,9 @@ GameLogic::update()
 	      gameMode = new Menu(sound, input, scoreKeeper);
 	      break;
 
-	    // case GAME:
-	    //   gameMode = new Level(graphics, sound, input, scoreKeeper, datadir);
-	    //   break;
+	    case GAME:
+	      gameMode = new Level(sound, input, scoreKeeper, datadir);
+	      break;
 
 	    // case BONUS:
 	    //   gameMode = new BonusLevel(graphics, sound, input, scoreKeeper, datadir);

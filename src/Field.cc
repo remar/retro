@@ -19,12 +19,13 @@
  *    Original authors contact info: andreas.remar@gmail.com
  */
 
+#include "Cats.h"
 #include "Field.h"
 #include "Explosion.h"
 
 #include <time.h>
 
-Field::Field(remar2d *gfx, SoundManager *sfx,
+Field::Field(SoundManager *sfx,
 	     list<BrokenBlock *> *brokenBlocks,
 	     list<Object *> *objects,
 	     bool blocksTakeTwoHits,
@@ -33,7 +34,6 @@ Field::Field(remar2d *gfx, SoundManager *sfx,
 	     char *datadir)
   : SPIKES_LEVEL(600 - 32 - 16)
 {
-  this->gfx = gfx;
   this->sfx = sfx;
   this->brokenBlocks = brokenBlocks;
   this->objects = objects;
@@ -47,24 +47,38 @@ Field::Field(remar2d *gfx, SoundManager *sfx,
   if(bonusLevel)
     {
       backgroundBlocks = "red background";
-      sprintf(buf, "%s/data/gfx/bonusblock_open.xml", datadir);
-      blocks = gfx->loadTileSet(buf);
-      sprintf(buf, "%s/data/gfx/bonusblock_solid.xml", datadir);
-      solids = gfx->loadTileSet(buf);
+      // TODO: Reference tileset "bonusblock_open" when drawing
+      sprintf(buf, "%s/data/gfx/bonusblock_open.json", datadir);
+      // blocks = gfx->loadTileSet(buf);
+      Cats::LoadTileset(buf);
+      blocks = "bonusblock_open";
+      // TODO: Reference tileset "bonusblock_solid" when drawing
+      sprintf(buf, "%s/data/gfx/bonusblock_solid.json", datadir);
+      Cats::LoadTileset(buf);
+      solids = "bonusblock_solid";
+      // solids = gfx->loadTileSet(buf);
     }
   else
     {
       backgroundBlocks = "background";
-      sprintf(buf, "%s/data/gfx/block%d.xml", datadir, skill);
-      blocks = gfx->loadTileSet((const char *)buf);
-      sprintf(buf, "%s/data/gfx/solid%d.xml", datadir, skill);
-      solids = gfx->loadTileSet((const char *)buf);
+      sprintf(buf, "%s/data/gfx/block%d.json", datadir, skill);
+      // blocks = gfx->loadTileSet((const char *)buf);
+      Cats::LoadTileset(buf);
+      blocks = "block1"; // TODO: Replace with correct block
+      sprintf(buf, "%s/data/gfx/solid%d.json", datadir, skill);
+      // solids = gfx->loadTileSet((const char *)buf);
+      Cats::LoadTileset(buf);
+      solids = "solid1"; // TODO: Replace with correct solid
     }
 
-  sprintf(buf, "%s/data/gfx/dot.xml", datadir);
-  dots = gfx->loadTileSet(buf);
-  sprintf(buf, "%s/data/gfx/spikes.xml", datadir);
-  spikes = gfx->loadTileSet(buf);
+  sprintf(buf, "%s/data/gfx/dot.json", datadir);
+  // dots = gfx->loadTileSet(buf);
+  Cats::LoadTileset(buf);
+  dots = "dots";
+  sprintf(buf, "%s/data/gfx/spikes.json", datadir);
+  spikes = "spikes";
+  // spikes = gfx->loadTileSet(buf);
+  Cats::LoadTileset(buf);
 }
 
 /* Return true if this destroyed a block, false otherwise */
@@ -114,7 +128,7 @@ Field::breakBlock(int x, int y, bool createExplosion)
 
   if(createExplosion)
     {
-      objects->push_back(new Explosion(gfx, sfx, x*32+4, y*32+4));
+      objects->push_back(new Explosion(sfx, x*32+4, y*32+4));
     }
 
   drawBlockAndSurrounding(x, y);
@@ -149,19 +163,19 @@ Field::drawBlock(int x, int y)
 
   if(field[x][y] == Field::SOLID)
     {
-      gfx->setTile(x, y, solids, the_map[i], 0);
+      Cats::SetTile(x, y, solids, the_map[i], 0);
     }
   else if(field[x][y] == Field::BREAKABLE)
     {
-      gfx->setTile(x, y, blocks, the_map[i], 0);
+      Cats::SetTile(x, y, blocks, the_map[i], 0);
     }
   else if(field[x][y] == Field::DAMAGED)
     {
-      gfx->setTile(x, y, blocks, the_map[i] + 16, 0);
+      Cats::SetTile(x, y, blocks, the_map[i] + 16, 0);
     }
   else if(field[x][y] == Field::BROKEN)
     {
-      gfx->setTile(x, y, dots, bonusLevel ? 2 : skill-1, 0);
+      Cats::SetTile(x, y, dots, bonusLevel ? 2 : skill-1, 0);
     }
 }
 
@@ -185,59 +199,59 @@ Field::redrawAll(bool bright)
 
   for(int i = 0;i < 25;i++)
     {
-      gfx->setTile(i, 0, backgroundBlocks, 0+offset, 0);
-      gfx->setTile(i, 1, backgroundBlocks, 0+offset, 0);
-      gfx->setTile(i, 2, backgroundBlocks, 4+offset, 0);
-      gfx->setTile(i, 18, backgroundBlocks, 2+offset, 0);
+      Cats::SetTile(i, 0, backgroundBlocks, 0+offset, 0);
+      Cats::SetTile(i, 1, backgroundBlocks, 0+offset, 0);
+      Cats::SetTile(i, 2, backgroundBlocks, 4+offset, 0);
+      Cats::SetTile(i, 18, backgroundBlocks, 2+offset, 0);
     }
 
   if(field[0][3] == Field::SOLID)
     {
-      gfx->setTile(0, 2, backgroundBlocks, 0+offset, 0);
-      gfx->setTile(1, 2, backgroundBlocks, 11+offset, 0);
-      gfx->setTile(24, 2, backgroundBlocks, 0+offset, 0);
-      gfx->setTile(23, 2, backgroundBlocks, 12+offset, 0);
+      Cats::SetTile(0, 2, backgroundBlocks, 0+offset, 0);
+      Cats::SetTile(1, 2, backgroundBlocks, 11+offset, 0);
+      Cats::SetTile(24, 2, backgroundBlocks, 0+offset, 0);
+      Cats::SetTile(23, 2, backgroundBlocks, 12+offset, 0);
     }
 
   if(field[0][17] == Field::SOLID)
     {
-      gfx->setTile(0, 18, backgroundBlocks, 0+offset, 0);
-      gfx->setTile(24, 18, backgroundBlocks, 0+offset, 0);
-      gfx->setTile(1, 18, backgroundBlocks, 0+offset, 0);
-      gfx->setTile(23, 18, backgroundBlocks, 0+offset, 0);
+      Cats::SetTile(0, 18, backgroundBlocks, 0+offset, 0);
+      Cats::SetTile(24, 18, backgroundBlocks, 0+offset, 0);
+      Cats::SetTile(1, 18, backgroundBlocks, 0+offset, 0);
+      Cats::SetTile(23, 18, backgroundBlocks, 0+offset, 0);
 
       if(field[0][16] == Field::SOLID)
 	{
-	  gfx->setTile(0, 17, backgroundBlocks, 0+offset, 0);
-	  gfx->setTile(24, 17, backgroundBlocks, 0+offset, 0);
+	  Cats::SetTile(0, 17, backgroundBlocks, 0+offset, 0);
+	  Cats::SetTile(24, 17, backgroundBlocks, 0+offset, 0);
 	}
       else
 	{
-	  gfx->setTile(0, 17, backgroundBlocks, 2+offset, 0);
-	  gfx->setTile(24, 17, backgroundBlocks, 2+offset, 0);
+	  Cats::SetTile(0, 17, backgroundBlocks, 2+offset, 0);
+	  Cats::SetTile(24, 17, backgroundBlocks, 2+offset, 0);
 	}
 
       if(field[2][17] == Field::EMPTY)
 	{
-	  gfx->setTile(1, 18, backgroundBlocks, 9+offset, 0);
+	  Cats::SetTile(1, 18, backgroundBlocks, 9+offset, 0);
 	}
       if(field[22][17] == Field::EMPTY)
 	{
-	  gfx->setTile(23, 18, backgroundBlocks, 10+offset, 0);
+	  Cats::SetTile(23, 18, backgroundBlocks, 10+offset, 0);
 	}
 
       i1 = (field[1][16] << 1) + field[2][17];
-      gfx->setTile(1, 17, backgroundBlocks, map6[i1]+offset, 0);
+      Cats::SetTile(1, 17, backgroundBlocks, map6[i1]+offset, 0);
 
       i1 = (field[23][16] << 1) + field[22][17];
-      gfx->setTile(23, 17, backgroundBlocks, map7[i1]+offset, 0);
+      Cats::SetTile(23, 17, backgroundBlocks, map7[i1]+offset, 0);
     }
   else
     {
-      gfx->setTile(0, 17, spikes, 0, 0);
-      gfx->setTile(1, 17, spikes, 0, 0);
-      gfx->setTile(23, 17, spikes, 0, 0);
-      gfx->setTile(24, 17, spikes, 0, 0);
+      Cats::SetTile(0, 17, spikes, 0, 0);
+      Cats::SetTile(1, 17, spikes, 0, 0);
+      Cats::SetTile(23, 17, spikes, 0, 0);
+      Cats::SetTile(24, 17, spikes, 0, 0);
     }
 
   for(int i = 3;i < 17;i++)
@@ -246,22 +260,22 @@ Field::redrawAll(bool bright)
 	{
 	  i1 = (field[0][i-1] << 1) + field[0][i+1];
 	  
-	  gfx->setTile(0, i, backgroundBlocks, map1[i1]+offset, 0);
-	  gfx->setTile(24, i, backgroundBlocks, map1[i1]+offset, 0);
-	  gfx->setTile(1, i, backgroundBlocks, map2[i1]+offset, 0);
-	  gfx->setTile(23, i, backgroundBlocks, map3[i1]+offset, 0);
+	  Cats::SetTile(0, i, backgroundBlocks, map1[i1]+offset, 0);
+	  Cats::SetTile(24, i, backgroundBlocks, map1[i1]+offset, 0);
+	  Cats::SetTile(1, i, backgroundBlocks, map2[i1]+offset, 0);
+	  Cats::SetTile(23, i, backgroundBlocks, map3[i1]+offset, 0);
 	}
     }
 
   for(int i = 2;i < 23;i++)
     {
       if(field[i][17] == Field::EMPTY)
-	gfx->setTile(i, 17, spikes, 0, 0);
+	Cats::SetTile(i, 17, spikes, 0, 0);
       else
 	{
 	  i1 = (field[i-1][17] << 1) + field[i+1][17];
-	  gfx->setTile(i, 17, backgroundBlocks, map4[i1]+offset, 0);
-	  gfx->setTile(i, 18, backgroundBlocks, map5[i1]+offset, 0);
+	  Cats::SetTile(i, 17, backgroundBlocks, map4[i1]+offset, 0);
+	  Cats::SetTile(i, 18, backgroundBlocks, map5[i1]+offset, 0);
 	}
     }
 

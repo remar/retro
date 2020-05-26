@@ -20,20 +20,20 @@
  */
 
 #include "Object.h"
+#include "Cats.h"
 
-Object::Object(remar2d *gfx, const char *sprite, SoundManager *sfx)
+Object::Object(const char *sprite, SoundManager *sfx)
   : destroyTimer(0), destroyMe(false)
 {
-  this->gfx = gfx;
   this->sfx = sfx;
-  sprite_instance = gfx->createSpriteInstance(sprite);
+  sprite_instance = Cats::CreateSpriteInstance(sprite);
   name = sprite;
 }
 
 Object::~Object()
 {
   setVisible(false);
-  gfx->removeSpriteInstance(sprite_instance);
+  Cats::RemoveSpriteInstance(sprite_instance);
 }
 
 void
@@ -42,7 +42,7 @@ Object::moveAbs(float x, float y)
   pos_x = x;
   pos_y = y;
 
-  gfx->moveSpriteAbs(sprite_instance, getX(), getY());
+  Cats::SetSpritePosition(sprite_instance, getX(), getY());
 }
 
 
@@ -52,25 +52,25 @@ Object::moveRel(float x, float y)
   pos_x += x;
   pos_y += y;
 
-  gfx->moveSpriteAbs(sprite_instance, getX(), getY());
+  Cats::SetSpritePosition(sprite_instance, getX(), getY());
 }
 
 void
 Object::setVisible(bool visible)
 {
-  gfx->showSprite(sprite_instance, visible);
+  Cats::ShowSprite(sprite_instance, visible);
 }
 
 void
 Object::setAnimation(const char *animation)
 {
-  gfx->setAnimation(sprite_instance, animation); 
+  Cats::SetAnimation(sprite_instance, animation);
 }
 
 void
 Object::pauseAnimation(bool on)
 {
-  gfx->pauseAnimation(sprite_instance, on);
+  Cats::PauseAnimation(sprite_instance, on);
 }
 
 void
