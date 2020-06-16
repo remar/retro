@@ -26,11 +26,11 @@
 #include "Field.h"
 #include "BrokenBlock.h"
 #include "Object.h"
+#include "Hero.h"
 
 /*
 #include "SoundManager.h"
 #include "Input.h"
-#include "Hero.h"
 #include "Fuzz.h"
 #include "Coin.h"
 #include "Nest.h"
@@ -85,7 +85,7 @@ class Level : public GameMode
   bool paused;
 
   /* Da player. */
-  // Hero *hero;
+  Hero *hero;
 
   /* Bullets flying through the air! (KERPOWW!!) */
 

@@ -43,7 +43,7 @@ Level::Level(SoundManager *sfx, Input *input,
   win = false;
   debugOutputTimer = 60;
   loadFailed = false;
-  // hero = 0;
+  hero = 0;
 
   scoreKeeper->setTimer(200);
   timerTimer = 60;
@@ -219,9 +219,9 @@ Level::loadLevel(char *lev)
 	}
     }
 
-  // hero = new Hero(gfx, sfx, &bullets, bulletHandler, hud);
-  // hero->setVisible(true);
-  // hero->moveAbs(heroStartX, heroStartY);
+  hero = new Hero(sfx /*, &bullets, bulletHandler, hud*/);
+  hero->setVisible(true);
+  hero->moveAbs(heroStartX, heroStartY);
 
   field->redrawAll();
 
@@ -367,15 +367,15 @@ Level::update()
     return GAME;
 
 
-  // if(hero->isDead())
-  //   {
-  //     timerPaused = true;
-  //   }
+  if(hero->isDead())
+    {
+      timerPaused = true;
+    }
 
-  // if(timerPaused && !hero->isBlinking() && !hero->isDead())
-  //   {
-  //     timerPaused = false;
-  //   }
+  if(timerPaused && !hero->isBlinking() && !hero->isDead())
+    {
+      timerPaused = false;
+    }
 
   if(!timerPaused && --timerTimer == 0)
     {
@@ -450,7 +450,8 @@ Level::update()
   // bulletHandler->update();
 
   // DONE: Move movement code for Captain Good to Hero class
-  // hero->update(input, field);
+  hero->update(input, field);
+
   // if(hero->destroy())
   //   {
   //     scoreKeeper->heroKilled();
@@ -852,7 +853,7 @@ Level::showAllObjects(bool show)
   //     (*it)->setVisible(show);
   //   }
 
-  // hero->setVisible(show);
+  hero->setVisible(show);
 
   // for(list<Bullet *>::iterator it = bullets.begin();it != bullets.end();it++)
   //   {
@@ -894,11 +895,11 @@ Level::deleteAllObjects()
   //     it = coins.erase(it);
   //   }
 
-  // if(hero)
-  //   {
-  //     delete hero;
-  //     hero = 0;
-  //   }
+  if(hero)
+    {
+      delete hero;
+      hero = 0;
+    }
 
   // for(list<Bullet *>::iterator it = bullets.begin();it != bullets.end();)
   //   {

@@ -22,22 +22,22 @@
 #ifndef HERO_H
 #define HERO_H
 
-#include <remar2d.h>
 #include <list>
 #include "Object.h"
-#include "Bullet.h"
-#include "BulletHandler.h"
-#include "HUD.h"
+/* #include "Bullet.h" */
+/* #include "BulletHandler.h" */
+/* #include "HUD.h" */
 #include "Field.h"
 #include "Input.h"
 
-class BulletHandler; // defined in BulletHandler.h (FIXME: Circular dependency)
+// class BulletHandler; // defined in BulletHandler.h (FIXME: Circular dependency)
 
 class Hero : public Object
 {
  public:
-  Hero(remar2d *gfx, SoundManager *sfx, list<Bullet *> *bullets,
-       BulletHandler *bulletHandler, HUD *hud);
+  Hero(SoundManager *sfx);
+  /* Hero(SoundManager *sfx, list<Bullet *> *bullets, */
+  /*      BulletHandler *bulletHandler, HUD *hud); */
   ~Hero();
   void moveRel(float xDir, float yDir); //, bool onGround);
   void setVisible(bool visible);
@@ -111,10 +111,10 @@ class Hero : public Object
 
   int deathTimer;
 
-  list<Bullet *> *bullets;
-  BulletHandler *bulletHandler;
+  /* list<Bullet *> *bullets; */
+  /* BulletHandler *bulletHandler; */
 
-  HUD *hud;
+  /* HUD *hud; */
 
   bool hasStoppedSound;
 

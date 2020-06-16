@@ -11,8 +11,8 @@ LIBS =		`sdl2-config --libs` ../../cats-cpp/src/libcats.a -lSDL2_image -lSDL2_mi
 
 RETRO =		retro.o binreloc.o datadir.o Input.o GameLogic.o Menu.o Counter.o \
 		ScoreKeeper.o FileManager.o GameMode.o SoundManager.o Level.o \
-		Field.o Object.o BrokenBlock.o Explosion.o
-#		Hero.o Fuzz.o \
+		Field.o Object.o BrokenBlock.o Explosion.o Hero.o
+#		Fuzz.o \
 #		Coin.o Nest.o Spawner.o Bullet.o \
 #		Smoke.o Enemy.o Counter.o Drone.o \
 #		Collectible.o HUD.o Menu.o ScoreScreen.o \

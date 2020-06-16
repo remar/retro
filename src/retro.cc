@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
   if(!datadir)
     exit(1);
 
-  SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+  SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK);
 
   Input *input = new Input();
 

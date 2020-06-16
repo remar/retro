@@ -83,9 +83,9 @@ Menu::Menu(SoundManager *sfx, Input *input,
   const char *aStrings[] = {"left", "right", "fire", "jump"};
   for(int i = 0;i < 4;i++)
     {
-      // actionStrings[i] = gfx->print("text", aStrings[i]);
-      // gfx->showSprite(actionStrings[i], false);
-      // gfx->moveSpriteAbs(actionStrings[i], 16*3, 16*25 + 32 * i);
+      actionStrings[i] = Cats::CreateText("text", aStrings[i]);
+      Cats::ShowText(actionStrings[i], false);
+      Cats::SetTextPosition(actionStrings[i], 16*3, 16*25 + 32 * i);
     }
 
   leftArrow = Cats::CreateSpriteInstance("arrow");
@@ -147,13 +147,17 @@ Menu::update()
 	  blinkDelay = 60;
 	}
 
-      // if(blinkDelay <= 30)
-      // 	gfx->showSprite(actionStrings[(int)subMode - 1], false);
-      // else
-      // 	gfx->showSprite(actionStrings[(int)subMode - 1], true);
+      if(blinkDelay <= 30)
+	Cats::ShowText(actionStrings[(int)subMode - 1], false);
+      else
+	Cats::ShowText(actionStrings[(int)subMode - 1], true);
 
       if(int i = input->getKeyPressed())
 	{
+	  if(i == SDLK_SPACE) {
+	    return MENU;
+	  }
+
 	  for(int j = 0;lockedKeys[j];j++)
 	    {
 	      if(i == lockedKeys[j])
@@ -171,17 +175,17 @@ Menu::update()
 
 	  keyConfig[(int)subMode - 1] = i;
 
-	  // gfx->showSprite(actionStrings[(int)subMode - 1], true);
+	  Cats::ShowText(actionStrings[(int)subMode - 1], true);
 	  subMode = (SUBMODE)((int)subMode + 1);
 
 	  if(subMode > REDEFINE_JUMP)
 	    {
 	      subMode = NORMAL;
 
-	      // for(int k = 0;k < 4;k++)
-	      // 	{
-	      // 	  gfx->showSprite(actionStrings[k], false);
-	      // 	}
+	      for(int k = 0;k < 4;k++)
+		{
+		  Cats::ShowText(actionStrings[k], false);
+		}
 
 	      FileManager fileManager;
 	      fileManager.writeKeyConfig(keyConfig);
@@ -224,8 +228,8 @@ Menu::update()
 
       input->resetActionKeys();
 
-      // for(int i = 0;i < 4;i++)
-      // 	gfx->showSprite(actionStrings[i], true);
+      for(int i = 0;i < 4;i++)
+	Cats::ShowText(actionStrings[i], true);
 
       blinkDelay = 60;
     }

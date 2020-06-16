@@ -61,11 +61,11 @@ Field::Field(SoundManager *sfx,
   else
     {
       backgroundBlocks = "background";
-      sprintf(buf, "%s/data/gfx/block%d.json", datadir, skill);
+      sprintf(buf, "%s/data/gfx/block%d.json", datadir, 1/*skill*/);
       // blocks = gfx->loadTileSet((const char *)buf);
       Cats::LoadTileset(buf);
       blocks = "block1"; // TODO: Replace with correct block
-      sprintf(buf, "%s/data/gfx/solid%d.json", datadir, skill);
+      sprintf(buf, "%s/data/gfx/solid%d.json", datadir, 1 /*skill*/);
       // solids = gfx->loadTileSet((const char *)buf);
       Cats::LoadTileset(buf);
       solids = "solid1"; // TODO: Replace with correct solid
